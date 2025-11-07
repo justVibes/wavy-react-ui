@@ -16,6 +16,10 @@
     "wavy",
     "ui"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/justVibes/wavy-ui.git"
+  },
   "scripts": {
     "css": "npm run bundle-css",
     "deps": "npm i @wavy/types@latest @wavy/fn@latest",
