@@ -1,0 +1,48 @@
+{
+  "name": "@wavy/ui",
+  "version": "0.0.70",
+  "description": "",
+  "license": "MIT",
+  "author": "Wavy",
+  "type": "module",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "styles": "dist/main.css",
+  "bin": {
+    "apply-theme": "scripts/public/bundleCss.js"
+  },
+  "keywords": [
+    "wavy-ui",
+    "wavy",
+    "ui"
+  ],
+  "scripts": {
+    "css": "npm run bundle-css",
+    "deps": "npm i @wavy/types@latest @wavy/fn@latest",
+    "tp-css-bundler": "tsup scripts/templates/bundleCss.ts --outDir scripts/public --format esm --no-dts --external utils.js",
+    "tp-theme-builder": "tsup scripts/templates/buildTheme.ts --outDir scripts/public --format esm --no-dts --external utils.js",
+    "tp-builders": "npm run tp-css-bundler && npm run tp-theme-builder",
+    "bundle-css": "node scripts/public/bundleCss.js --green",
+    "build": "tsup && node scripts/build/cloneAssets.ts && npm run bundle-css && npm link",
+    "publisher": "npm run build && npm version patch && npm publish"
+  },
+  "devDependencies": {
+    "@emotion/styled": "^11.14.1",
+    "@types/node": "^24.7.0",
+    "@types/react": "^19.2.2",
+    "@wavy/types": "^0.0.51",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^3.27.0",
+    "@emotion/react": "^11.14.0",
+    "@wavy/fn": "^0.0.19",
+    "next-themes": "^0.4.6",
+    "react-datepicker": "^8.8.0",
+    "react-icons": "^5.5.0",
+    "uuid": "^13.0.0"
+  }
+}

@@ -1,0 +1,19 @@
+.popover-transition {
+  --duration: 200ms;
+  scale: 0;
+  opacity: 0;
+  transition-behavior: allow-discrete;
+  position-try-fallbacks: flip-block, flip-inline, flip-start, top, top right,
+    right, bottom right, bottom, bottom left, left, top left;
+  transition: display var(--duration), scale var(--duration),
+    opacity var(--duration);
+}
+
+.popover-transition:popover-open {
+  scale: 1;
+  opacity: 1;
+  @starting-style {
+    scale: 0;
+    opacity: 0;
+  }
+}

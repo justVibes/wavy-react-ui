@@ -1,0 +1,5 @@
+src
+scripts/{build,templates}/**
+.gitignore
+tsconfig.json
+tsup.config.ts

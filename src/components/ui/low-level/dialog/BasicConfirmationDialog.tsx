@@ -1,0 +1,91 @@
+import React from "react";
+import BasicDialog from "./BasicDialog";
+import {
+  BasicButton,
+  BasicDisclaimer,
+  resolveBasicColor,
+  UseDialogControllerReturn,
+} from "@/main";
+import { JSX } from "@emotion/react/jsx-runtime";
+import CancelButton from "../../high-level/buttons/CancelButton";
+import { BasicDivProps } from "../html/div/BasicDiv";
+
+interface BasicConfirmationDialogProps
+  extends Partial<
+    Record<
+      "width" | "height" | `${"min" | "max"}${"Width" | "Height"}`,
+      BasicDivProps["width"]
+    >
+  > {
+  title: string;
+  message: string;
+  hideDisclaimerLabel?: boolean;
+  disclaimer?: string;
+  controller?: UseDialogControllerReturn;
+  triggerElement?: JSX.Element;
+  /**
+   * @default "error"
+   */
+  severity?: "error" | "info" | "warning";
+  /**
+   * @default "Cancel"
+   */
+  cancelLabel?: "Dismiss" | "Cancel" | (string & {});
+  onCancelClick?: () => void;
+  action: { label: string; onClick: () => void; async?: boolean };
+}
+
+function BasicConfirmationDialog(props: BasicConfirmationDialogProps) {
+  const severity = props.severity || "error";
+  const color = resolveBasicColor(severity, {
+    preference: "res",
+  });
+  return (
+    <BasicDialog
+      controller={props.controller}
+      width={props.width ?? "25rem"}
+      height={props.height}
+      minHeight={props.minHeight}
+      maxHeight={props.maxHeight}
+      minWidth={props.minWidth}
+      maxWidth={props.maxWidth}
+      triggerElement={props.triggerElement}
+    >
+      <BasicDialog.Header fontSize="xxl">{props.title}</BasicDialog.Header>
+      <BasicDialog.Body fade={0.75}>
+        <span>{props.message}</span>
+        {props.disclaimer && (
+          <BasicDisclaimer
+            width={"full"}
+            facade={(s) => (s === "error" ? "warning" : s)}
+            hideLabel={props.hideDisclaimerLabel}
+            severity={severity}
+            message={props.disclaimer}
+          />
+        )}
+      </BasicDialog.Body>
+      <BasicDialog.Footer gap={"md"}>
+        <BasicDialog.CloseTrigger>
+          <BasicButton
+            size="sm"
+            fade={0.75}
+            text={props.cancelLabel || "Cancel"}
+            backgroundColor="transparent"
+            color="onSurface"
+            onClick={props.onCancelClick}
+          />
+        </BasicDialog.CloseTrigger>
+        <BasicButton
+          async={props.action.async}
+          size="sm"
+          text={props.action.label}
+          backgroundColor={color}
+          color="white"
+          onClick={props.action.onClick}
+        />
+      </BasicDialog.Footer>
+    </BasicDialog>
+  );
+}
+
+export default BasicConfirmationDialog;

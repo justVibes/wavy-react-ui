@@ -1,0 +1,119 @@
+:root {
+  --dp-accent-color: var(--primary);
+  --dp-item-transition: 200ms linear;
+  --datepicker__selected-color--disabled: red;
+}
+
+/** Reintegrate when the calendar get revamped*/
+
+/* .dp-chevron.nav {
+  --size: 1.5rem;
+  opacity: 1;
+  cursor: pointer;
+}
+.dp-chevron.nav.disabled {
+  opacity: 0.5;
+} */
+
+.dp-caption-label {
+  font-size: 1.55rem;
+}
+
+.react-datepicker__header {
+  background-color: transparent;
+  border: 0;
+  padding-bottom: 0;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: var(--secondary-container);
+  color: var(--secondary);
+  outline: none;
+}
+
+.calendar {
+  --padding: 0;
+  background-color: transparent;
+  border: 0;
+  font-family: inherit;
+  user-select: none;
+  padding-left: var(--padding);
+  padding-right: var(--padding);
+}
+
+.calendar-chevron {
+  --size: 1.1rem;
+  transition: all 300ms linear;
+  height: var(--size);
+  width: var(--size);
+  flex-shrink: 0;
+  color: var(--dp-accent-color);
+  opacity: 0.75;
+}
+
+.calendar-chevron.nav {
+  --size: 1.5rem;
+  cursor: pointer;
+}
+.calendar-chevron.nav.disabled {
+  cursor: not-allowed;
+  opacity: 0.25;
+}
+
+.calendar-week-day {
+  opacity: 0.7;
+  transform: translateX(-0.25rem);
+  font-weight: bold;
+  font-size: 0.875em;
+  padding-bottom: 0.5rem;
+}
+
+.calendar-date {
+  font-size: 0.75rem;
+  border-radius: 0.35rem;
+  /* border: solid 1px transparent; */
+  transition: all var(--dp-item-transition);
+}
+
+.calendar,
+.calendar-week-day,
+.calendar-date {
+  color: var(--on-surface);
+}
+
+.calendar-date.selected {
+  transition: all var(--dp-item-transition);
+  border-color: var(--dp-accent-color);
+  box-shadow: var(--dp-accent-color) 0px 0px 0px 1px;
+  color: var(--dp-accent-color);
+  background-color: transparent;
+}
+
+.calendar-date.today {
+  --bg: var(--primary-container);
+  --text: var(--on-primary-container);
+
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.calendar-date.out-of-bounds {
+  opacity: 0.5;
+}
+
+.calendar-date.unselected:hover {
+  background-color: var(--on-surface__150);
+}
+
+.calendar-date.selected:hover {
+  background-color: transparent;
+}
+
+.calendar-date.today:hover {
+  background-color: var(--text);
+  color: var(--bg);
+}
+
+.calendar-date.out-of-bounds:hover {
+  background-color: var(--outline__200);
+}
