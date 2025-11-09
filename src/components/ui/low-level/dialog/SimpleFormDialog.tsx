@@ -28,6 +28,8 @@ interface SimpleFormDialogProps<T extends string> {
   /**@default "lg" */
   actionButtionSize?: BasicButtonProps["size"];
   width?: BasicDivProps["width"];
+  /**A shortcut for defining the default value for fields where: `<"field">.defaultValue === undefined`.*/
+  defaultValue?: Partial<Record<T, string>>;
   fields: Record<
     T,
     {
@@ -36,17 +38,16 @@ interface SimpleFormDialogProps<T extends string> {
       label?: (string & {}) | "prop-name" | ((propName: string) => string);
       placeholder: string;
       disabled?: boolean;
-      defaultVale?: string;
+      defaultValue?: string;
       allowedChars?: RegExp;
       options?: string[];
     }
   >;
-  /**A shortcut to format the property name for all fields that haven't been defined.
+  /**A shortcut to format the property name for all fields where: `typeof <"field">.label !== "function" && [undefined, "prop-name"].includes(<"field">.label)`
    * - Useful for field's that use `prop-name` as the label.
    */
   formatFieldPropName?: (propName: string) => string;
-  /**A shortcut to set the allowed characters for all the form fields that
-   * don't have the allowedChars property defined.
+  /**A shortcut to set the allowed characters for all fields where: `<"field">.allowedChars === undefined`
    */
   allowedChars?: RegExp;
   onSave?: (form: Record<T, string>) => void;
@@ -61,7 +62,7 @@ function SimpleFormDialog<T extends string>(props: SimpleFormDialogProps<T>) {
           key,
           typeof value === "object" && "defaultValue" in value
             ? value.defaultValue
-            : "",
+            : props.defaultValue?.[key as T] ?? "",
         ];
       })
     ) as any
