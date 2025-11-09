@@ -55,7 +55,7 @@ function EditAddressDialog(props: EditAddressDialogProps) {
     parish: "Kingston",
     country: "Jamaica",
   };
-  
+
   const handleOnSaveClick = () => {
     props.onSave?.(addressRef.read());
   };

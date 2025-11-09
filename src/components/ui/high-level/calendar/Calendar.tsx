@@ -25,6 +25,7 @@ interface CalendarProps {
   selectedDate?: Date;
   allowSameDay?: boolean;
   required?: boolean;
+  excludedDates?: Date[];
   onDateSelected?: (date: Date) => void;
   onClose?: () => void;
 }
@@ -41,6 +42,10 @@ function Calendar(props: CalendarProps) {
         : !props.maxDate || props.maxDate === "end-of-year"
         ? getEndOfYearDate()
         : toDate(props.maxDate);
+  // const excludedDates =
+  //   props.maxDate === "today"
+  //     ? [...(props.excludedDates || []), ...dateRange(new Date(), getLastDayInMonth(maxDate))]
+  //     : props.excludedDates;
 
   const handleOnChange = (date: Date) => {
     setSelectedDate(date);
@@ -54,18 +59,17 @@ function Calendar(props: CalendarProps) {
     const activeState = state.read();
     return (
       activeState.getMonth() === date.getMonth() &&
-      getDaysInMonth(
-        activeState.getMonth(),
-        activeState.getFullYear()
-      ).includes(date.getDate())
+      isDateInMonth(date.getDate(), activeState.getMonth())
     );
   };
 
   const handleStateChange = (date: Date) => state.upsert(date);
+
   return (
     <DatePicker
       inline
       required
+      // excludeDates={excludedDates}
       allowSameDay={props.allowSameDay}
       minDate={minDate}
       maxDate={maxDate}
@@ -85,6 +89,7 @@ function Calendar(props: CalendarProps) {
           isDateSelected(date) ? "selected" : "unselected",
           isDateToday(date) ? "today" : "",
           !isDateInActiveMonth(date) ? "out-of-bounds" : "",
+          dateGreaterThan(date, maxDate) ? "excluded" : "",
         ].join(" ")
       }
     />
@@ -107,19 +112,17 @@ function Header(
     "October",
     "November",
     "December",
-  ].filter(
-    (_, i) => {
-      const currentYear = props.date.getFullYear();
-      if (currentYear === props.minDate.getFullYear()) {
-        return i >= props.minDate.getMonth();
-      }
-      if (currentYear === props.maxDate.getFullYear()) {
-        return i <= props.maxDate.getMonth();
-      }
-
-      return true;
+  ].filter((_, i) => {
+    const currentYear = props.date.getFullYear();
+    if (currentYear === props.minDate.getFullYear()) {
+      return i >= props.minDate.getMonth();
     }
-  );
+    if (currentYear === props.maxDate.getFullYear()) {
+      return i <= props.maxDate.getMonth();
+    }
+
+    return true;
+  });
   const selectedMonth = months[props.date.getMonth()];
 
   props.visibleYearsRange;
@@ -235,6 +238,52 @@ const getEndOfYearDate = () => {
   date.setMonth(11);
   date.setDate(31);
   return date;
+};
+
+const dateRange = (start: Date, end: Date) => {
+  let dates = [start];
+
+  while (!isSameDay(dates[dates.length - 1], end)) {
+    const date = new Date(dates[dates.length - 1]);
+    date.setDate(date.getDate() + 1);
+    dates.push(date);
+  }
+
+  return dates;
+};
+
+const dateGreaterThan = (value: Date, compareTo: Date) => {
+  const ref = {
+    year: value.getFullYear(),
+    month: value.getMonth(),
+    date: value.getDate(),
+  };
+  const comp = {
+    year: compareTo.getFullYear(),
+    month: compareTo.getMonth(),
+    date: compareTo.getDate(),
+  };
+  if (ref.year > comp.year) return true;
+  if (ref.year === comp.year) {
+    if (ref.month > comp.month) return true;
+    if (ref.month === comp.month) return ref.date > comp.date;
+  }
+  return false;
+};
+
+const isDateInMonth = (date: number, month: number) => {
+  const d = new Date();
+  d.setMonth(month);
+  d.setDate(date);
+
+  return d.getMonth() === month;
+};
+const isSameDay = (value: Date, reference: Date) => {
+  return (
+    value.getFullYear() === reference.getFullYear() &&
+    value.getMonth() === reference.getMonth() &&
+    value.getDate() === reference.getDate()
+  );
 };
 
 export default memo(Calendar);

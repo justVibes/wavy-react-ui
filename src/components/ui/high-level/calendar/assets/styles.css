@@ -1,24 +1,11 @@
 :root {
-  --dp-accent-color: var(--primary);
-  --dp-item-transition: 200ms linear;
-  --datepicker__selected-color--disabled: red;
+  --calendar-color: var(--on-surface);
+  --calendar-accent-color: var(--primary);
+  --calendar-mute-color: var(--on-surface__550);
+  --calendar-item-transition: 200ms linear;
 }
 
-/** Reintegrate when the calendar get revamped*/
-
-/* .dp-chevron.nav {
-  --size: 1.5rem;
-  opacity: 1;
-  cursor: pointer;
-}
-.dp-chevron.nav.disabled {
-  opacity: 0.5;
-} */
-
-.dp-caption-label {
-  font-size: 1.55rem;
-}
-
+/* Overridden styles */
 .react-datepicker__header {
   background-color: transparent;
   border: 0;
@@ -31,6 +18,11 @@
   outline: none;
 }
 
+.react-datepicker__day--disabled {
+  opacity: 0.5;
+}
+
+/* Custom styles */
 .calendar {
   --padding: 0;
   background-color: transparent;
@@ -47,7 +39,7 @@
   height: var(--size);
   width: var(--size);
   flex-shrink: 0;
-  color: var(--dp-accent-color);
+  color: var(--calendar-accent-color);
   opacity: 0.75;
 }
 
@@ -72,20 +64,20 @@
   font-size: 0.75rem;
   border-radius: 0.35rem;
   /* border: solid 1px transparent; */
-  transition: all var(--dp-item-transition);
+  transition: all var(--calendar-item-transition);
 }
 
 .calendar,
 .calendar-week-day,
 .calendar-date {
-  color: var(--on-surface);
+  color: var(--calendar-color);
 }
 
 .calendar-date.selected {
-  transition: all var(--dp-item-transition);
-  border-color: var(--dp-accent-color);
-  box-shadow: var(--dp-accent-color) 0px 0px 0px 1px;
-  color: var(--dp-accent-color);
+  transition: all var(--calendar-item-transition);
+  border-color: var(--calendar-accent-color);
+  box-shadow: var(--calendar-accent-color) 0px 0px 0px 1px;
+  color: var(--calendar-accent-color);
   background-color: transparent;
 }
 
@@ -98,7 +90,12 @@
 }
 
 .calendar-date.out-of-bounds {
-  opacity: 0.5;
+  color: var(--calendar-mute-color);
+}
+
+.calendar-date.excluded {
+  opacity: 0.25;
+  cursor: not-allowed;
 }
 
 .calendar-date.unselected:hover {
@@ -116,4 +113,9 @@
 
 .calendar-date.out-of-bounds:hover {
   background-color: var(--outline__200);
+}
+
+.calendar-date.excluded:hover {
+  background-color: initial;
+  color: initial;
 }
