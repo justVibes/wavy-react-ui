@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import globalEventEmitter from "../events/EventEmitter";
+import useManagedRef from "./useManagedRef";
 
 type DispatchOptions = Partial<{ skipRender: boolean }>;
 
 function useEventEmitter<T>(eventName: string) {
   const [data, setData] = useState<T>();
+
   const eventListener = useRef(new Map<string, (event: CustomEvent) => void>());
   const skipRender = useRef(false);
 
   useEffect(() => {
     const listener = (event: CustomEvent<T>) => {
-      console.log(`Received ${event.detail} while listening to ${eventName}`);
       eventListener.current.get(eventName)?.(event);
       if (skipRender.current) {
         skipRender.current = false;
@@ -36,7 +37,6 @@ function useEventEmitter<T>(eventName: string) {
       (data: T, options: DispatchOptions = { skipRender: true }) => {
         skipRender.current = !!options?.skipRender;
 
-        console.log(`Emitting ${eventName} with ${data}...`);
         globalEventEmitter.dispatchEvent(
           new CustomEvent(eventName, { detail: data })
         );

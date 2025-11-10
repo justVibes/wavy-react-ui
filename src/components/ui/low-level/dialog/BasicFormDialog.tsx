@@ -142,7 +142,7 @@ function BasicFormDialog<Sections extends string>(
         rawSections: props.sections,
       }}
     >
-      <BasicDialog
+      <BasicDialog.Root
         controller={props.controller}
         triggerElement={props.triggerElement}
         unmountOnExit={props.unmountOnExit}
@@ -174,7 +174,7 @@ function BasicFormDialog<Sections extends string>(
             onSubmitClick={props.onSubmit}
           />
         </BasicDialog.Body>
-      </BasicDialog>
+      </BasicDialog.Root>
     </FormContext.Provider>
   );
 }

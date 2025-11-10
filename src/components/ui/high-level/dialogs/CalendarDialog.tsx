@@ -52,7 +52,7 @@ function CalendarDialog(props: CalendarDialogProps) {
   };
 
   return (
-    <BasicDialog
+    <BasicDialog.Root
       hideCloseButton
       onOpenChange={handleOnOpenChange}
       width={"max-content"}
@@ -81,7 +81,7 @@ function CalendarDialog(props: CalendarDialogProps) {
           <DoneButton size={actionButtonSize} onClick={handleDoneClick} />
         </BasicDialog.ActionTrigger>
       </BasicDialog.Footer>
-    </BasicDialog>
+    </BasicDialog.Root>
   );
 }
 

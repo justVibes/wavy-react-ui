@@ -14,7 +14,7 @@ import applyBasicStyle from "../html/BasicStyle";
 import { SafeExtract, SafeOmit } from "@wavy/types";
 import { BasicButtonProps } from "../html/button/BasicButton";
 
-interface BasicDialogProps<T = {}>
+interface RootProps<T = {}>
   extends SafeOmit<
     BasicDivProps,
     | "clickable"
@@ -64,7 +64,8 @@ interface BasicDialogProps<T = {}>
   onOpenChange?: (isOpen: boolean) => void;
   onClose?: () => void;
 }
-function BasicDialog<T>(props: BasicDialogProps<T>) {
+// The generic type basically for the dialogController
+function Root<T>(props: RootProps<T>) {
   const { triggerRerender } = useRerender();
   const style = applyBasicStyle({
     ...props,
@@ -157,13 +158,13 @@ const CompoundElement =
     );
   };
 
-BasicDialog.Header = CompoundElement("Header", {
+const Header = CompoundElement("Header", {
   fontSize: "xl",
   fontWeight: "bold",
 });
-BasicDialog.Body = CompoundElement("Body", { gap: "md" });
-BasicDialog.Footer = CompoundElement("Footer", { row: true, gap: "sm" });
-BasicDialog.CloseTrigger = (props: {
+const Body = CompoundElement("Body", { gap: "md" });
+const Footer = CompoundElement("Footer", { row: true, gap: "sm" });
+const CloseTrigger = (props: {
   children: JSX.Element;
   wrap?: boolean;
   slotProps?: Partial<{
@@ -184,8 +185,19 @@ BasicDialog.CloseTrigger = (props: {
   );
 };
 
-BasicDialog.ActionTrigger = (props: { children: JSX.Element }) => {
+const ActionTrigger = (props: { children: JSX.Element }) => {
   return <Dialog.ActionTrigger asChild>{props.children}</Dialog.ActionTrigger>;
 };
+const BasicDialog = {
+  Root,
+  Header,
+  Body,
+  Footer,
+  CloseTrigger,
+  ActionTrigger,
+};
+interface BasicDialogProps {
+  Root: RootProps;
+}
 export default BasicDialog;
-export type {BasicDialogProps}
+export type { BasicDialogProps };

@@ -47,7 +47,7 @@ function TaskResultDialog(props: TaskResultDialogProps) {
 
   return (
     <MainContext.Provider value={{ color }}>
-      <BasicDialog
+      <BasicDialog.Root
         controller={controller}
         width={"25rem"}
         gap={"sm"}
@@ -79,7 +79,7 @@ function TaskResultDialog(props: TaskResultDialogProps) {
           />
           {actionButton && <ActionButton {...actionButton} />}
         </BasicDialog.Footer>
-      </BasicDialog>
+      </BasicDialog.Root>
     </MainContext.Provider>
   );
 }

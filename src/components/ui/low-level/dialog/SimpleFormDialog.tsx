@@ -8,7 +8,7 @@ import {
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { useState } from "react";
-import { BasicDialogProps } from "./BasicDialog";
+import { type BasicDialogProps } from "./BasicDialog";
 import { BasicButtonProps } from "../html/button/BasicButton";
 import { BasicDivProps } from "../html/div/BasicDiv";
 import BasicSelect from "../html/select/BasicSelect";
@@ -20,7 +20,7 @@ interface SimpleFormDialogProps<T extends string> {
   title?: string;
   triggerElement?: JSX.Element;
   /**@default "md" */
-  closeButtonSize?: BasicDialogProps["closeButtonSize"];
+  closeButtonSize?: BasicDialogProps["Root"]["closeButtonSize"];
   /**@default "2rem"*/
   titleFontSize?: BasicDivProps["fontSize"];
   /**@default "md" */
@@ -76,7 +76,7 @@ function SimpleFormDialog<T extends string>(props: SimpleFormDialogProps<T>) {
   };
 
   return (
-    <BasicDialog
+    <BasicDialog.Root
       rerenderOnClose
       width={props.width}
       closeButtonSize={props.closeButtonSize || "md"}
@@ -147,7 +147,7 @@ function SimpleFormDialog<T extends string>(props: SimpleFormDialogProps<T>) {
           <SaveButton size={actionButtonSize} onClick={handleOnSaveClick} />
         </BasicDialog.ActionTrigger>
       </BasicDialog.Footer>
-    </BasicDialog>
+    </BasicDialog.Root>
   );
 }
 

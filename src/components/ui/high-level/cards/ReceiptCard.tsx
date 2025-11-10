@@ -26,7 +26,7 @@ interface ReceiptCardProps
 }
 function ReceiptCard(props: ReceiptCardProps) {
   return (
-    <BasicCard
+    <BasicCard.Root
       backgroundColor={props.backgroundColor || "onSurface"}
       color={props.color || "surface"}
       width={props.width}
@@ -41,7 +41,7 @@ function ReceiptCard(props: ReceiptCardProps) {
         centerContent
         corners={"md"}
         backgroundColor={props.indicatorBackgroundColor || "surface[0.1]"}
-        style={{flexShrink:0}}
+        style={{ flexShrink: 0 }}
       >
         {props.receiptPath ? (
           <BasicImg
@@ -82,7 +82,7 @@ function ReceiptCard(props: ReceiptCardProps) {
           />
         </BasicCard.TrailingAddOn>
       )}
-    </BasicCard>
+    </BasicCard.Root>
   );
 }
 

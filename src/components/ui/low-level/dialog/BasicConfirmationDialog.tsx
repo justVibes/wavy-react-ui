@@ -41,7 +41,7 @@ function BasicConfirmationDialog(props: BasicConfirmationDialogProps) {
     preference: "res",
   });
   return (
-    <BasicDialog
+    <BasicDialog.Root
       controller={props.controller}
       width={props.width ?? "25rem"}
       height={props.height}
@@ -84,7 +84,7 @@ function BasicConfirmationDialog(props: BasicConfirmationDialogProps) {
           onClick={props.action.onClick}
         />
       </BasicDialog.Footer>
-    </BasicDialog>
+    </BasicDialog.Root>
   );
 }
 

@@ -96,7 +96,7 @@ function AttachmentsDialog(props: AttachmentsDialogProps) {
         rerender: triggerRerender,
       }}
     >
-      <BasicDialog
+      <BasicDialog.Root
         onClose={handleOnClose}
         unmountOnExit={props.unmountOnExit}
         maxHeight={"30rem"}
@@ -116,7 +116,7 @@ function AttachmentsDialog(props: AttachmentsDialogProps) {
             <AttachmentsList />
           )}
         </BasicDialog.Body>
-      </BasicDialog>
+      </BasicDialog.Root>
     </MainContext.Provider>
   );
 }
@@ -227,7 +227,7 @@ function Attachment(props: {
   const Icon = fileTypeIconMapper(typeAlias);
 
   return (
-    <BasicCard
+    <BasicCard.Root
       corners={"md"}
       width={"full"}
       sx={{
@@ -309,7 +309,7 @@ function Attachment(props: {
           )}
         </BasicCard.TrailingAddOn>
       )}
-    </BasicCard>
+    </BasicCard.Root>
   );
 }
 

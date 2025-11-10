@@ -14,7 +14,7 @@ import { Prettify, SafeOmit } from "@wavy/types";
 
 const GapContext = createContext<{ gap: BasicDivProps["gap"] }>(null);
 
-interface BasicCardProps
+interface RootProps
   extends Partial<
     Record<"width" | `${"max" | "min"}Width`, BasicDivProps["width"]>
   > {
@@ -42,7 +42,7 @@ interface BasicCardProps
     | [JSX.Element, JSX.Element]
     | [JSX.Element, JSX.Element, JSX.Element];
 }
-function BasicCard(props: BasicCardProps) {
+function Root(props: RootProps) {
   return (
     <GapContext.Provider value={{ gap: props.gap }}>
       <BasicDiv
@@ -131,9 +131,9 @@ function createTextNode(defaultStyle?: BasicSpanProps) {
   };
 }
 
-BasicCard.LeadingAddOn = createAddOnEl(true);
-BasicCard.TrailingAddOn = createAddOnEl(false);
-BasicCard.Content = (
+const LeadingAddOn = createAddOnEl(true);
+const TrailingAddOn = createAddOnEl(false);
+const Content = (
   props: SafeOmit<BasicDivProps, "asChildren"> & {
     children: JSX.Element | [JSX.Element, JSX.Element];
   }
@@ -154,11 +154,16 @@ BasicCard.Content = (
   );
 };
 
-BasicCard.Label = createTextNode({
+const Label = createTextNode({
   fontWeight: "bold",
   fontSize: "xs",
   fade: 0.75,
 });
-BasicCard.Item = createTextNode({ fontSize: "sm" });
+const Item = createTextNode({ fontSize: "sm" });
 
+const BasicCard = { Root, LeadingAddOn, TrailingAddOn, Content, Label, Item };
+interface BasicCardProps {
+  RootProps: RootProps;
+}
 export default BasicCard;
+export type { BasicCardProps };

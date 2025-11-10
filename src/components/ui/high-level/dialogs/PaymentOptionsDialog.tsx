@@ -55,7 +55,7 @@ function PaymentOptionsDialog(props: PaymentOptionsDialogProps<{}>) {
     );
   };
   return (
-    <BasicDialog
+    <BasicDialog.Root
       triggerElement={props.triggerElement}
       controller={props.controller}
       width="22rem"
@@ -129,7 +129,7 @@ function PaymentOptionsDialog(props: PaymentOptionsDialogProps<{}>) {
           );
         })}
       </BasicDialog.Body>
-    </BasicDialog>
+    </BasicDialog.Root>
   );
 }
 

@@ -35,8 +35,8 @@ interface BasicPopoverProps
   displayAction?: "click" | "hover";
   visibleOnScroll?: boolean;
   rerenderOnClose?: boolean;
-  /**@description This ensures that the popover isn't closed during interactions
-   * (e.g: hovering or clicking the popover).
+  /**@description This stops the popover from closing while attempting to interact with it
+   * (e.g: hovering over or clicking the popover).
    * @default false
    */
   allowInteractions?: boolean;
