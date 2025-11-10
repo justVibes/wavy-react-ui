@@ -40,6 +40,9 @@ interface BasicEditableFieldProps {
   /**Replaces the predefined controls */
   control?: JSX.Element;
   placeholder?: string;
+  /**The padding for the content in its resting (non-editing) state
+   * @default ["md", ["top", "bottom"]] */
+  contentPadding?: BasicDivProps["padding"];
   spaceBetween?: boolean;
   hideControls?: boolean;
   inputRef?: React.Ref<HTMLInputElement>;
@@ -182,7 +185,7 @@ function BasicEditableField(props: BasicEditableFieldProps) {
             <BasicDiv
               spill={"hidden"}
               width={"full"}
-              padding={["md", ["top", "bottom"]]}
+              padding={props.contentPadding ?? ["md", ["top", "bottom"]]}
               corners={"sm"}
               fontSize={size}
               cursor="text"
