@@ -3,7 +3,7 @@ import applyBasicStyle, {
   BasicColor,
   BasicHtmlElementStyleProps,
 } from "../BasicStyle";
-import StyledElement, { Sx } from "../StyledElements";
+import StyledElement, { InlineCss } from "../StyledElements";
 import {
   applyCoreHTMLProps,
   BasicHtmlElementCoreProps,
@@ -19,7 +19,7 @@ interface BasicImgProps
   noFit?: boolean;
   scaleDown?: boolean;
   tint?: BasicColor;
-  sx?: Sx;
+  sx?: InlineCss;
 }
 
 /**

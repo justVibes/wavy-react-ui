@@ -12,7 +12,7 @@ import CssSpacing from "@/css/resources/CssSpacing";
 import { useManagedRef } from "@/main";
 import { isEmpty, strictArray } from "@wavy/fn";
 import applyBasicStyle, { BasicHtmlElementStyleProps } from "../BasicStyle";
-import StyledElement, { Sx } from "../StyledElements";
+import StyledElement, { InlineCss } from "../StyledElements";
 import {
   applyCoreHTMLProps,
   BasicHtmlElementCoreProps,
@@ -32,7 +32,7 @@ interface BasicDivProps
   overflowPadding?: keyof typeof CssSpacing;
   enableYFaders?: boolean;
   decreaseYFaderPadding?: boolean;
-  css?: Sx;
+  css?: InlineCss;
   onScroll?: (event: React.UIEvent<HTMLDivElement, UIEvent>) => void;
 }
 function BasicDiv(props: PropsWithChildren<BasicDivProps>) {

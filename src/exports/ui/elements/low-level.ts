@@ -11,6 +11,9 @@ import BasicDisclaimer from "@/components/ui/low-level/disclaimer/BasicDisclaime
 import BasicDropzone from "@/components/ui/low-level/dropzone/BasicDropzone";
 import BasicEditableField from "@/components/ui/low-level/editable-field/BasicEditableField";
 import EmptyState from "@/components/ui/low-level/empty-state/EmptyState";
+import FileViewer, {
+  type FileViewerProps,
+} from "@/components/ui/low-level/file-viewer/FileViewer";
 import BasicButton from "@/components/ui/low-level/html/button/BasicButton";
 import BasicDiv from "@/components/ui/low-level/html/div/BasicDiv";
 import BasicImg from "@/components/ui/low-level/html/img/BasicImg";
@@ -38,6 +41,7 @@ export {
   BasicSpan,
   BasicMenu,
   BasicCard,
+  FileViewer,
   BasicBadge,
   EmptyState,
   BasicDialog,
@@ -63,3 +67,5 @@ export {
   BasicSegmentedControls,
   BasicConfirmationDialog,
 };
+
+export type { FileViewerProps };

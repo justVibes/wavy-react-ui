@@ -1,4 +1,4 @@
-import { BasicColor, BasicDiv, resolveBasicColor, Sx } from "@/main";
+import { BasicColor, BasicDiv, resolveBasicColor, InlineCss } from "@/main";
 import {
   Box,
   Menu,
@@ -58,7 +58,8 @@ interface BasicMenuProps<Item extends string>
   }>;
 }
 function BasicMenu<Item extends string>(props: BasicMenuProps<Item>) {
-  const backgroundColor: BasicColor = props.backgroundColor || "surfaceContainer";
+  const backgroundColor: BasicColor =
+    props.backgroundColor || "surfaceContainer";
   const color: BasicColor = props.color || "onSurface";
 
   const placement: BasicMenuProps<Item>["placement"] =

@@ -4,7 +4,7 @@ import {
   BasicDiv,
   BasicSpan,
   ellipsis,
-  Sx,
+  InlineCss,
 } from "@/main";
 import React from "react";
 import { BasicDivProps } from "../div/BasicDiv";
@@ -25,7 +25,7 @@ interface BasicOptionProps {
   color?: BasicColor;
   disabled?: boolean;
   backgroundColor?: BasicColor;
-  sx?: Sx;
+  sx?: InlineCss;
   scrollIntoView?: boolean;
   onClick?: () => void;
 }

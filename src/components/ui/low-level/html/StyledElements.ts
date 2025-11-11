@@ -27,4 +27,4 @@ class StyledElement {
 }
 
 export default StyledElement;
-export type { CssProperties, InlineCss as Sx };
+export type { CssProperties, InlineCss };

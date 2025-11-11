@@ -9,7 +9,7 @@ import {
   BasicHtmlElementCoreProps,
 } from "../BasicHtmlElementCore";
 import applyBasicStyle, { BasicHtmlElementStyleProps } from "../BasicStyle";
-import StyledElement, { Sx } from "../StyledElements";
+import StyledElement, { InlineCss } from "../StyledElements";
 import { TextAlign } from "./types/BasicSpanTypes";
 
 interface BasicSpanProps
@@ -27,7 +27,7 @@ interface BasicSpanProps
   textAlign?: TextAlign;
   ellipsis?: boolean;
   ref?: React.Ref<HTMLSpanElement>;
-  sx?: Sx;
+  sx?: InlineCss;
   children?: React.ReactNode;
 }
 function BasicSpan(props: BasicSpanProps) {

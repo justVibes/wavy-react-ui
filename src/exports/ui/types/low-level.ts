@@ -4,9 +4,10 @@ export type {
 } from "@/components/ui/low-level/html/BasicStyle";
 
 export type {
-  Sx,
+  InlineCss,
   CssProperties,
 } from "@/components/ui/low-level/html/StyledElements";
 
-export type  { BasicTooltipPlacement } from "@/components/ui/low-level/tooltip/BasicTooltip";
+export type { BasicTooltipPlacement } from "@/components/ui/low-level/tooltip/BasicTooltip";
 export type { BasicMenuPlacement } from "@/components/ui/low-level/menu/BasicMenu";
+
