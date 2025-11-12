@@ -79,7 +79,7 @@ function Indicator(props: FileViewerProps.IndicatorProps) {
           style: {
             padding:
               applyBasicStyle({ padding: props.styles?.icon?.padding })
-                ?.padding ?? `calc(${navThickness}/4.61)`,
+                ?.padding ?? ".65rem",
           },
         })}
       />
@@ -391,7 +391,7 @@ declare namespace FileViewerProps {
       icon: Partial<{
         /**@default RootProps.navThickness */
         size: BasicDivProps["size"];
-        /**@default calc(RootProps.navThickness/4.61) */
+        /**@default ".65rem" */
         padding: BasicDivProps["padding"];
       }>;
       filename: Partial<{

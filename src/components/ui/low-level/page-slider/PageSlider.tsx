@@ -90,9 +90,10 @@ function PageSlider<T>(props: PageSliderProps<T>) {
     },
     [activePage]
   );
-  controller.echo = useCallback((message) => {
-    return props.onEcho?.(message);
-  }, []);
+  // useCallback stops the function from rerendering when deps that are generated outside
+  // of this component changes.
+  // Untried fixes: Add deps to the onEcho callback
+  controller.echo = props.onEcho;
   controller.isPageActive = useCallback(
     (page) => page === activePage,
     [activePage]
@@ -102,14 +103,15 @@ function PageSlider<T>(props: PageSliderProps<T>) {
   }, []);
   controller.getActivePage = useCallback(() => activePage, [activePage]);
 
-
   useEffect(() => {
     const cleanup = () => {
-      controller.goTo = null;
-      controller.echo = null;
-      controller.onPageChange = null;
-      controller.isPageActive = null;
-      controller.getActivePage = null;
+      for (const key of Object.keys(controller)) {
+        const validKey = key as keyof typeof controller;
+
+        if (typeof controller[validKey] === "function") {
+          controller[validKey] = null;
+        }
+      }
       onChangeCb = null;
     };
 
