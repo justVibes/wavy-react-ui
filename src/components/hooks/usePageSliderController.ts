@@ -1,8 +1,9 @@
-function usePageSliderController(defaultPage: number) {
+function usePageSliderController(defaultPage = 0) {
   return {
     defaultPage,
     goTo: (_: number): void => null,
-    isActive: (_: number): boolean => null,
+    getActivePage: (): number => null,
+    isPageActive: (_: number): boolean => null,
     onPageChange: (_: (_: number) => void): void => null,
   };
 }

@@ -67,10 +67,11 @@ function PageSlider(props: PageSliderProps) {
     },
     [activePage]
   );
-  controller.isActive = useCallback(
+  controller.isPageActive = useCallback(
     (page) => page === activePage,
     [activePage]
   );
+  controller.getActivePage = useCallback(() => activePage, [activePage]);
   controller.onPageChange = useCallback((cb) => {
     onChangeCb = cb;
   }, []);
@@ -78,7 +79,7 @@ function PageSlider(props: PageSliderProps) {
   useEffect(() => {
     const cleanup = () => {
       controller.goTo = null;
-      controller.isActive = null;
+      controller.isPageActive = null;
       controller.onPageChange = null;
       onChangeCb = null;
     };
@@ -94,7 +95,7 @@ function PageSlider(props: PageSliderProps) {
       <div
         style={applyBasicStyle({
           pos: "relative",
-          spill:props.spill,
+          spill: props.spill,
           height: props.height,
           width: props.width ?? "100%",
           gap: props.gap ?? ".5rem",
