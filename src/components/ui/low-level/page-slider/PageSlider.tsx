@@ -1,7 +1,7 @@
 import usePageSliderController, {
   UsePageSliderControllerReturn,
 } from "@/components/hooks/usePageSliderController";
-import { applyBasicStyle, BasicColor, BasicDiv } from "@/main";
+import { applyBasicStyle, BasicColor, BasicDiv, useManagedRef } from "@/main";
 import { hasIndex } from "@wavy/fn";
 import { SafeOmit } from "@wavy/types";
 import React, {
@@ -14,22 +14,21 @@ import React, {
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { BasicDivProps } from "../html/div/BasicDiv";
 
-const Context =
-  createContext<
-    SafeOmit<
-      PageSliderProps,
-      | "children"
-      | "controller"
-      | "onChange"
-      | "childFlexGrow"
-      | "gap"
-      | "height"
-      | "width"
-    >
-  >(null);
+const Context = createContext<
+  SafeOmit<
+    PageSliderProps<any>,
+    | "children"
+    | "controller"
+    | "onChange"
+    | "childFlexGrow"
+    | "gap"
+    | "height"
+    | "width"
+  > & { transitioning: boolean }
+>(null);
 
-interface PageSliderProps {
-  controller?: UsePageSliderControllerReturn;
+interface PageSliderProps<T> {
+  controller?: UsePageSliderControllerReturn<T>;
   spill?: BasicDivProps["spill"];
   /**@default "md" */
   gap?: BasicDivProps["gap"];
@@ -52,35 +51,65 @@ interface PageSliderProps {
   navCorners?: BasicDivProps["corners"];
   /**@default 1 */
   childFlexGrow?: number;
-  onChange?: (pageIdx: number) => void;
+  onEcho?: (message?: string) => T;
+  onChange?: (from: number, to: number) => void;
 }
-function PageSlider(props: PageSliderProps) {
+function PageSlider<T>(props: PageSliderProps<T>) {
+  const [transitioning, setTransitioning] = useState(false);
   const controller = props.controller || usePageSliderController(0);
   const [activePage, setActivePage] = useState(controller.defaultPage ?? 0);
-  let onChangeCb: (page: number) => void;
+
+  let onChangeCb: (from: number, to: number) => void;
   controller.goTo = useCallback(
-    (page) => {
-      if (page === activePage) return;
-      onChangeCb?.(page);
-      props.onChange?.(page);
-      setActivePage(page);
+    (to, options) => {
+      const transition = options?.transition || "smooth";
+      const from = activePage;
+
+      if (to === from || !props.children[to]) return;
+      onChangeCb?.(from, to);
+      props.onChange?.(from, to);
+
+      if (Math.abs(from - to) > 1 && transition === "smooth") {
+        setTransitioning(true);
+        let counter = from;
+        const interval = setInterval(() => {
+          if (to > from) counter++;
+          else counter--;
+
+          setActivePage(counter);
+
+          // If this is the last iteration
+          if (counter === to) {
+            clearInterval(interval);
+            setTransitioning(false);
+          }
+        }, options?.transitionDuration || 200);
+      } else {
+        setActivePage(to);
+      }
     },
     [activePage]
   );
+  controller.echo = useCallback((message) => {
+    return props.onEcho?.(message);
+  }, []);
   controller.isPageActive = useCallback(
     (page) => page === activePage,
     [activePage]
   );
-  controller.getActivePage = useCallback(() => activePage, [activePage]);
   controller.onPageChange = useCallback((cb) => {
     onChangeCb = cb;
   }, []);
+  controller.getActivePage = useCallback(() => activePage, [activePage]);
+
 
   useEffect(() => {
     const cleanup = () => {
       controller.goTo = null;
-      controller.isPageActive = null;
+      controller.echo = null;
       controller.onPageChange = null;
+      controller.isPageActive = null;
+      controller.getActivePage = null;
       onChangeCb = null;
     };
 
@@ -90,22 +119,31 @@ function PageSlider(props: PageSliderProps) {
   const handleOnPrevClick = () => controller.goTo(activePage - 1);
   const handleOnNextClick = () => controller.goTo(activePage + 1);
 
+  const parentStyle = applyBasicStyle({
+    height: props.height,
+    width: props.width,
+    spill: props.spill,
+    gap: props.gap,
+  });
+
   return (
-    <Context.Provider value={{ ...props }}>
+    <Context.Provider value={{ ...props, transitioning }}>
       <div
-        style={applyBasicStyle({
-          pos: "relative",
-          spill: props.spill,
-          height: props.height,
-          width: props.width ?? "100%",
-          gap: props.gap ?? ".5rem",
-          centerContent: true,
-          style: {
-            transition: "all 300ms ease-in-out",
-            perspective: "500px",
-            transformStyle: "preserve-3d",
-          },
-        })}
+        // 12.11.2025 @ 8:25 am
+        // Using applyBasicStyle breaks the components positioning
+        style={{
+          display: "flex",
+          position: "relative",
+          alignItems: "center",
+          height: parentStyle.height,
+          width: parentStyle.width ?? "100%",
+          justifyContent: "center",
+          gap: parentStyle.gap ?? ".5rem",
+          overflow: parentStyle.overflow,
+          transition: "all 300ms ease-in-out",
+          perspective: "500px",
+          transformStyle: "preserve-3d",
+        }}
       >
         <Nav
           disabled={activePage <= 0}
@@ -162,11 +200,12 @@ function Nav(props: {
 }) {
   const ctx = useContext(Context);
   const Icon = props.inset === "left" ? BsArrowLeft : BsArrowRight;
+  const disabled = props.disabled || ctx.transitioning;
 
   return (
     <BasicDiv
-      fade={props.disabled ? 0.5 : 1}
-      cursor={props.disabled ? "not-allowed" : "pointer"}
+      fade={disabled ? 0.5 : 1}
+      cursor={disabled ? "not-allowed" : "pointer"}
       pos="absolute"
       centerSelf={"y"}
       centerContent
@@ -179,21 +218,21 @@ function Nav(props: {
       css={{
         [props.inset as any]: "1rem",
         zIndex: 2,
-        transition: "all 0.3s ease-in-out",
+        transition: "all 300ms ease-in-out",
         boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-        ":hover > *": props.disabled
+        ":hover > *": disabled
           ? undefined
           : {
               animation: "squish 300ms ease-in-out",
             },
-        ":active": props.disabled
+        ":active": disabled
           ? undefined
           : {
               scale: 0.9,
               opacity: 0.75,
             },
       }}
-      onClick={props.disabled ? undefined : props.onClick}
+      onClick={disabled ? undefined : props.onClick}
     >
       <Icon size={ctx.navIconSize} />
     </BasicDiv>
