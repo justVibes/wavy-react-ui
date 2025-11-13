@@ -77,9 +77,9 @@ function Indicator(props: FileViewerProps.IndicatorProps) {
           size: navThickness || props.styles?.icon?.size,
           color: "pdf",
           style: {
-            padding:
-              applyBasicStyle({ padding: props.styles?.icon?.padding })
-                ?.padding ?? ".65rem",
+            padding: applyBasicStyle({
+              padding: props.styles?.icon?.padding || ".65rem",
+            })?.padding,
           },
         })}
       />

@@ -1,8 +1,14 @@
 import usePageSliderController, {
   UsePageSliderControllerReturn,
 } from "@/components/hooks/usePageSliderController";
-import { applyBasicStyle, BasicColor, BasicDiv, useManagedRef } from "@/main";
-import { hasIndex } from "@wavy/fn";
+import {
+  applyBasicStyle,
+  BasicColor,
+  BasicDiv,
+  BasicSpan,
+  useManagedRef,
+} from "@/main";
+import { buildArray, hasIndex } from "@wavy/fn";
 import { SafeOmit } from "@wavy/types";
 import React, {
   createContext,
@@ -52,6 +58,10 @@ interface PageSliderProps<T> {
   /**@default 1 */
   childFlexGrow?: number;
   onEcho?: (message?: string) => T;
+
+  /**Using from and to can be useful for "big" page jumps.
+   *i.e: `0 -> 4 | 5 -> 2 | 4 -> 10`
+   */
   onChange?: (from: number, to: number) => void;
 }
 function PageSlider<T>(props: PageSliderProps<T>) {
@@ -67,10 +77,11 @@ function PageSlider<T>(props: PageSliderProps<T>) {
 
       if (
         to === from ||
+        transitioning ||
         (!options?.ignoreOutOfBoundsCheck && !props.children[to])
-      )
+      ) {
         return;
-      // if() return
+      }
       onChangeCb?.(from, to);
       props.onChange?.(from, to);
 
@@ -93,7 +104,7 @@ function PageSlider<T>(props: PageSliderProps<T>) {
         setActivePage(to);
       }
     },
-    [activePage, props.children]
+    [activePage, props.children, transitioning]
   );
   // useCallback stops the function from rerendering when deps that are generated outside
   // of this component changes.
@@ -242,6 +253,16 @@ function Nav(props: {
       onClick={disabled ? undefined : props.onClick}
     >
       <Icon size={ctx.navIconSize} />
+    </BasicDiv>
+  );
+}
+
+function PageIndicator(props: { totalPages: number; currentPage: number }) {
+  return (
+    <BasicDiv row gap={"md"}>
+      {buildArray(props.totalPages, (i) => (
+        <BasicSpan text={(i + 1).toString()} />
+      ))}
     </BasicDiv>
   );
 }
