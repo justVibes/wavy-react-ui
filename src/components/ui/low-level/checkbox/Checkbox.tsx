@@ -4,7 +4,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import { BasicDivProps } from "../html/div/BasicDiv";
 
 interface CheckboxProps {
-  defaultChecked?: boolean;
+  checked?: boolean;
   size?: BasicDivProps["size"];
   /**@default "sm" */
   corners?: BasicDivProps["corners"];
@@ -17,15 +17,18 @@ interface CheckboxProps {
   borderColor?: BasicColor;
   /**@default "onPrimaryContainer" */
   iconColor?: BasicColor;
+  disableShadow?: boolean;
   iconSize?: `${number}${"rem" | "em" | "px"}`;
   onChange?: (checked: boolean) => void;
+  onClick?: () => void;
 }
 
 function Checkbox(props: CheckboxProps) {
-  const [checked, setChecked] = useState(props.defaultChecked ?? false);
+  const [checked, setChecked] = useState(props.checked ?? false);
 
   const toggleChecked = () => {
     props.onChange?.(!checked);
+    props.onClick?.();
     setChecked(!checked);
   };
   return (
@@ -40,7 +43,9 @@ function Checkbox(props: CheckboxProps) {
       color={props.iconColor || "onPrimaryContainer"}
       borderColor={props.borderColor || "onSurface[0.1]"}
       style={{
-        boxShadow: "rgba(0, 0, 0, 0.25) 0px 2px 4px 0px inset",
+        boxShadow: props.disableShadow
+          ? undefined
+          : "rgba(0, 0, 0, 0.25) 0px 2px 4px 0px inset",
       }}
       onClick={toggleChecked}
     >
