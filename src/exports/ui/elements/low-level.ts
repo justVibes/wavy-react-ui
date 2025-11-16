@@ -36,16 +36,20 @@ import BasicTag from "@/components/ui/low-level/tag/BasicTag";
 import BasicTextField from "@/components/ui/low-level/textfield/BasicTextField";
 import BasicTimeline from "@/components/ui/low-level/timeline/BasicTimeline";
 import BasicTooltip from "@/components/ui/low-level/tooltip/BasicTooltip";
+import BasicSelect from "@/components/ui/low-level/html/select/BasicSelect";
+import BasicOption from "@/components/ui/low-level/html/option/BasicOption";
 
 export {
   BasicOl,
   Checkbox,
   BasicDiv,
   BasicImg,
+  BasicOption,
   BasicTag,
   BasicSpan,
   BasicMenu,
   BasicCard,
+  BasicSelect,
   FileViewer,
   BasicTable,
   BasicBadge,
