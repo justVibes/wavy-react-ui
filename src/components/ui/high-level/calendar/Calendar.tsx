@@ -16,7 +16,7 @@ type DateType = number | Date | (string & {});
 
 interface CalendarProps {
   /**@default "Jan 1, 1920"*/
-  minDate?: DateType;
+  minDate?: DateType | "today";
   /**@default "end-of-year" */
   maxDate?: DateType | "today" | "end-of-year";
   /**@default "after" */
@@ -35,7 +35,10 @@ function Calendar(props: CalendarProps) {
     props.selectedDate || new Date()
   );
   const state = useManagedRef(selectedDate);
-  const minDate = toDate(props.minDate) || new Date("Jan 1, 1920"),
+  const minDate =
+      props.minDate === "today"
+        ? new Date()
+        : toDate(props.minDate) || new Date("Jan 1, 1920"),
     maxDate =
       props.maxDate === "today"
         ? new Date()
@@ -112,7 +115,8 @@ function Header(
     "October",
     "November",
     "December",
-  ].filter((_, i) => {
+  ];
+  const enabledMonths = months.filter((_, i) => {
     const currentYear = props.date.getFullYear();
     if (currentYear === props.minDate.getFullYear()) {
       return i >= props.minDate.getMonth();
@@ -125,7 +129,6 @@ function Header(
   });
   const selectedMonth = months[props.date.getMonth()];
 
-  props.visibleYearsRange;
   const handleMonthClick = (value: string) => {
     props.changeMonth(months.findIndex((m) => m === value));
   };
@@ -138,7 +141,11 @@ function Header(
     return range(props.minDate.getFullYear(), props.maxDate.getFullYear() + 1);
   };
   const getNavClassName = (disabled: boolean) => {
-    return ["calendar-chevron", "nav", disabled ? "disabled" : ""].join(" ");
+    return [
+      "calendar-chevron",
+      "calendar-nav",
+      disabled ? "disabled" : "",
+    ].join(" ");
   };
 
   return (
@@ -159,7 +166,7 @@ function Header(
         <Dropdown
           label={selectedMonth}
           isSelected={(value) => selectedMonth === value}
-          options={months.map((month) => ({
+          options={enabledMonths.map((month) => ({
             value: month,
           }))}
           onOptionClick={handleMonthClick}

@@ -58,7 +58,7 @@ function CalendarDialog(props: CalendarDialogProps) {
       width={"max-content"}
       controller={controller}
       triggerElement={triggerElement}
-      backgroundColor={backgroundColor || "onSurface[0.25]"}
+      backgroundColor={backgroundColor || "surface[0.25]"}
       backdropBlur={backdropBlur || ".5rem"}
     >
       {props.title && (
