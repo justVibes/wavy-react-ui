@@ -71,7 +71,8 @@ function Calendar(props: CalendarProps) {
   return (
     <DatePicker
       inline
-      required
+      required={props.required}
+      // selectsRange
       // excludeDates={excludedDates}
       allowSameDay={props.allowSameDay}
       minDate={minDate}

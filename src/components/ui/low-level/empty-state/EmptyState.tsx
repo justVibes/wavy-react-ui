@@ -3,6 +3,7 @@ import { JSX } from "@emotion/react/jsx-runtime";
 import { BasicDivProps } from "../html/div/BasicDiv";
 import { createContext, useContext } from "react";
 import { HtmlElementDim } from "../html/BasicStyle";
+import { BasicSpanProps } from "../html/span/BasicSpan";
 
 const FadeContext = createContext<{ fade: BasicDivProps["fade"] }>(null);
 
@@ -12,10 +13,10 @@ function Root(props: EmptyStateProps.RootProps) {
       value={props.itemFade ? { fade: props.itemFade } : { fade: 0.5 }}
     >
       <BasicDiv
-        size="full"
-        centerContent
+        {...props}
+        size={props.size ?? "full"}
+        centerContent={props.centerContent ?? true}
         gap={props.gap || "lg"}
-        pos={props.pos}
       >
         {props.children}
       </BasicDiv>
@@ -51,23 +52,29 @@ function Content(props: EmptyStateProps.ContentProps) {
 }
 
 declare namespace EmptyStateProps {
-  interface RootProps {
-    pos?: BasicDivProps["pos"];
+  interface RootProps extends BasicDivProps {
+    /**@default "lg" */
     gap?: BasicDivProps["gap"];
+    /**@default "full" */
+    size?: BasicDivProps["size"];
+    /**@default true */
+    centerContent?: BasicDivProps["centerContent"];
     itemFade?: BasicDivProps["fade"];
     children: JSX.Element | JSX.Element[];
   }
   interface IndicatorProps {
+    /**@default "4rem" */
     size?: HtmlElementDim;
     element: JSX.Element;
     disableFade?: boolean;
   }
-  interface ContentProps
-    extends Partial<
-      Record<`${"title" | "description"}FontSize`, BasicDivProps["fontSize"]>
-    > {
+  interface ContentProps {
+    /**@default "lg" */
+    titleFontSize?: BasicSpanProps["fontSize"];
+    descriptionFontSize?: BasicSpanProps["fontSize"];
     title: string;
     description: string;
+    /**@default "sm" */
     gap?: BasicDivProps["gap"];
   }
 }

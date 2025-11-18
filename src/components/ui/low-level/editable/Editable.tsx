@@ -2,27 +2,29 @@ import {
   BasicButton,
   BasicPopover,
   BasicSpan,
-  BasicTextField,
-  BasicTooltip,
+  TextField,
   ellipsis,
   FontSize,
   useManagedRef,
 } from "@/main";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { JSX } from "@emotion/react/jsx-runtime";
+import { Prettify, SafeOmit } from "@wavy/types";
+import React, { createContext, useContext, useState } from "react";
 import { IconType } from "react-icons";
 import { LuCheck, LuPencilLine, LuX } from "react-icons/lu";
 import { BasicButtonProps } from "../html/button/BasicButton";
 import BasicDiv, { BasicDivProps } from "../html/div/BasicDiv";
 import { BasicPopoverProps } from "../popover/BasicPopover";
-import { Prettify, SafeOmit } from "@wavy/types";
-import { JSX } from "@emotion/react/jsx-runtime";
+import { TextFieldProps } from "../textfield/TextField";
 
 const Context = createContext<{
   padding: BasicButtonProps["padding"];
-  iconSize: BasicEditableFieldProps["size"];
+  iconSize: EditableProps["size"];
 }>(null);
 
-interface BasicEditableFieldProps {
+type Control = "cancel" | "save" | "edit";
+
+interface EditableProps extends Partial<Pick<TextFieldProps, "focusColor">> {
   value?: string;
   disabled?: boolean;
   label?: string;
@@ -34,7 +36,7 @@ interface BasicEditableFieldProps {
   inputWidth?: BasicDivProps["width"];
   /**@default "md" */
   size?: "2xl" | "xl" | "lg" | "md" | "sm" | "xs" | "2xs";
-  iconSize?: BasicEditableFieldProps["size"];
+  iconSize?: EditableProps["size"];
   /** Prevents editing */
   preventDefault?: boolean;
   /**Replaces the predefined controls */
@@ -44,11 +46,14 @@ interface BasicEditableFieldProps {
    * @default ["md", ["top", "bottom"]] */
   contentPadding?: BasicDivProps["padding"];
   spaceBetween?: boolean;
-  hideControls?: boolean;
-  inputRef?: React.Ref<HTMLInputElement>;
+  hideControls?: boolean | Control | Control[];
+  maxChars?: number;
+  inputSize?: TextFieldProps["size"];
   rowGap?: BasicDivProps["gap"];
   columnGap?: BasicDivProps["gap"];
-  sanitizePopoverContent?: (value: string) => React.ReactNode;
+  showPopoverOnHover?: boolean;
+  showCharCounter?:boolean
+  renderPopoverContent?: (value: string) => React.ReactNode;
   onEditClick?: () => void;
   onContentClick?: () => void;
   onCancelClick?: () => void;
@@ -71,7 +76,7 @@ interface BasicEditableFieldProps {
     >;
   };
 }
-function BasicEditableField(props: BasicEditableFieldProps) {
+function Editable(props: EditableProps) {
   const clickedControlRef = useManagedRef<"save" | "cancel" | "edit">(null);
   const previousTextRef = useManagedRef(props.defaultValue ?? "");
   const [text, setText] = useState(props.value ?? previousTextRef.read());
@@ -83,7 +88,6 @@ function BasicEditableField(props: BasicEditableFieldProps) {
     if (props.value === undefined) setText(value);
     props.onChange?.(value);
   };
-
   const rollbackChanges = () => {
     handleOnChange(previousTextRef.read());
   };
@@ -159,7 +163,11 @@ function BasicEditableField(props: BasicEditableFieldProps) {
           grid
           gap={props.columnGap ?? wrapperProps.gap}
           gridCols={
-            props.hideControls
+            props.hideControls === true ||
+            (Array.isArray(props.hideControls) &&
+              (["cancel", "save", "edit"] as const).every((ctrl) =>
+                (props.hideControls as Control[]).includes(ctrl)
+              ))
               ? "1fr"
               : props.control
               ? "1fr auto"
@@ -171,17 +179,19 @@ function BasicEditableField(props: BasicEditableFieldProps) {
         >
           {editing ? (
             <BasicDiv width={"full"} align="center" gap={"md"}>
-              <BasicTextField
+              <TextField
                 autoFocus
-                size={size}
+                maxChars={props.maxChars}
                 value={text}
                 corners={"md"}
-                pureRef={props.inputRef}
                 width={props.inputWidth}
+                focusColor={props.focusColor}
+                size={props.inputSize || size}
                 placeholder={props.placeholder}
-                onEnterKeyPressed={handleOnEnterPressed}
-                onBlur={handleTextFieldBlur}
+                showCharCounter={props.showCharCounter}
                 onChange={handleOnChange}
+                onBlur={handleTextFieldBlur}
+                onEnterKeyPressed={handleOnEnterPressed}
               />
             </BasicDiv>
           ) : (
@@ -208,15 +218,19 @@ function BasicEditableField(props: BasicEditableFieldProps) {
               <BasicPopover
                 {...props.slotProps?.popover}
                 allowInteractions
-                asChild={props.slotProps?.popover.asChild ?? !text}
+                asChild={
+                  props.showPopoverOnHover
+                    ? !!text
+                    : props.slotProps?.popover?.asChild
+                }
                 content={
-                  (props.slotProps?.popover.content ||
-                    props.sanitizePopoverContent?.(text)) ??
+                  (props.slotProps?.popover?.content ||
+                    props.renderPopoverContent?.(text)) ??
                   text
                 }
                 displayAction="hover"
-                maxWidth={props.slotProps?.popover.maxWidth || "10rem"}
-                maxHeight={props.slotProps?.popover.maxHeight || "5rem"}
+                maxWidth={props.slotProps?.popover?.maxWidth || "10rem"}
+                maxHeight={props.slotProps?.popover?.maxHeight || "5rem"}
               >
                 <span
                   style={ellipsis({
@@ -229,10 +243,15 @@ function BasicEditableField(props: BasicEditableFieldProps) {
               </BasicPopover>
             </BasicDiv>
           )}
-          {!props.hideControls &&
+          {props.hideControls !== true &&
             (props.control || (
               <ControlButtons
                 editing={editing}
+                hideControl={
+                  typeof props.hideControls === "boolean"
+                    ? undefined
+                    : props.hideControls
+                }
                 onCancel={handleOnCancelClick}
                 onSave={handleOnSave}
                 onEdit={handleOnEditClick}
@@ -246,17 +265,33 @@ function BasicEditableField(props: BasicEditableFieldProps) {
 
 function ControlButtons(props: {
   editing: boolean;
+  hideControl?: Exclude<EditableProps["hideControls"], boolean>;
   onCancel: () => void;
   onSave: () => void;
   onEdit: () => void;
 }) {
+  const hidden = (control: Control) =>
+    Array.isArray(props.hideControl)
+      ? props.hideControl.includes(control)
+      : props.hideControl === control;
   if (!props.editing) {
-    return <Control icon={LuPencilLine} onClick={props.onEdit} />;
+    return hidden("edit") ? undefined : (
+      <Control icon={LuPencilLine} onClick={props.onEdit} />
+    );
   }
   return (
     <>
-      <Control outlined icon={LuX} onClick={props.onCancel} />
-      <Control preventDefault outlined icon={LuCheck} onClick={props.onSave} />
+      {!hidden("cancel") && (
+        <Control outlined icon={LuX} onClick={props.onCancel} />
+      )}
+      {!hidden("save") && (
+        <Control
+          preventDefault
+          outlined
+          icon={LuCheck}
+          onClick={props.onSave}
+        />
+      )}
     </>
   );
 }
@@ -298,4 +333,4 @@ function Control(props: {
   );
 }
 
-export default BasicEditableField;
+export default Editable;

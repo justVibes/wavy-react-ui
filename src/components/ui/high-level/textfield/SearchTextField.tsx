@@ -1,4 +1,4 @@
-import { BasicTextField } from "@/main";
+import { TextField } from "@/main";
 import { CiSearch } from "react-icons/ci";
 import { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 
@@ -15,7 +15,7 @@ interface SearchTextFieldProps {
 }
 function SearchTextField(props: SearchTextFieldProps) {
   return (
-    <BasicTextField
+    <TextField
       disabled={props.disabled}
       allowCopyText={props.allowCopy}
       allowPasteText={props.allowPaste}

@@ -1,5 +1,6 @@
 import {
   BasicColor,
+  BasicSpan,
   CopyButton,
   CssSpacing,
   PasteButton,
@@ -16,11 +17,11 @@ import {
 } from "@chakra-ui/react";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { takeLast } from "@wavy/fn";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import applyBasicStyle, { HtmlElementDim } from "../html/BasicStyle";
 import BasicDiv, { BasicDivProps } from "../html/div/BasicDiv";
 import { isCharAllowed } from "./helper-functions/BasicTextFieldHelperFunctions";
-import { AllowedCharacters } from "./types/BasicTextFieldTypes";
+import { AllowedCharacters } from "./types";
 import { Prettify } from "@wavy/types";
 
 type ElementPos = "leading" | "trailing";
@@ -29,7 +30,7 @@ type AdditionalElements = {
   [Key in `${ElementPos}${ElementType}`]?: React.ReactNode;
 };
 
-interface BasicTextFieldProps extends AdditionalElements {
+interface TextFieldProps extends AdditionalElements {
   disabled?: boolean;
   readOnly?: boolean;
   borderColor?: BasicDivProps["borderColor"];
@@ -51,6 +52,9 @@ interface BasicTextFieldProps extends AdditionalElements {
   allowCopyText?: boolean;
   label?: string;
   required?: boolean;
+  /**@default Infinity */
+  maxChars?: number;
+  showCharCounter?: boolean;
   helperText?: string;
   indent?: HtmlElementDim | Partial<Record<"left" | "right", HtmlElementDim>>;
   onPasteClick?: (text: string) => void;
@@ -96,10 +100,13 @@ interface BasicTextFieldProps extends AdditionalElements {
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
 }
-function BasicTextField(props: BasicTextFieldProps) {
-  const textRef = useManagedRef(props.defaultValue);
+function TextField(props: TextFieldProps) {
+  const [text, setText] = useState(props.defaultValue ?? "");
+  // const textRef = useManagedRef(props.defaultValue);
   const controlled = props.value !== undefined;
   const inputRef = props.ref || useRef<HTMLInputElement>(null);
+  const charCounterRef = useRef<HTMLSpanElement>(null);
+  const maxChars = props.maxChars ?? Infinity;
 
   const defaultIndent = "2rem";
   const getSideIndent = (side: "left" | "right") =>
@@ -126,9 +133,10 @@ function BasicTextField(props: BasicTextFieldProps) {
         left: props.leadingContent
           ? getSideIndent("left") || defaultIndent
           : padding,
-        right: props.trailingContent
-          ? getSideIndent("right") || defaultIndent
-          : padding,
+        right:
+          props.trailingContent || props.showCharCounter
+            ? getSideIndent("right") || defaultIndent
+            : padding,
         bottom: padding,
       },
       corners: !props.corners && props.corners !== 0 ? ".75rem" : props.corners,
@@ -139,6 +147,15 @@ function BasicTextField(props: BasicTextFieldProps) {
     inputRef.current.value = value;
     props.onChange(value, null);
   };
+
+  useEffect(() => {
+    //Apply styles
+    if (props.showCharCounter) {
+      Object.assign(inputRef.current?.style, {
+        paddingRight: `calc(${getComputedStyle(charCounterRef.current).width} + 7px)`,
+      });
+    }
+  }, [text, props.value]);
 
   useEffect(() => {
     const handleFormatText = (text: string) => {
@@ -231,7 +248,17 @@ function BasicTextField(props: BasicTextFieldProps) {
           startElementProps={
             props.slotProps?.leadingContent || { padding: "2" }
           }
-          endElement={props.trailingContent}
+          endElement={
+            props.showCharCounter ? (
+              <BasicSpan
+                ref={charCounterRef}
+                fade={0.5}
+                text={`${(props.value ?? text).length}/${maxChars}`}
+              />
+            ) : (
+              props.trailingContent
+            )
+          }
           endElementProps={props.slotProps?.trailingContent || { padding: "1" }}
           startAddon={props.leadingAdornment}
           startAddonProps={{
@@ -248,6 +275,7 @@ function BasicTextField(props: BasicTextFieldProps) {
           gapX={".5rem"}
         >
           <Input
+            maxLength={props.maxChars}
             readOnly={props.readOnly}
             ref={props.pureRef || inputRef}
             width={"full"}
@@ -260,8 +288,8 @@ function BasicTextField(props: BasicTextFieldProps) {
             }}
             // pattern="^\s*(\$|€|£|¥)?\s*(-)?\s*(\d{1,3}(?:,\d{3})*|\d+)(\.\d{2})?\s*$"
             // css={{ "&:invalid": { color: "red" } }}
-            defaultValue={textRef.read()}
-            value={props.value}
+            // defaultValue={props.defaultValue}
+            value={props.value ?? text}
             overflow={"hidden"}
             style={styles.input}
             onFocus={props.onFocus}
@@ -279,9 +307,9 @@ function BasicTextField(props: BasicTextFieldProps) {
             onChange={(e) => {
               const value = e.currentTarget.value;
 
-              textRef.upsert(value);
-              //   setText(value);
               props.onChange?.(value, e);
+              if (!controlled) setText(value);
+              //   setText(value);
             }}
             placeholder={props.placeholder}
           />
@@ -339,5 +367,5 @@ function ClipboardHelperWrapper(props: ClipboardHelperWrapperProps) {
   );
 }
 
-export default BasicTextField;
-export type { BasicTextFieldProps };
+export default TextField;
+export type { TextFieldProps };

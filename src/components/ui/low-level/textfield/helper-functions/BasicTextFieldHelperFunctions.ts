@@ -1,4 +1,4 @@
-import { AllowedCharacters } from "../types/BasicTextFieldTypes";
+import { AllowedCharacters } from "../types";
 
 const isCharAllowed = (
   char: string,

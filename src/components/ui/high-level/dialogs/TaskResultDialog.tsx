@@ -10,7 +10,7 @@ import {
 import { SuccessMessage, TaskResult } from "@wavy/types";
 import { createContext, useContext } from "react";
 import { IconType } from "react-icons";
-import { FiCheckCircle } from "react-icons/fi";
+import { BsCheck2Circle } from "react-icons/bs";
 import { GrRotateLeft } from "react-icons/gr";
 import { IoWarningOutline } from "react-icons/io5";
 import { RiMailCloseLine, RiMailSendLine } from "react-icons/ri";
@@ -38,7 +38,7 @@ function TaskResultDialog(props: TaskResultDialogProps) {
     if (!controller.value) return;
 
     if (!props.indicator || props.indicator === "normal")
-      return isSuccess ? FiCheckCircle : IoWarningOutline;
+      return isSuccess ? BsCheck2Circle : IoWarningOutline;
     if (props.indicator === "mail")
       return isSuccess ? RiMailSendLine : RiMailCloseLine;
     return props.indicator(isSuccess ? "success" : "error");

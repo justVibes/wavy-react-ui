@@ -10,7 +10,7 @@ import BasicFormDialog from "@/components/ui/low-level/dialog/BasicFormDialog";
 import SimpleFormDialog from "@/components/ui/low-level/dialog/SimpleFormDialog";
 import BasicDisclaimer from "@/components/ui/low-level/disclaimer/BasicDisclaimer";
 import BasicDropzone from "@/components/ui/low-level/dropzone/BasicDropzone";
-import BasicEditableField from "@/components/ui/low-level/editable-field/BasicEditableField";
+import Editable from "@/components/ui/low-level/editable/Editable";
 import EmptyState from "@/components/ui/low-level/empty-state/EmptyState";
 import FileViewer, {
   type FileViewerProps,
@@ -33,7 +33,7 @@ import BasicSeparator from "@/components/ui/low-level/separator/BasicSeparator";
 import BasicStatus from "@/components/ui/low-level/status/BasicStatus";
 import BasicStepper from "@/components/ui/low-level/stepper/BasicStepper";
 import BasicTag from "@/components/ui/low-level/tag/BasicTag";
-import BasicTextField from "@/components/ui/low-level/textfield/BasicTextField";
+import TextField from "@/components/ui/low-level/textfield/TextField";
 import BasicTimeline from "@/components/ui/low-level/timeline/BasicTimeline";
 import BasicTooltip from "@/components/ui/low-level/tooltip/BasicTooltip";
 import BasicSelect from "@/components/ui/low-level/html/select/BasicSelect";
@@ -66,14 +66,14 @@ export {
   BasicDropzone,
   BasicMediaCard,
   BasicSeparator,
-  BasicTextField,
+  TextField,
   BasicIndicator,
   BasicDisclaimer,
   PageSlider,
   BasicFormDialog,
   BasicProfileCard,
   SimpleFormDialog,
-  BasicEditableField,
+  Editable,
   BasicSegmentedControls,
   BasicConfirmationDialog,
 };

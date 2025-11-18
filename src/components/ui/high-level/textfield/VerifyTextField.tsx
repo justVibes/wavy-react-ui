@@ -2,9 +2,7 @@ import { useState } from "react";
 import BasicStatus, {
   BasicStatusProps,
 } from "../../low-level/status/BasicStatus";
-import BasicTextField, {
-  BasicTextFieldProps,
-} from "../../low-level/textfield/BasicTextField";
+import TextField, { TextFieldProps } from "../../low-level/textfield/TextField";
 import VerifyButton from "../buttons/VerifyButton";
 import ErrorTooltip from "../tooltip/ErrorTooltip";
 import { useManagedRef } from "@/main";
@@ -17,7 +15,7 @@ import {
 
 function VerifyTextField(
   props: SafeOmit<
-    BasicTextFieldProps,
+    TextFieldProps,
     | "leadingAdornment"
     | "leadingContent"
     | "trailingAdornment"
@@ -44,7 +42,7 @@ function VerifyTextField(
   };
 
   return (
-    <BasicTextField
+    <TextField
       {...props}
       leadingAdornment={
         <ErrorTooltip

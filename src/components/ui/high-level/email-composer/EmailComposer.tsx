@@ -1,6 +1,6 @@
 import {
   BasicColor,
-  BasicTextField,
+  TextField,
   CopyButton,
   FontSize,
   resolveBasicColor,
@@ -210,7 +210,7 @@ function Recipients(props: {
     );
   };
   return (
-    <TextField
+    <CustomTextField
       readOnly={props.readOnly}
       placeholder="Recipients"
       defaultValue={props.recipients.join(RECIPIENTS_SEP)}
@@ -292,7 +292,7 @@ function Subject(props: {
       asChildren={!copyVisible}
       borderColor={[FIELD_SEP_COLOR, "bottom"]}
     >
-      <TextField
+      <CustomTextField
         disableSepColor={copyVisible}
         placeholder="Subject"
         defaultValue={props.subject}
@@ -344,7 +344,7 @@ function Body(props: {
   );
 }
 
-function TextField(props: {
+function CustomTextField(props: {
   placeholder?: string;
   defaultValue?: string;
   readOnly?: boolean;
@@ -358,7 +358,7 @@ function TextField(props: {
   indent?: `${number}rem` | Partial<Record<"left" | "right", `${number}rem`>>;
 }) {
   return (
-    <BasicTextField
+    <TextField
       size={"xs"}
       readOnly={props.readOnly}
       corners={0}

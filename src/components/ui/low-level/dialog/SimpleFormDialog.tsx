@@ -1,6 +1,6 @@
 import {
   BasicDialog,
-  BasicTextField,
+  TextField,
   CancelButton,
   UseDialogControllerReturn,
   useManagedRef,
@@ -12,7 +12,7 @@ import { type BasicDialogProps } from "./BasicDialog";
 import { BasicButtonProps } from "../html/button/BasicButton";
 import { BasicDivProps } from "../html/div/BasicDiv";
 import BasicSelect from "../html/select/BasicSelect";
-import { BasicTextFieldProps } from "../textfield/BasicTextField";
+import { TextFieldProps } from "../textfield/TextField";
 import SaveButton from "../../high-level/buttons/SaveButton";
 
 interface SimpleFormDialogProps<T extends string> {
@@ -24,7 +24,7 @@ interface SimpleFormDialogProps<T extends string> {
   /**@default "2rem"*/
   titleFontSize?: BasicDivProps["fontSize"];
   /**@default "md" */
-  textfieldSize?: BasicTextFieldProps["size"];
+  textfieldSize?: TextFieldProps["size"];
   /**@default "lg" */
   actionButtionSize?: BasicButtonProps["size"];
   width?: BasicDivProps["width"];
@@ -120,7 +120,7 @@ function SimpleFormDialog<T extends string>(props: SimpleFormDialogProps<T>) {
             );
           }
           return (
-            <BasicTextField
+            <TextField
               key={validKey}
               width={"full"}
               placeholder={field.placeholder}
@@ -156,7 +156,7 @@ function OptionsField(props: {
   defaultValue: string;
   label: string;
   placeholder: string;
-  size?: BasicTextFieldProps["size"];
+  size?: TextFieldProps["size"];
   options: string[];
   onChange: (value: string) => void;
 }) {
@@ -177,7 +177,7 @@ function OptionsField(props: {
       onOptionClick={handleOnChange}
       slotProps={{ divWrapper: { style: { width: "100%" } } }}
     >
-      <BasicTextField
+      <TextField
         readOnly
         size={props.size}
         disabled={props.disabled}

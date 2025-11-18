@@ -188,7 +188,10 @@ function BasicPopover(props: BasicPopoverProps) {
         //Effects
         spill: props.spill || "auto",
         backdropBlur: props.backdropBlur,
-        style: { boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" },
+        style: {
+          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+          scrollbarWidth: "thin",
+        },
       }),
     });
   }, []);
