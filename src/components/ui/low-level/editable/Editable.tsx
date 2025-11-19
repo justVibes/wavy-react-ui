@@ -55,6 +55,8 @@ interface EditableProps extends Partial<Pick<TextFieldProps, "focusColor">> {
   showPopoverOnHover?: boolean;
   showCharCounter?: boolean;
   fontSize?: BasicSpanProps["fontSize"];
+  charCounterFontSize?: BasicSpanProps["fontSize"];
+  allowedChars?: RegExp;
   renderPopoverContent?: (value: string) => React.ReactNode;
   onEditClick?: () => void;
   onContentClick?: () => void;
@@ -184,6 +186,7 @@ function Editable(props: EditableProps) {
             <BasicDiv width={"full"} align="center" gap={"md"}>
               <TextField
                 autoFocus
+                allowedChars={props.allowedChars}
                 maxChars={props.maxChars}
                 value={text}
                 corners={"md"}
@@ -195,7 +198,7 @@ function Editable(props: EditableProps) {
                 onChange={handleOnChange}
                 onBlur={handleTextFieldBlur}
                 onEnterKeyPressed={handleOnEnterPressed}
-                onEscapeKeyPressed={() => handleOnCancel({asClick: false})}
+                onEscapeKeyPressed={() => handleOnCancel({ asClick: false })}
               />
             </BasicDiv>
           ) : (
@@ -211,7 +214,9 @@ function Editable(props: EditableProps) {
                 ":hover": { backgroundColor: "onSurface[0.1]" },
               }}
               onDoubleClick={
-                activationMode === "dblclick" ? () => handleOnCancel({asClick: false}) : undefined
+                activationMode === "dblclick"
+                  ? () => handleOnCancel({ asClick: false })
+                  : undefined
               }
               onClick={
                 activationMode === "click" ? handleOnContentClick : undefined

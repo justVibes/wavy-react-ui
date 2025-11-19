@@ -38,8 +38,10 @@ import BasicTimeline from "@/components/ui/low-level/timeline/BasicTimeline";
 import BasicTooltip from "@/components/ui/low-level/tooltip/BasicTooltip";
 import BasicSelect from "@/components/ui/low-level/html/select/BasicSelect";
 import BasicOption from "@/components/ui/low-level/html/option/BasicOption";
+import Paper from "@/components/ui/low-level/paper/Paper";
 
 export {
+  Paper,
   BasicOl,
   Checkbox,
   BasicDiv,

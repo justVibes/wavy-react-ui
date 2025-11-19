@@ -6,6 +6,7 @@ import {
   BasicColor,
   BasicDiv,
   BasicSpan,
+  useChangeEffect,
   useManagedRef,
 } from "@/main";
 import { buildArray, hasIndex } from "@wavy/fn";
@@ -58,6 +59,8 @@ interface PageSliderProps<T> {
   /**@default 1 */
   childFlexGrow?: number;
   onEcho?: (message?: string) => T;
+  /**The callback fired when the transition to the selected page has either `started` or `ended` */
+  onTransition?: (event: "start" | "end") => void;
 
   /**Using from and to can be useful for "big" page jumps.
    *i.e: `0 -> 4 | 5 -> 2 | 4 -> 10`
@@ -70,6 +73,12 @@ function PageSlider<T>(props: PageSliderProps<T>) {
   const [activePage, setActivePage] = useState(controller.defaultPage ?? 0);
 
   let onChangeCb: (from: number, to: number) => void;
+
+  useEffect(() => {
+    if (transitioning) props.onTransition?.("start");
+    else props.onTransition?.("end");
+  }, [transitioning]);
+
   controller.goTo = useCallback(
     (to, options) => {
       const transition = options?.transition || "smooth";
@@ -85,7 +94,7 @@ function PageSlider<T>(props: PageSliderProps<T>) {
       onChangeCb?.(from, to);
       props.onChange?.(from, to);
 
-      if (Math.abs(from - to) > 1 && transition === "smooth") {
+      if (transition === "smooth") {
         setTransitioning(true);
         let counter = from;
         const interval = setInterval(() => {

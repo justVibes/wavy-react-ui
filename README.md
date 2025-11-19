@@ -1,1 +1,1 @@
-# wavy-ui
+# wavy-react-ui
