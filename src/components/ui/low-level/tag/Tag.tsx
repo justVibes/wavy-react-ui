@@ -1,16 +1,16 @@
-import { Tag } from "@chakra-ui/react";
+import { Tag as ChakraTag } from "@chakra-ui/react";
 import { BasicColor } from "../html/BasicStyle";
 import { resolveBasicColor } from "@/main";
 
-interface BasicTagProps {
+interface TagProps {
   label: string;
   opacity?: number;
   labelOpacity?: number;
   color?: BasicColor;
 }
-function BasicTag(props: BasicTagProps) {
+function Tag(props: TagProps) {
   return (
-    <Tag.Root
+    <ChakraTag.Root
       opacity={props.opacity}
       padding={"1"}
       color={resolveBasicColor(props.color)}
@@ -18,9 +18,11 @@ function BasicTag(props: BasicTagProps) {
       flexShrink={0}
       display={"inline-flex"}
     >
-      <Tag.Label opacity={props.labelOpacity}>{props.label}</Tag.Label>
-    </Tag.Root>
+      <ChakraTag.Label opacity={props.labelOpacity}>
+        {props.label}
+      </ChakraTag.Label>
+    </ChakraTag.Root>
   );
 }
 
-export default BasicTag;
+export { Tag, type TagProps };

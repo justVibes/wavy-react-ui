@@ -1,10 +1,10 @@
 import {
   BasicColor,
-  TextField,
   CopyButton,
   FontSize,
   resolveBasicColor,
   TaskResultDialog,
+  TextField,
   useDialogController,
   useManagedRef,
 } from "@/main";
@@ -12,13 +12,12 @@ import { JSX } from "@emotion/react/jsx-runtime";
 import { strictArray } from "@wavy/fn";
 import { Email, SafeOmit, SuccessMessage, TaskResult } from "@wavy/types";
 import { useState } from "react";
-import BasicAvatar from "../../low-level/avatar/BasicAvatar";
-import { HtmlElementDim } from "../../low-level/html/BasicStyle";
+import { Avatar } from "../../low-level/avatar/Avatar";
 import BasicDiv, { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 import BasicSpan from "../../low-level/html/span/BasicSpan";
+import AttachmentsButton from "../buttons/AttachmentsButton";
 import SendButton from "../buttons/SendButton";
 import { type AttachmentDialogContextType } from "../dialogs/AttachmentsDialog";
-import AttachmentsButton from "../buttons/AttachmentsButton";
 
 const FIELD_SEP_COLOR: BasicColor = "onPaper[0.1]";
 const RECIPIENTS_SEP = ", ";
@@ -261,7 +260,7 @@ function ReadOnlyRecipients(props: { recipients: string[] }) {
             corners={"xl"}
             spill={"hidden"}
           >
-            <BasicAvatar
+            <Avatar
               size={"2xs"}
               backgroundColor="sendBlue[0.25]"
               color="sendBlue"

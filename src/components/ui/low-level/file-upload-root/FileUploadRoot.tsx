@@ -3,7 +3,7 @@ import { JSX } from "@emotion/react/jsx-runtime";
 import { LOCAL_FILE_MIME_TYPES, LocalFile } from "@wavy/types";
 import React from "react";
 
-interface BasicFileUploadRootProps {
+interface FileUploadRootProps {
   maxFiles?: number;
   multiple?: boolean;
   showList?: boolean;
@@ -17,7 +17,7 @@ interface BasicFileUploadRootProps {
   }>;
   onChange?: (files: FileList) => void;
 }
-function BasicFileUploadRoot(props: BasicFileUploadRootProps) {
+function FileUploadRoot(props: FileUploadRootProps) {
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.onChange(event.currentTarget.files);
   };
@@ -39,12 +39,8 @@ function BasicFileUploadRoot(props: BasicFileUploadRootProps) {
   );
 }
 
-const getAcceptedMimeTypes = (
-  categories: BasicFileUploadRootProps["accepts"]
-) => {
+const getAcceptedMimeTypes = (categories: FileUploadRootProps["accepts"]) => {
   return categories.flatMap((category) => LOCAL_FILE_MIME_TYPES[category]);
 };
 
-
-export default BasicFileUploadRoot;
-export type { BasicFileUploadRootProps };
+export { FileUploadRoot, type FileUploadRootProps };

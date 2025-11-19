@@ -38,6 +38,4 @@ function Paper(props: PaperProps) {
   );
 }
 
-export default Paper;
-export type { PaperProps };
-
+export { Paper, type PaperProps };

@@ -276,4 +276,4 @@ function PageIndicator(props: { totalPages: number; currentPage: number }) {
   );
 }
 
-export default PageSlider;
+export { PageSlider, type PageSliderProps };

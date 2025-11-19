@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import applyBasicStyle, { BasicHtmlElementStyleProps } from "../BasicStyle";
+import { JSX } from "@emotion/react/jsx-runtime";
 import {
   distinct,
   getMimeTypes,
@@ -7,12 +6,13 @@ import {
   strictArray,
   toObject,
 } from "@wavy/fn";
-import { JSX } from "@emotion/react/jsx-runtime";
 import {
   KnownFileTypeAlias,
   LOCAL_FILE_TYPE_ALIAS,
   LocalFile,
 } from "@wavy/types";
+import React, { useRef } from "react";
+import applyBasicStyle, { BasicHtmlElementStyleProps } from "../BasicStyle";
 
 interface BasicFileInputProps
   extends BasicHtmlElementStyleProps {

@@ -39,6 +39,8 @@ export * from "@/components/ui/high-level/buttons/CopyPasteButtons";
 export * from "@/components/ui/high-level/buttons/PosNegButtons";
 export * from "@/components/ui/high-level/buttons/UploadButtons";
 export * from "@/components/ui/high-level/buttons/YesNoButtons";
+export * from "@/components/ui/high-level/buttons/DownloadButton";
+
 export {
   AttachmentsButton,
   CancelButton,

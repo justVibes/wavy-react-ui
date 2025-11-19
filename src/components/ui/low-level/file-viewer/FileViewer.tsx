@@ -2,7 +2,7 @@ import {
   applyBasicStyle,
   BasicColor,
   BasicDiv,
-  BasicPopover,
+  Popover,
   BasicSpan,
   CssShapes,
   getFileIcon,
@@ -178,7 +178,7 @@ function SidebarOption(props: FileViewerProps.SidebarOptionProps) {
     onOptionClick(props.label);
   };
   return (
-    <BasicPopover
+    <Popover
       displayAction="hover"
       placement="right"
       fontSize="sm"
@@ -217,7 +217,7 @@ function SidebarOption(props: FileViewerProps.SidebarOptionProps) {
       >
         {<props.icon size={props.iconSize ?? "1.1rem"} />}
       </BasicDiv>
-    </BasicPopover>
+    </Popover>
   );
 }
 
@@ -421,5 +421,4 @@ declare namespace FileViewerProps {
   }
 }
 
-export default FileViewer;
-export type { FileViewerProps };
+export { FileViewer, type FileViewerProps };

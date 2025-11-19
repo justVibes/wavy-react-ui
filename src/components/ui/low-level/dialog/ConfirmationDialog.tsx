@@ -1,17 +1,15 @@
-import React, { useRef } from "react";
-import BasicDialog from "./BasicDialog";
 import {
   BasicButton,
-  BasicDisclaimer,
+   Disclaimer,
   resolveBasicColor,
   UseDialogControllerReturn,
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
-import CancelButton from "../../high-level/buttons/CancelButton";
-import { BasicDivProps } from "../html/div/BasicDiv";
 import { TaskResult } from "@wavy/types";
+import { BasicDivProps } from "../html/div/BasicDiv";
+import { Dialog } from "./Dialog";
 
-interface BasicConfirmationDialogProps
+interface ConfirmationDialogProps
   extends Partial<
     Record<
       "width" | "height" | `${"min" | "max"}${"Width" | "Height"}`,
@@ -39,14 +37,14 @@ interface BasicConfirmationDialogProps
   };
 }
 
-function BasicConfirmationDialog(props: BasicConfirmationDialogProps) {
+function ConfirmationDialog(props: ConfirmationDialogProps) {
   const severity = props.severity || "error";
   const color = resolveBasicColor(severity, {
     preference: "res",
   });
-  
+
   return (
-    <BasicDialog.Root
+    <Dialog.Root
       controller={props.controller}
       width={props.width ?? "25rem"}
       height={props.height}
@@ -56,11 +54,11 @@ function BasicConfirmationDialog(props: BasicConfirmationDialogProps) {
       maxWidth={props.maxWidth}
       triggerElement={props.triggerElement}
     >
-      <BasicDialog.Header fontSize="2xl">{props.title}</BasicDialog.Header>
-      <BasicDialog.Body fade={0.75}>
+      <Dialog.Header fontSize="2xl">{props.title}</Dialog.Header>
+      <Dialog.Body fade={0.75}>
         <span>{props.message}</span>
         {props.disclaimer && (
-          <BasicDisclaimer
+          <Disclaimer
             width={"full"}
             facade={(s) => (s === "error" ? "warning" : s)}
             hideLabel={props.hideDisclaimerLabel}
@@ -68,9 +66,9 @@ function BasicConfirmationDialog(props: BasicConfirmationDialogProps) {
             message={props.disclaimer}
           />
         )}
-      </BasicDialog.Body>
-      <BasicDialog.Footer gap={"md"}>
-        <BasicDialog.ActionTrigger>
+      </Dialog.Body>
+      <Dialog.Footer gap={"md"}>
+        <Dialog.ActionTrigger>
           <BasicButton
             size="sm"
             fade={0.75}
@@ -79,7 +77,7 @@ function BasicConfirmationDialog(props: BasicConfirmationDialogProps) {
             text={props.cancelLabel || "Cancel"}
             onClick={props.onCancelClick}
           />
-        </BasicDialog.ActionTrigger>
+        </Dialog.ActionTrigger>
         <BasicButton
           async
           size="sm"
@@ -88,9 +86,9 @@ function BasicConfirmationDialog(props: BasicConfirmationDialogProps) {
           color="white"
           onClick={props.action.onClick}
         />
-      </BasicDialog.Footer>
-    </BasicDialog.Root>
+      </Dialog.Footer>
+    </Dialog.Root>
   );
 }
 
-export default BasicConfirmationDialog;
+export { ConfirmationDialog, type ConfirmationDialogProps };

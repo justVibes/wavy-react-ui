@@ -81,5 +81,4 @@ declare namespace EmptyStateProps {
 
 const EmptyState = { Root, Indicator, Content };
 
-export default EmptyState;
-export type { EmptyStateProps };
+export { EmptyState, type EmptyStateProps };

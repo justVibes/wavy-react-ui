@@ -1,7 +1,7 @@
 import {
   BasicButton,
   BasicColor,
-  BasicDialog,
+  Dialog,
   BasicDiv,
   FontSize,
   resolveBasicColor,
@@ -47,14 +47,14 @@ function TaskResultDialog(props: TaskResultDialogProps) {
 
   return (
     <MainContext.Provider value={{ color }}>
-      <BasicDialog.Root
+      <Dialog.Root
         controller={controller}
         width={"25rem"}
         gap={"sm"}
         unmountOnExit={props.unmountOnExit}
         borderColor={props.disableColorIndicator ? undefined : [color, "left"]}
       >
-        <BasicDialog.Body grid gridCols="auto 1fr" gap={"lg"}>
+        <Dialog.Body grid gridCols="auto 1fr" gap={"lg"}>
           <Indicator color={resolveBasicColor(color)} size={"2.75rem"} />
           <BasicDiv
             width={"full"}
@@ -67,9 +67,9 @@ function TaskResultDialog(props: TaskResultDialogProps) {
               {message}
             </span>
           </BasicDiv>
-        </BasicDialog.Body>
+        </Dialog.Body>
 
-        <BasicDialog.Footer row gap={"md"} align="center">
+        <Dialog.Footer row gap={"md"} align="center">
           <BasicButton
             size="xs"
             backgroundColor={actionButton ? "transparent" : "onSurface[0.1]"}
@@ -78,8 +78,8 @@ function TaskResultDialog(props: TaskResultDialogProps) {
             onClick={controller.hide}
           />
           {actionButton && <ActionButton {...actionButton} />}
-        </BasicDialog.Footer>
-      </BasicDialog.Root>
+        </Dialog.Footer>
+      </Dialog.Root>
     </MainContext.Provider>
   );
 }

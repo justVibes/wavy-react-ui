@@ -14,17 +14,7 @@ const Context = createContext<{
   lineSeparatorColor: BasicColor;
 } | null>(null);
 
-interface RootProps {
-  /**@default "fit-content" */
-  width?: BasicHtmlElementStyleProps["width"];
-  /**@default "onSurface[0.5]" */
-  lineSeparatorColor?: BasicColor;
-  rowGap?: string;
-  /**@default ".5rem" */
-  columnGap?: string;
-  children: JSX.Element | JSX.Element[];
-}
-function Root(props: RootProps) {
+function Root(props: TimelineProps.RootProps) {
   const childrenUids = useManagedRef<number[]>([]);
   const lineSeparatorColor = props.lineSeparatorColor || "onSurface[0.5]";
   const Children = Array.isArray(props.children)
@@ -79,29 +69,7 @@ function Root(props: RootProps) {
   );
 }
 
-interface ItemProps {
-  indicator?: React.ReactNode;
-  /**The node that should be placed `before` (to the left of) the separator */
-  before?: React.ReactNode;
-  /**The node that should be placed `after` (to the right of) the separator */
-  after?: React.ReactNode;
-  disabled?: boolean;
-  styles?: Partial<
-    Record<"before" | "after", BasicHtmlElementStyleProps> & {
-      indicator: Partial<
-        BasicHtmlElementStyleProps & {
-          /**@default ".6rem" */
-          size: BasicHtmlElementStyleProps["size"];
-          /**@default "circle" */
-          corners: BasicHtmlElementStyleProps["corners"];
-          /**@default "onSurface" */
-          backgroundColor: BasicColor;
-        }
-      >;
-    }
-  >;
-}
-function Item(props: ItemProps) {
+function Item(props: TimelineProps.ItemProps) {
   const [pos, setPos] = useState<"first" | "last" | "both">();
   const { register } = useContext(Context)!;
 
@@ -182,13 +150,43 @@ function LineSeparator(props: { hide: boolean }) {
   );
 }
 
-const BasicTimeline = {
+const Timeline = {
   Root,
   Item,
 };
-type BasicTimelineProps = {
-  RootProps: RootProps;
-  ItemProps: ItemProps;
-};
-export default BasicTimeline;
-export type { BasicTimelineProps };
+declare namespace TimelineProps {
+  interface RootProps {
+    /**@default "fit-content" */
+    width?: BasicHtmlElementStyleProps["width"];
+    /**@default "onSurface[0.5]" */
+    lineSeparatorColor?: BasicColor;
+    rowGap?: string;
+    /**@default ".5rem" */
+    columnGap?: string;
+    children: JSX.Element | JSX.Element[];
+  }
+  interface ItemProps {
+    indicator?: React.ReactNode;
+    /**The node that should be placed `before` (to the left of) the separator */
+    before?: React.ReactNode;
+    /**The node that should be placed `after` (to the right of) the separator */
+    after?: React.ReactNode;
+    disabled?: boolean;
+    styles?: Partial<
+      Record<"before" | "after", BasicHtmlElementStyleProps> & {
+        indicator: Partial<
+          BasicHtmlElementStyleProps & {
+            /**@default ".6rem" */
+            size: BasicHtmlElementStyleProps["size"];
+            /**@default "circle" */
+            corners: BasicHtmlElementStyleProps["corners"];
+            /**@default "onSurface" */
+            backgroundColor: BasicColor;
+          }
+        >;
+      }
+    >;
+  }
+}
+
+export { Timeline, type TimelineProps };

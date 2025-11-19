@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import { IoMdImages } from "react-icons/io";
-import BasicAvatar from "../../low-level/avatar/BasicAvatar";
+import {Avatar} from "../../low-level/avatar/Avatar";
 import BasicDiv, { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { BasicSpan } from "@/main";
@@ -55,7 +55,7 @@ function PictureUploader(props: PictureUploaderProps) {
   return (
     <Wrapper>
       <BasicDiv row gap={props.columnGap || "lg"} align="center">
-        <BasicAvatar
+        <Avatar
           size={"xl"}
           fallback={props.fallback || IoMdImages}
           src={avatar || null}

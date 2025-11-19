@@ -1,5 +1,5 @@
 import {
-  BasicDialog,
+  Dialog,
   BasicDiv,
   BasicSpan,
   FontSize,
@@ -55,13 +55,13 @@ function PaymentOptionsDialog(props: PaymentOptionsDialogProps<{}>) {
     );
   };
   return (
-    <BasicDialog.Root
+    <Dialog.Root
       triggerElement={props.triggerElement}
       controller={props.controller}
       width="22rem"
     >
-      <BasicDialog.Header children={"Payment Options"} />
-      <BasicDialog.Body gap={"sm"} width="full">
+      <Dialog.Header children={"Payment Options"} />
+      <Dialog.Body gap={"sm"} width="full">
         {props.options.map((option, index) => {
           const PreElements = option.variables
             ? option?.["pre-element"]?.(option.variables)
@@ -128,8 +128,8 @@ function PaymentOptionsDialog(props: PaymentOptionsDialogProps<{}>) {
             </>
           );
         })}
-      </BasicDialog.Body>
-    </BasicDialog.Root>
+      </Dialog.Body>
+    </Dialog.Root>
   );
 }
 

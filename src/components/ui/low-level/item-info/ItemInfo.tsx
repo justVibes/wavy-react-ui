@@ -1,14 +1,14 @@
+import { lastIndex } from "@wavy/fn";
+import { IconType } from "react-icons";
 import { IoAdd } from "react-icons/io5";
 import BasicDiv from "../html/div/BasicDiv";
 import BasicSpan from "../html/span/BasicSpan";
-import { lastIndex } from "@wavy/fn";
-import { IconType } from "react-icons";
 
-interface BasicItemInfoProps {
+interface ItemInfoProps {
   item: { title: string; description?: string; icon?: IconType };
   info: string | object | (() => string | object);
 }
-function BasicItemInfo(props: BasicItemInfoProps) {
+function ItemInfo(props: ItemInfoProps) {
   const handleOnClick = () => {
     const getInfo = (info: string | object, indent = false) => {
       if (typeof info === "string") return info;
@@ -64,4 +64,4 @@ function BasicItemInfo(props: BasicItemInfoProps) {
   );
 }
 
-export default BasicItemInfo;
+export { ItemInfo, type ItemInfoProps };

@@ -1,6 +1,6 @@
 import { IconButton } from "@chakra-ui/react";
 import { IoRemove } from "react-icons/io5";
-import BasicAvatar from "../../low-level/avatar/BasicAvatar";
+import { Avatar } from "../../low-level/avatar/Avatar";
 import BasicDiv from "../../low-level/html/div/BasicDiv";
 import BasicSpan from "../../low-level/html/span/BasicSpan";
 
@@ -10,7 +10,7 @@ interface UserProfileProps {
 function UserProfile(props: UserProfileProps) {
   return (
     <BasicDiv width="full" row align="center" gap={"md"} spill={"hidden"}>
-      <BasicAvatar fallback={props.user.name} src={props.user.picture} />
+      <Avatar fallback={props.user.name} src={props.user.picture} />
       <BasicDiv
         width="full"
         spill={"hidden"}

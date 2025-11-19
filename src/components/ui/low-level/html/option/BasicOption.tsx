@@ -1,15 +1,12 @@
 import {
-  applyBasicStyle,
   BasicColor,
   BasicDiv,
-  BasicSpan,
   ellipsis,
-  InlineCss,
+  InlineCss
 } from "@/main";
-import React from "react";
+import { LuCheck } from "react-icons/lu";
 import { BasicDivProps } from "../div/BasicDiv";
 import { BasicSpanProps } from "../span/BasicSpan";
-import { LuCheck } from "react-icons/lu";
 
 interface BasicOptionProps {
   value: string | number;

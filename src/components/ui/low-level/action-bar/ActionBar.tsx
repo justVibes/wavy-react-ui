@@ -1,34 +1,35 @@
-import { ActionBar, Portal } from "@chakra-ui/react";
+import { ActionBar as ChakraActionBar, Portal } from "@chakra-ui/react";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { BasicDivProps } from "../html/div/BasicDiv";
 
-interface BasicActionBarProps {
+interface ActionBarProps {
   open: boolean;
   onOpenChange: (isOpen: boolean) => void;
   closeOnEscape?:boolean;
   closeOnInteractOutside?:boolean;
 }
-function BasicActionBar(props: BasicActionBarProps) {
+function ActionBar(props: ActionBarProps) {
   return (
-    <ActionBar.Root
+    <ChakraActionBar.Root
       open={props.open}
       onOpenChange={({ open }) => props.onOpenChange(open)}
       closeOnEscape={props.closeOnEscape}
       closeOnInteractOutside={props.closeOnInteractOutside}
     >
       <Portal>
-        <ActionBar.Positioner>
-          <ActionBar.Content></ActionBar.Content>
-        </ActionBar.Positioner>
+        <ChakraActionBar.Positioner>
+          <ChakraActionBar.Content></ChakraActionBar.Content>
+        </ChakraActionBar.Positioner>
       </Portal>
-    </ActionBar.Root>
+    </ChakraActionBar.Root>
   );
 }
 
-BasicActionBar.Content = (
+ActionBar.Content = (
   props: BasicDivProps & { children: JSX.Element | JSX.Element[] }
 ) => {
-  return <ActionBar.Content></ActionBar.Content>;
+  return <ChakraActionBar.Content></ChakraActionBar.Content>;
 };
 
-export default BasicActionBar;
+export default ActionBar;
+export type {ActionBarProps}

@@ -3,7 +3,7 @@ import { For } from "@chakra-ui/react";
 import { format, lastIndex } from "@wavy/fn";
 import { useEffect } from "react";
 import BasicDiv from "../../low-level/html/div/BasicDiv";
-import BasicTag from "../../low-level/tag/BasicTag";
+import {Tag} from "../../low-level/tag/Tag";
 import { TaskLog } from "@wavy/types";
 
 interface TerminalProps {
@@ -81,7 +81,7 @@ function Log(props: TaskLog & { scrollIntoView: boolean }) {
       &nbsp;
       {typeof props.response === "object" && (
         <>
-          <BasicTag labelOpacity={0.75} label={props.response.tag} />
+          <Tag labelOpacity={0.75} label={props.response.tag} />
           &nbsp;
         </>
       )}

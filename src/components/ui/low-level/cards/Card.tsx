@@ -14,35 +14,7 @@ import { Prettify, SafeOmit } from "@wavy/types";
 
 const GapContext = createContext<{ gap: BasicDivProps["gap"] }>(null);
 
-interface RootProps
-  extends Partial<
-    Record<"width" | `${"max" | "min"}Width`, BasicDivProps["width"]>
-  > {
-  backgroundColor?: BasicColor;
-  color?: BasicColor;
-  /**
-   * @default "lg"
-   */
-  corners?: BasicDivProps["corners"];
-  /**
-   * @default "md"
-   */
-  padding?: BasicDivProps["padding"];
-  /**
-   * @default "md"
-   */
-  gap?: BasicDivProps["gap"];
-  height?: BasicDivProps["height"];
-  clickable?: boolean;
-  style?: BasicDivProps["style"];
-  sx?: BasicDivProps["css"];
-  spill?: BasicDivProps["spill"];
-  children:
-    | JSX.Element
-    | [JSX.Element, JSX.Element]
-    | [JSX.Element, JSX.Element, JSX.Element];
-}
-function Root(props: RootProps) {
+function Root(props: CardProps.RootProps) {
   return (
     <GapContext.Provider value={{ gap: props.gap }}>
       <BasicDiv
@@ -161,9 +133,36 @@ const Label = createTextNode({
 });
 const Item = createTextNode({ fontSize: "sm" });
 
-const BasicCard = { Root, LeadingAddOn, TrailingAddOn, Content, Label, Item };
-interface BasicCardProps {
-  RootProps: RootProps;
+const Card = { Root, LeadingAddOn, TrailingAddOn, Content, Label, Item };
+
+declare namespace CardProps {
+  interface RootProps
+    extends Partial<
+      Record<"width" | `${"max" | "min"}Width`, BasicDivProps["width"]>
+    > {
+    backgroundColor?: BasicColor;
+    color?: BasicColor;
+    /**
+     * @default "lg"
+     */
+    corners?: BasicDivProps["corners"];
+    /**
+     * @default "md"
+     */
+    padding?: BasicDivProps["padding"];
+    /**
+     * @default "md"
+     */
+    gap?: BasicDivProps["gap"];
+    height?: BasicDivProps["height"];
+    clickable?: boolean;
+    style?: BasicDivProps["style"];
+    sx?: BasicDivProps["css"];
+    spill?: BasicDivProps["spill"];
+    children:
+      | JSX.Element
+      | [JSX.Element, JSX.Element]
+      | [JSX.Element, JSX.Element, JSX.Element];
+  }
 }
-export default BasicCard;
-export type { BasicCardProps };
+export { Card, type CardProps };

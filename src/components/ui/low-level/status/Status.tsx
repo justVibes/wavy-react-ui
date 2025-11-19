@@ -5,16 +5,13 @@ import { upperFirst } from "@wavy/fn";
 import { HtmlElementDim } from "../html/BasicStyle";
 import { TaskResultStatus } from "@wavy/types";
 
-interface BasicStatusProps {
+interface StatusProps {
   status: TaskResultStatus;
   indicatorSize?: HtmlElementDim;
   indicatorOnly?: boolean;
 }
-function BasicStatus(props: BasicStatusProps) {
-  const colorMap: Record<
-    BasicStatusProps["status"],
-    keyof typeof ColorResources
-  > = {
+function Status(props: StatusProps) {
+  const colorMap: Record<StatusProps["status"], keyof typeof ColorResources> = {
     pending: "gray",
     success: "carlsbergGreen",
     error: "error",
@@ -49,5 +46,4 @@ function BasicStatus(props: BasicStatusProps) {
   );
 }
 
-export default BasicStatus;
-export type { BasicStatusProps };
+export { Status, type StatusProps  };

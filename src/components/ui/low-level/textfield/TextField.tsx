@@ -379,5 +379,4 @@ function ClipboardHelperWrapper(props: ClipboardHelperWrapperProps) {
   );
 }
 
-export default TextField;
-export type { TextFieldProps };
+export { TextField, type TextFieldProps };

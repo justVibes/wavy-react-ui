@@ -1,8 +1,8 @@
 import {
-  BasicBadge,
+  Badge,
   BasicDiv,
-  BasicIndicator,
-  BasicTooltip,
+  Indicator,
+  Tooltip,
   useManagedRef,
   useRerender,
 } from "@/main";
@@ -36,12 +36,12 @@ function AttachmentsButton(props: AttachmentsButtonProps) {
   };
 
   return (
-    <BasicTooltip tooltip="Attachments" placement="right">
-      <BasicBadge
+    <Tooltip tooltip="Attachments" placement="right">
+      <Badge
         circleChild
         asChild={!props.attachments}
         badge={
-          <BasicIndicator
+          <Indicator
             content={
               typeof props.attachments === "number"
                 ? props.attachments
@@ -73,8 +73,8 @@ function AttachmentsButton(props: AttachmentsButtonProps) {
             {!props.iconOnly && "Attachments"}
           </BasicDiv>
         </Dialog>
-      </BasicBadge>
-    </BasicTooltip>
+      </Badge>
+    </Tooltip>
   );
 }
 

@@ -1,18 +1,16 @@
 import { ErrorMessage, SafeOmit } from "@wavy/types";
 import BasicSpan from "../../low-level/html/span/BasicSpan";
-import BasicTooltip, {
-  BasicTooltipProps,
-} from "../../low-level/tooltip/BasicTooltip";
+import { Tooltip, TooltipProps } from "../../low-level/tooltip/Tooltip";
 import { camelCaseToLetter } from "@wavy/fn";
 
 function ErrorTooltip(
-  props: SafeOmit<BasicTooltipProps, "tooltip"> & {
+  props: SafeOmit<TooltipProps, "tooltip"> & {
     error: ErrorMessage | undefined;
   }
 ) {
   if (!props.error) return props.children;
   return (
-    <BasicTooltip
+    <Tooltip
       {...props}
       tooltip={
         <span>

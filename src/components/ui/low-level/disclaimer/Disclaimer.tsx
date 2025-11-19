@@ -15,7 +15,7 @@ import applyBasicStyle, { HtmlElementDim } from "../html/BasicStyle";
 import { BasicDivProps } from "../html/div/BasicDiv";
 import BasicSpan, { BasicSpanProps } from "../html/span/BasicSpan";
 
-interface BasicDisclaimerProps
+interface DisclaimerProps
   extends Partial<
     Record<"top" | "left" | "bottom" | "right", HtmlElementDim | 0>
   > {
@@ -27,8 +27,8 @@ interface BasicDisclaimerProps
    */
   disableShadow?: boolean;
   facade?: (
-    severity: BasicDisclaimerProps["severity"]
-  ) => BasicDisclaimerProps["severity"];
+    severity: DisclaimerProps["severity"]
+  ) => DisclaimerProps["severity"];
   width?: BasicDivProps["width"];
   /**
    * @default "1rem"
@@ -55,7 +55,7 @@ interface BasicDisclaimerProps
    */
   hideLabel?: boolean;
 }
-function BasicDisclaimer(props: BasicDisclaimerProps) {
+function Disclaimer(props: DisclaimerProps) {
   const [isMultiline, setIsMultiline] = useState(false);
   const iconMapper: Record<typeof props.severity, IconType> = {
     error: BsExclamationCircle,
@@ -123,4 +123,4 @@ function BasicDisclaimer(props: BasicDisclaimerProps) {
   );
 }
 
-export default BasicDisclaimer;
+export { Disclaimer, type DisclaimerProps };

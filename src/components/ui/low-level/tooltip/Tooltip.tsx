@@ -1,16 +1,20 @@
-import { Tooltip, TooltipProps } from "@/chakra/ui/tooltip";
+import {
+  Tooltip as ChakraTooltip,
+  TooltipProps as ChakraTooltipProps,
+} from "@/chakra/ui/tooltip";
 import { JSX } from "@emotion/react/jsx-runtime";
 import React from "react";
 import applyBasicStyle, { BasicColor } from "../html/BasicStyle";
 import { BasicDivProps } from "../html/div/BasicDiv";
 
-type BasicTooltipPlacement = TooltipProps["positioning"]["placement"];
-interface BasicTooltipProps {
+type TooltipPlacement = ChakraTooltipProps["positioning"]["placement"];
+
+interface TooltipProps {
   asChild?: boolean;
   children: JSX.Element;
   tooltip: React.ReactNode;
   arrow?: boolean;
-  placement?: BasicTooltipPlacement;
+  placement?: TooltipPlacement;
   backgroundColor?: BasicColor;
   color?: BasicColor;
   corners?: BasicDivProps["corners"];
@@ -21,7 +25,7 @@ interface BasicTooltipProps {
     spanWrapper: Partial<BasicDivProps>;
   }>;
 }
-function BasicTooltip(props: BasicTooltipProps) {
+function Tooltip(props: TooltipProps) {
   if (props.asChild) return props.children;
   const { padding, borderRadius, color, backgroundColor } = applyBasicStyle({
     padding: props.padding || "sm",
@@ -30,7 +34,7 @@ function BasicTooltip(props: BasicTooltipProps) {
     backgroundColor: props.backgroundColor || "onSurface[0.1]",
   });
   return (
-    <Tooltip
+    <ChakraTooltip
       positioning={{ placement: props.placement }}
       showArrow={props.arrow}
       openDelay={props.delay?.open}
@@ -59,9 +63,8 @@ function BasicTooltip(props: BasicTooltipProps) {
       ) : (
         props.children
       )}
-    </Tooltip>
+    </ChakraTooltip>
   );
 }
 
-export default BasicTooltip;
-export type { BasicTooltipProps, BasicTooltipPlacement };
+export { Tooltip, type TooltipPlacement, type TooltipProps };

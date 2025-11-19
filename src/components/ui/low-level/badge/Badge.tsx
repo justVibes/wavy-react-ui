@@ -3,7 +3,7 @@ import { JSX } from "@emotion/react/jsx-runtime";
 import React, { useRef } from "react";
 import { HtmlElementDim } from "../html/BasicStyle";
 
-interface BasicBadgeProps {
+interface BadgeProps {
   children: JSX.Element;
   badge: React.ReactNode;
   /**
@@ -14,7 +14,7 @@ interface BasicBadgeProps {
   asChild?: boolean;
   offset?: HtmlElementDim;
 }
-function BasicBadge(props: BasicBadgeProps) {
+function Badge(props: BadgeProps) {
   const boxRef = useRef<HTMLDivElement>(null);
   const floatRef = useRef<HTMLDivElement>(null);
 
@@ -35,4 +35,4 @@ function BasicBadge(props: BasicBadgeProps) {
   );
 }
 
-export default BasicBadge;
+export { Badge, type BadgeProps };

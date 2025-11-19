@@ -8,6 +8,5 @@ export type {
   CssProperties,
 } from "@/components/ui/low-level/html/StyledElements";
 
-export type { BasicTooltipPlacement } from "@/components/ui/low-level/tooltip/BasicTooltip";
-export type { BasicMenuPlacement } from "@/components/ui/low-level/menu/BasicMenu";
-
+export type { TooltipPlacement as BasicTooltipPlacement } from "@/components/ui/low-level/tooltip/Tooltip";
+export type { MenuPlacement as BasicMenuPlacement } from "@/components/ui/low-level/menu/Menu";

@@ -1,5 +1,5 @@
 import {
-  BasicDialog,
+  Dialog,
   TextField,
   CancelButton,
   UseDialogControllerReturn,
@@ -8,19 +8,19 @@ import {
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { useState } from "react";
-import { type BasicDialogProps } from "./BasicDialog";
-import { BasicButtonProps } from "../html/button/BasicButton";
-import { BasicDivProps } from "../html/div/BasicDiv";
-import BasicSelect from "../html/select/BasicSelect";
-import { TextFieldProps } from "../textfield/TextField";
-import SaveButton from "../../high-level/buttons/SaveButton";
+import { type DialogProps } from "../Dialog";
+import { BasicButtonProps } from "../../html/button/BasicButton";
+import { BasicDivProps } from "../../html/div/BasicDiv";
+import BasicSelect from "../../html/select/BasicSelect";
+import { TextFieldProps } from "../../textfield/TextField";
+import SaveButton from "../../../high-level/buttons/SaveButton";
 
 interface SimpleFormDialogProps<T extends string> {
   controller?: UseDialogControllerReturn;
   title?: string;
   triggerElement?: JSX.Element;
   /**@default "md" */
-  closeButtonSize?: BasicDialogProps["Root"]["closeButtonSize"];
+  closeButtonSize?: DialogProps.RootProps["closeButtonSize"];
   /**@default "2rem"*/
   titleFontSize?: BasicDivProps["fontSize"];
   /**@default "md" */
@@ -76,7 +76,7 @@ function SimpleFormDialog<T extends string>(props: SimpleFormDialogProps<T>) {
   };
 
   return (
-    <BasicDialog.Root
+    <Dialog.Root
       rerenderOnClose
       width={props.width}
       closeButtonSize={props.closeButtonSize || "md"}
@@ -84,10 +84,10 @@ function SimpleFormDialog<T extends string>(props: SimpleFormDialogProps<T>) {
       triggerElement={props.triggerElement}
       onClose={() => triggerRerender()}
     >
-      <BasicDialog.Header fontSize={"2rem"}>
+      <Dialog.Header fontSize={"2rem"}>
         {props.title || "Edit Form"}
-      </BasicDialog.Header>
-      <BasicDialog.Body padding={"xs"}>
+      </Dialog.Header>
+      <Dialog.Body padding={"xs"}>
         {Object.keys(props.fields).map((key) => {
           const validKey = key as T;
           const field = props.fields[validKey];
@@ -133,21 +133,21 @@ function SimpleFormDialog<T extends string>(props: SimpleFormDialogProps<T>) {
             />
           );
         })}
-      </BasicDialog.Body>
-      <BasicDialog.Footer>
-        <BasicDialog.ActionTrigger>
+      </Dialog.Body>
+      <Dialog.Footer>
+        <Dialog.ActionTrigger>
           <CancelButton
             fade={0.5}
             size={actionButtonSize}
             onClick={handleOnCancelClick}
           />
-        </BasicDialog.ActionTrigger>
+        </Dialog.ActionTrigger>
 
-        <BasicDialog.ActionTrigger>
+        <Dialog.ActionTrigger>
           <SaveButton size={actionButtonSize} onClick={handleOnSaveClick} />
-        </BasicDialog.ActionTrigger>
-      </BasicDialog.Footer>
-    </BasicDialog.Root>
+        </Dialog.ActionTrigger>
+      </Dialog.Footer>
+    </Dialog.Root>
   );
 }
 
@@ -190,4 +190,4 @@ function OptionsField(props: {
   );
 }
 
-export default SimpleFormDialog;
+export { SimpleFormDialog, type SimpleFormDialogProps };

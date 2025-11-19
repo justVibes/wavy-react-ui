@@ -7,46 +7,7 @@ import { BasicDivProps } from "../html/div/BasicDiv";
 import { SafeOmit } from "@wavy/types";
 import { BasicSpanProps } from "../html/span/BasicSpan";
 
-interface BasicMediaCardProps {
-  className?: string;
-  title: string;
-  height?: BasicDivProps["height"];
-  /**
-   * @default "14rem"
-   */
-  width?: BasicDivProps["width"];
-  /**
-   * @default "7rem"
-   */
-  mediaHeight?: BasicDivProps["height"];
-  /**
-   * @default true
-   */
-  coverImg?: boolean;
-  /**
-   * @default "full"
-   */
-  imgSize?: BasicDivProps["size"];
-  description?: string;
-  children?: JSX.Element;
-  src?: string;
-  /**
-   * @default "md"
-   */
-  titleFontSize?: BasicSpanProps["fontSize"];
-  /**
-   * @default "xs"
-   */
-  descriptionFontSize?: BasicSpanProps["fontSize"];
-  /**
-   * @default "md"
-   */
-  imgCorners?: BasicDivProps["corners"];
-  fallback?: IconType | JSX.Element | string;
-  fade?: BasicDivProps["fade"];
-  style?: BasicDivProps["style"];
-}
-function BasicMediaCard(props: BasicMediaCardProps) {
+function Root(props: MediaCardProps.RootProps) {
   const FallBack = () => {
     if (typeof props.fallback === "string") return props.fallback;
     if (React.isValidElement(props.fallback)) return props.fallback;
@@ -121,12 +82,7 @@ function BasicMediaCard(props: BasicMediaCardProps) {
   );
 }
 
-BasicMediaCard.Content = (
-  props: SafeOmit<
-    BasicDivProps,
-    "decreaseYFaderPadding" | "updateScrollPosDeps" | "rememberScrollPos"
-  > & { children: React.ReactNode }
-) => {
+function Content(props: MediaCardProps.ContentProps) {
   return (
     <BasicDiv
       {...{
@@ -138,6 +94,55 @@ BasicMediaCard.Content = (
       {props.children}
     </BasicDiv>
   );
-};
+}
 
-export default BasicMediaCard;
+const MediaCard = { Root, Content };
+
+declare namespace MediaCardProps {
+  interface RootProps {
+    className?: string;
+    title: string;
+    height?: BasicDivProps["height"];
+    /**
+     * @default "14rem"
+     */
+    width?: BasicDivProps["width"];
+    /**
+     * @default "7rem"
+     */
+    mediaHeight?: BasicDivProps["height"];
+    /**
+     * @default true
+     */
+    coverImg?: boolean;
+    /**
+     * @default "full"
+     */
+    imgSize?: BasicDivProps["size"];
+    description?: string;
+    children?: JSX.Element;
+    src?: string;
+    /**
+     * @default "md"
+     */
+    titleFontSize?: BasicSpanProps["fontSize"];
+    /**
+     * @default "xs"
+     */
+    descriptionFontSize?: BasicSpanProps["fontSize"];
+    /**
+     * @default "md"
+     */
+    imgCorners?: BasicDivProps["corners"];
+    fallback?: IconType | JSX.Element | string;
+    fade?: BasicDivProps["fade"];
+    style?: BasicDivProps["style"];
+  }
+
+  type ContentProps = SafeOmit<
+    BasicDivProps,
+    "decreaseYFaderPadding" | "updateScrollPosDeps" | "rememberScrollPos"
+  > & { children: React.ReactNode };
+}
+
+export { MediaCard, type MediaCardProps };

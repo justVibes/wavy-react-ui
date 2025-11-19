@@ -1,6 +1,6 @@
 import {
   BasicButton,
-  BasicPopover,
+  Popover,
   BasicSpan,
   TextField,
   ellipsis,
@@ -14,7 +14,7 @@ import { IconType } from "react-icons";
 import { LuCheck, LuPencilLine, LuX } from "react-icons/lu";
 import { BasicButtonProps } from "../html/button/BasicButton";
 import BasicDiv, { BasicDivProps } from "../html/div/BasicDiv";
-import { BasicPopoverProps } from "../popover/BasicPopover";
+import { PopoverProps } from "../popover/Popover";
 import { TextFieldProps } from "../textfield/TextField";
 import { BasicSpanProps } from "../html/span/BasicSpan";
 
@@ -70,11 +70,11 @@ interface EditableProps extends Partial<Pick<TextFieldProps, "focusColor">> {
   slotProps?: {
     popover?: Prettify<
       Partial<
-        SafeOmit<BasicPopoverProps, "children"> & {
+        SafeOmit<PopoverProps, "children"> & {
           /**@default "match-anchor" */
-          maxWidth: BasicPopoverProps["maxWidth"];
+          maxWidth: PopoverProps["maxWidth"];
           /**@default "5rem"*/
-          maxHeight: BasicPopoverProps["maxHeight"];
+          maxHeight: PopoverProps["maxHeight"];
         }
       >
     >;
@@ -222,7 +222,7 @@ function Editable(props: EditableProps) {
                 activationMode === "click" ? handleOnContentClick : undefined
               }
             >
-              <BasicPopover
+              <Popover
                 {...props.slotProps?.popover}
                 allowInteractions
                 asChild={
@@ -247,7 +247,7 @@ function Editable(props: EditableProps) {
                 >
                   {text || props.placeholder}
                 </span>
-              </BasicPopover>
+              </Popover>
             </BasicDiv>
           )}
           {props.hideControls !== true &&
@@ -340,4 +340,4 @@ function Control(props: {
   );
 }
 
-export default Editable;
+export { Editable, type EditableProps };

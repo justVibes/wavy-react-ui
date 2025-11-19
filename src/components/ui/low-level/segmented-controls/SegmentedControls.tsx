@@ -6,7 +6,7 @@ import {
 import { IconType } from "react-icons";
 import { BasicColor } from "../html/BasicStyle";
 
-interface BasicSegmentedControlsProps<ControlType extends string> {
+interface SegmentedControlsProps<ControlType extends string> {
   controls: ControlType[] | { value: ControlType; icon: IconType }[];
   defaultValue?: ControlType;
   value?: ControlType;
@@ -15,8 +15,8 @@ interface BasicSegmentedControlsProps<ControlType extends string> {
   borderColor?: BasicColor | 0;
   onChange?: (control: ControlType) => void;
 }
-function BasicSegmentedControls<ControlType extends string>(
-  props: BasicSegmentedControlsProps<ControlType>
+function SegmentedControls<ControlType extends string>(
+  props: SegmentedControlsProps<ControlType>
 ) {
   const handleOnChange = (details: SegmentGroupValueChangeDetails) => {
     props.onChange?.(details.value as ControlType);
@@ -44,4 +44,4 @@ function BasicSegmentedControls<ControlType extends string>(
   );
 }
 
-export default BasicSegmentedControls;
+export { SegmentedControls, type SegmentedControlsProps };

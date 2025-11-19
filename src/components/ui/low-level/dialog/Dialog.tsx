@@ -1,71 +1,19 @@
 import { UseDialogControllerReturn } from "@/components/hooks/useDialogController";
-import { BasicColor, BasicDiv, resolveBasicColor, useRerender } from "@/main";
+import { BasicDiv, useRerender } from "@/main";
 import {
+  Dialog as ChakraDialog,
   CloseButton,
   CloseButtonProps,
-  Dialog,
   Portal,
-  useDialog,
 } from "@chakra-ui/react";
 import { JSX } from "@emotion/react/jsx-runtime";
-import React, { useState } from "react";
-import { BasicDivProps } from "../html/div/BasicDiv";
-import applyBasicStyle from "../html/BasicStyle";
 import { SafeExtract, SafeOmit } from "@wavy/types";
-import { BasicButtonProps } from "../html/button/BasicButton";
+import React from "react";
+import applyBasicStyle from "../html/BasicStyle";
+import { BasicDivProps } from "../html/div/BasicDiv";
 
-interface RootProps<T = {}>
-  extends SafeOmit<
-    BasicDivProps,
-    | "clickable"
-    | "ref"
-    | "onClick"
-    | "onBlur"
-    | "onFocus"
-    | "onScroll"
-    | "decreaseYFaderPadding"
-    | "enableYFaders"
-    | "rememberScrollPos"
-    | "updateScrollPosDeps"
-  > {
-  /**
-   * @default center
-   */
-  placement?: "center" | "top" | "bottom";
-  children: JSX.Element | JSX.Element[];
-  triggerElement?: JSX.Element;
-  hideCloseButton?: boolean;
-  /**@default "sm" */
-  closeButtonSize?: CloseButtonProps["size"];
-  /**
-   * @default false
-   */
-  unmountOnExit?: boolean;
-  /**
-   * @default "slide-in-bottom"
-   */
-  enterAnimation?: Dialog.RootProps["motionPreset"];
-  /**
-   * @default "outside"
-   */
-  scrollBehavior?: Dialog.RootProps["scrollBehavior"];
-  controller?: UseDialogControllerReturn<T>;
-  /**
-   * Whether to close the dialog when the escape key is pressed
-   * @default true
-   */
-  closeOnEscape?: boolean;
-  /**
-   * Whether to close the dialog when the outside is clicked
-   * @default true
-   */
-  closeOnInteractOutside?: boolean;
-  rerenderOnClose?: boolean;
-  onOpenChange?: (isOpen: boolean) => void;
-  onClose?: () => void;
-}
 // The generic type basically for the dialogController
-function Root<T>(props: RootProps<T>) {
+function Root<T>(props: DialogProps.RootProps<T>) {
   const { triggerRerender } = useRerender();
   const style = applyBasicStyle({
     ...props,
@@ -82,7 +30,7 @@ function Root<T>(props: RootProps<T>) {
     props.rerenderOnClose && triggerRerender();
   };
   return (
-    <Dialog.Root
+    <ChakraDialog.Root
       unmountOnExit={props.unmountOnExit}
       open={props.controller?.isOpen}
       onEscapeKeyDown={
@@ -102,26 +50,28 @@ function Root<T>(props: RootProps<T>) {
       motionPreset={props.enterAnimation || "slide-in-bottom"}
     >
       {props.triggerElement && (
-        <Dialog.Trigger asChild>{props.triggerElement}</Dialog.Trigger>
+        <ChakraDialog.Trigger asChild>
+          {props.triggerElement}
+        </ChakraDialog.Trigger>
       )}
       <Portal>
-        <Dialog.Backdrop />
-        <Dialog.Positioner>
-          <Dialog.Content style={style}>
+        <ChakraDialog.Backdrop />
+        <ChakraDialog.Positioner>
+          <ChakraDialog.Content style={style}>
             {props.children}
 
             {!props.hideCloseButton && (
-              <Dialog.CloseTrigger asChild>
+              <ChakraDialog.CloseTrigger asChild>
                 <CloseButton
                   size={props.closeButtonSize || "sm"}
                   onClick={props.controller?.hide}
                 />
-              </Dialog.CloseTrigger>
+              </ChakraDialog.CloseTrigger>
             )}
-          </Dialog.Content>
-        </Dialog.Positioner>
+          </ChakraDialog.Content>
+        </ChakraDialog.Positioner>
       </Portal>
-    </Dialog.Root>
+    </ChakraDialog.Root>
   );
 }
 
@@ -134,11 +84,11 @@ interface ElementProps
 }
 const CompoundElement =
   (
-    key: SafeExtract<keyof typeof Dialog, "Header" | "Body" | "Footer">,
+    key: SafeExtract<keyof typeof ChakraDialog, "Header" | "Body" | "Footer">,
     defaultProps?: SafeOmit<ElementProps, "children">
   ) =>
   (props: ElementProps) => {
-    const Wrapper = Dialog[key];
+    const Wrapper = ChakraDialog[key];
 
     let propsCopy: ElementProps = { ...props, spill: props.spill || "hidden" };
 
@@ -175,20 +125,24 @@ const CloseTrigger = (props: {
   }>;
 }) => {
   return (
-    <Dialog.CloseTrigger asChild>
+    <ChakraDialog.CloseTrigger asChild>
       {props.wrap ? (
         <div {...props.slotProps?.divWrapper}>{props.children}</div>
       ) : (
         props.children
       )}
-    </Dialog.CloseTrigger>
+    </ChakraDialog.CloseTrigger>
   );
 };
 
 const ActionTrigger = (props: { children: JSX.Element }) => {
-  return <Dialog.ActionTrigger asChild>{props.children}</Dialog.ActionTrigger>;
+  return (
+    <ChakraDialog.ActionTrigger asChild>
+      {props.children}
+    </ChakraDialog.ActionTrigger>
+  );
 };
-const BasicDialog = {
+const Dialog = {
   Root,
   Header,
   Body,
@@ -196,8 +150,57 @@ const BasicDialog = {
   CloseTrigger,
   ActionTrigger,
 };
-interface BasicDialogProps {
-  Root: RootProps;
+
+declare namespace DialogProps {
+  interface RootProps<T = {}>
+    extends SafeOmit<
+      BasicDivProps,
+      | "clickable"
+      | "ref"
+      | "onClick"
+      | "onBlur"
+      | "onFocus"
+      | "onScroll"
+      | "decreaseYFaderPadding"
+      | "enableYFaders"
+      | "rememberScrollPos"
+      | "updateScrollPosDeps"
+    > {
+    /**
+     * @default center
+     */
+    placement?: "center" | "top" | "bottom";
+    children: JSX.Element | JSX.Element[];
+    triggerElement?: JSX.Element;
+    hideCloseButton?: boolean;
+    /**@default "sm" */
+    closeButtonSize?: CloseButtonProps["size"];
+    /**
+     * @default false
+     */
+    unmountOnExit?: boolean;
+    /**
+     * @default "slide-in-bottom"
+     */
+    enterAnimation?: ChakraDialog.RootProps["motionPreset"];
+    /**
+     * @default "outside"
+     */
+    scrollBehavior?: ChakraDialog.RootProps["scrollBehavior"];
+    controller?: UseDialogControllerReturn<T>;
+    /**
+     * Whether to close the dialog when the escape key is pressed
+     * @default true
+     */
+    closeOnEscape?: boolean;
+    /**
+     * Whether to close the dialog when the outside is clicked
+     * @default true
+     */
+    closeOnInteractOutside?: boolean;
+    rerenderOnClose?: boolean;
+    onOpenChange?: (isOpen: boolean) => void;
+    onClose?: () => void;
+  }
 }
-export default BasicDialog;
-export type { BasicDialogProps };
+export { Dialog, type DialogProps };

@@ -1,23 +1,23 @@
 import { Box, FileUpload, Icon } from "@chakra-ui/react";
 import { LuUpload } from "react-icons/lu";
 import { BasicColor } from "../html/BasicStyle";
-import BasicFileUploadRoot, {
-  BasicFileUploadRootProps,
-} from "../file-upload-root/BasicFileUploadRoot";
+import {
+  FileUploadRoot,
+  type FileUploadRootProps,
+} from "../file-upload-root/FileUploadRoot";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { resolveBasicColor } from "@/main";
 import { SafeOmit } from "@wavy/types";
 
-interface BasicDropzoneProps
-  extends SafeOmit<BasicFileUploadRootProps, "children"> {
+interface FileDropzoneProps extends SafeOmit<FileUploadRootProps, "children"> {
   backgroundColor?: BasicColor;
   borderColor?: BasicColor;
   color?: BasicColor;
   content?: JSX.Element;
 }
-function BasicDropzone(props: BasicDropzoneProps) {
+function FileDropzone(props: FileDropzoneProps) {
   return (
-    <BasicFileUploadRoot {...props}>
+    <FileUploadRoot {...props}>
       <FileUpload.Dropzone
         borderRadius={"xl"}
         height={"full"}
@@ -42,8 +42,8 @@ function BasicDropzone(props: BasicDropzoneProps) {
           )}
         </FileUpload.DropzoneContent>
       </FileUpload.Dropzone>
-    </BasicFileUploadRoot>
+    </FileUploadRoot>
   );
 }
 
-export default BasicDropzone;
+export { FileDropzone, type FileDropzoneProps };

@@ -1,27 +1,25 @@
-import { BasicColor, BasicDiv, resolveBasicColor, InlineCss } from "@/main";
+import { BasicColor, BasicDiv, resolveBasicColor } from "@/main";
 import {
-  Box,
-  Menu,
+  Menu as ChakraMenu,
   MenuItemProps,
   MenuRootProps,
   Portal,
 } from "@chakra-ui/react";
 import { JSX } from "@emotion/react/jsx-runtime";
 import React, { createContext, useContext } from "react";
-import applyBasicStyle, { HtmlElementDim } from "../html/BasicStyle";
 import { LuChevronRight } from "react-icons/lu";
+import applyBasicStyle, { HtmlElementDim } from "../html/BasicStyle";
 import { BasicDivProps } from "../html/div/BasicDiv";
-import { SafeOmit } from "@wavy/types";
 
 const Context = createContext<{
   placement: MenuRootProps["positioning"]["placement"];
   color: BasicColor;
-  onItemClick: BasicMenuProps<string>["onItemClick"];
+  onItemClick: MenuProps<string>["onItemClick"];
 }>(null);
 
-type BasicMenuPlacement = MenuRootProps["positioning"]["placement"];
+type MenuPlacement = MenuRootProps["positioning"]["placement"];
 
-interface BasicMenuProps<Item extends string>
+interface MenuProps<Item extends string>
   extends Partial<
     Record<
       `${"max" | "min"}${"Height" | "Width"}` | "height" | "width",
@@ -32,7 +30,7 @@ interface BasicMenuProps<Item extends string>
   /**
    * @default "right-start"
    */
-  placement?: BasicMenuPlacement;
+  placement?: MenuPlacement;
   /**
    * @default "onSurface"
    */
@@ -57,12 +55,12 @@ interface BasicMenuProps<Item extends string>
     >;
   }>;
 }
-function BasicMenu<Item extends string>(props: BasicMenuProps<Item>) {
+function Menu<Item extends string>(props: MenuProps<Item>) {
   const backgroundColor: BasicColor =
     props.backgroundColor || "surfaceContainer";
   const color: BasicColor = props.color || "onSurface";
 
-  const placement: BasicMenuProps<Item>["placement"] =
+  const placement: MenuProps<Item>["placement"] =
     props.placement || "right-start";
   return (
     <Context.Provider
@@ -72,17 +70,17 @@ function BasicMenu<Item extends string>(props: BasicMenuProps<Item>) {
         onItemClick: props.onItemClick,
       }}
     >
-      <Menu.Root positioning={{ placement, hideWhenDetached: true }}>
-        <Menu.Trigger asChild>
+      <ChakraMenu.Root positioning={{ placement, hideWhenDetached: true }}>
+        <ChakraMenu.Trigger asChild>
           {props.wrapTrigger ? (
             <div {...props.slotProps?.divWrapper}>{props.children}</div>
           ) : (
             props.children
           )}
-        </Menu.Trigger>
+        </ChakraMenu.Trigger>
         <OptionalPortal>
-          <Menu.Positioner>
-            <Menu.Content
+          <ChakraMenu.Positioner>
+            <ChakraMenu.Content
               h={props.height}
               w={props.width}
               maxH={props.maxHeight}
@@ -102,21 +100,21 @@ function BasicMenu<Item extends string>(props: BasicMenuProps<Item>) {
 
                 if (item.subMenu)
                   return (
-                    <BasicMenu
+                    <Menu
                       {...props}
                       gutter={(props.gutter || 0) + 2}
                       items={item.subMenu}
                       wrapTrigger={false}
                     >
                       <MenuItem isTrigger value={key} />
-                    </BasicMenu>
+                    </Menu>
                   );
                 return <MenuItem {...item} value={key} />;
               })}
-            </Menu.Content>
-          </Menu.Positioner>
+            </ChakraMenu.Content>
+          </ChakraMenu.Positioner>
         </OptionalPortal>
-      </Menu.Root>
+      </ChakraMenu.Root>
     </Context.Provider>
   );
 }
@@ -164,7 +162,11 @@ function MenuItem(
   const TrailingEl = () => {
     if (!props.trailingEl) return;
     if ("command" in props.trailingEl)
-      return <Menu.ItemCommand>{props.trailingEl.command}</Menu.ItemCommand>;
+      return (
+        <ChakraMenu.ItemCommand>
+          {props.trailingEl.command}
+        </ChakraMenu.ItemCommand>
+      );
     return props.trailingEl;
   };
   const handleOnClick = () => {
@@ -199,16 +201,16 @@ function MenuItem(
 
   if (props.isTrigger)
     return (
-      <Menu.TriggerItem
+      <ChakraMenu.TriggerItem
         {...defaults}
         alignItems={"center"}
         justifyContent={"space-between"}
       >
         {props.value} <LuChevronRight />
-      </Menu.TriggerItem>
+      </ChakraMenu.TriggerItem>
     );
   return (
-    <Menu.Item {...defaults} value={props.value}>
+    <ChakraMenu.Item {...defaults} value={props.value}>
       {props.leadingEl}
       <BasicDiv
         style={{ flexGrow: 1 }}
@@ -217,7 +219,7 @@ function MenuItem(
         {props.value}
       </BasicDiv>
       {<TrailingEl />}
-    </Menu.Item>
+    </ChakraMenu.Item>
   );
 }
 // BasicMenu.Item = (props: {
@@ -314,5 +316,4 @@ function MenuItem(
 //   );
 // };
 
-export default BasicMenu;
-export type { BasicMenuPlacement };
+export { Menu, type MenuPlacement, type MenuRootProps };

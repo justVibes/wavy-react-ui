@@ -5,7 +5,7 @@ import React from "react";
 import { IconType } from "react-icons";
 import { LuCheck } from "react-icons/lu";
 
-interface BasicStepperProps extends StepsVariant {
+interface StepperProps extends StepsVariant {
   steps: {
     title: string;
     description: React.ReactNode | (() => React.ReactNode);
@@ -23,7 +23,7 @@ interface BasicStepperProps extends StepsVariant {
     NextTrigger: (props: { children: JSX.Element }) => JSX.Element;
   }) => JSX.Element;
 }
-function BasicStepper(props: BasicStepperProps) {
+function Stepper(props: StepperProps) {
   const Wrapper = ({ children }: { children: JSX.Element[] }) => {
     const coreProps: Partial<Steps.RootProviderProps> = {
       ...props,
@@ -96,7 +96,11 @@ function BasicStepper(props: BasicStepperProps) {
           </Steps.Content>
         ))}
         {props.completedel !== "none" && (
-          <Steps.CompletedContent height={"full"} width={"full"} overflow={"hidden"}>
+          <Steps.CompletedContent
+            height={"full"}
+            width={"full"}
+            overflow={"hidden"}
+          >
             {props.completedel || "All steps are complete!"}
           </Steps.CompletedContent>
         )}
@@ -125,4 +129,4 @@ function BasicStepper(props: BasicStepperProps) {
   );
 }
 
-export default BasicStepper;
+export { Stepper, type StepperProps };

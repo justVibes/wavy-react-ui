@@ -3,7 +3,7 @@ import { sort } from "@wavy/fn";
 import { useEffect, useState } from "react";
 import Terminal from "../../high-level/terminal/Terminal";
 import BasicDiv from "../../low-level/html/div/BasicDiv";
-import BasicItemInfo from "../../low-level/item-info/BasicItemInfo";
+import {ItemInfo} from "../../low-level/item-info/ItemInfo";
 import { TaskLog, UnsubscribeFunction } from "@wavy/types";
 
 interface TaskLoggerProps {
@@ -50,7 +50,7 @@ function TaskLogger(props: TaskLoggerProps) {
       >
         <For each={props.relatedTaskData}>
           {({ content, ...item }) => {
-            return <BasicItemInfo item={item} info={content} />;
+            return <ItemInfo item={item} info={content} />;
           }}
         </For>
       </BasicDiv>

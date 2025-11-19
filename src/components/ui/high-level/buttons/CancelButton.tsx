@@ -5,6 +5,7 @@ const CancelButton = createBasicButton({
   optional: {
     backgroundColor: "transparent",
     color: "onSurface",
+    fade: 0.75,
   },
 });
 

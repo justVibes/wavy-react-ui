@@ -1,7 +1,7 @@
 import { BasicColor, BasicImg } from "@/main";
 import { inferFilename } from "@wavy/fn";
 import { TfiReceipt } from "react-icons/tfi";
-import BasicCard from "../../low-level/cards/BasicCard";
+import {Card} from "../../low-level/cards/Card";
 import DeleteButton from "../buttons/DeleteButton";
 import { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 import { BasicButtonProps } from "../../low-level/html/button/BasicButton";
@@ -26,7 +26,7 @@ interface ReceiptCardProps
 }
 function ReceiptCard(props: ReceiptCardProps) {
   return (
-    <BasicCard.Root
+    <Card.Root
       backgroundColor={props.backgroundColor || "onSurface"}
       color={props.color || "surface"}
       width={props.width}
@@ -35,7 +35,7 @@ function ReceiptCard(props: ReceiptCardProps) {
       corners={props.corners || "lg"}
       style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
     >
-      <BasicCard.LeadingAddOn
+      <Card.LeadingAddOn
         size="2rem"
         padding={"sm"}
         centerContent
@@ -53,25 +53,25 @@ function ReceiptCard(props: ReceiptCardProps) {
         ) : (
           <TfiReceipt size={"100%"} />
         )}
-      </BasicCard.LeadingAddOn>
+      </Card.LeadingAddOn>
 
-      <BasicCard.Content width="full" gap={"xs"}>
-        <BasicCard.Label
+      <Card.Content width="full" gap={"xs"}>
+        <Card.Label
           value="Your receipt"
           fade={0.75}
           truncateStyle={"ellipsis"}
         />
-        <BasicCard.Item
+        <Card.Item
           value={
             props.receiptName ||
             (props.receiptPath ? inferFilename(props.receiptPath) : "unknown")
           }
           truncateStyle={"ellipsis"}
         />
-      </BasicCard.Content>
+      </Card.Content>
 
       {!props.hideDeleteButton && (
-        <BasicCard.TrailingAddOn>
+        <Card.TrailingAddOn>
           <DeleteButton
             iconOnly
             iconVariant={props.deleteIconVariant}
@@ -80,9 +80,9 @@ function ReceiptCard(props: ReceiptCardProps) {
             color="delete"
             onClick={props.onDeleteClick}
           />
-        </BasicCard.TrailingAddOn>
+        </Card.TrailingAddOn>
       )}
-    </BasicCard.Root>
+    </Card.Root>
   );
 }
 

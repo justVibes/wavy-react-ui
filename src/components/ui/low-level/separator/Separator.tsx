@@ -1,12 +1,17 @@
-import { HStack, Separator, SeparatorProps, Text } from "@chakra-ui/react";
+import {
+  HStack,
+  Separator as ChakraSeparator,
+  SeparatorProps as ChakraSeparatorProps,
+  Text,
+} from "@chakra-ui/react";
 import { BasicColor } from "../html/BasicStyle";
 import { resolveBasicColor } from "@/main";
 
 type BaseProps = {
-  size?: SeparatorProps["size"];
+  size?: ChakraSeparatorProps["size"];
   color?: BasicColor;
-  variant?: SeparatorProps["variant"];
-  orientation?: SeparatorProps["orientation"];
+  variant?: ChakraSeparatorProps["variant"];
+  orientation?: ChakraSeparatorProps["orientation"];
 };
 
 type OptionalProps =
@@ -17,9 +22,10 @@ type OptionalProps =
     }
   | { label?: never; labelPosition?: never; labelColor?: never };
 
-function BasicSeparator(props: BaseProps & OptionalProps) {
+type SeparatorProps = BaseProps & OptionalProps;
+function Separator(props: SeparatorProps) {
   const SeparatorRef = () => (
-    <Separator
+    <ChakraSeparator
       flex="1"
       variant={props.variant}
       orientation={props.orientation}
@@ -40,4 +46,4 @@ function BasicSeparator(props: BaseProps & OptionalProps) {
   );
 }
 
-export default BasicSeparator;
+export { Separator, type SeparatorProps };

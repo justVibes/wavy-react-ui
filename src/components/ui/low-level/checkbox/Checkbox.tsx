@@ -57,4 +57,4 @@ function Checkbox(props: CheckboxProps) {
   );
 }
 
-export default Checkbox;
+export { Checkbox, type CheckboxProps };

@@ -3,8 +3,8 @@ import { SafeOmit } from "@wavy/types";
 import BasicDiv, { BasicDivProps } from "../div/BasicDiv";
 import { createContext, useContext, useEffect, useState } from "react";
 import BasicOption from "../option/BasicOption";
-import { BasicPopover, usePopoverContext, useRerender } from "@/main";
-import { BasicPopoverProps } from "../../popover/BasicPopover";
+import { Popover, usePopoverContext, useRerender } from "@/main";
+import { PopoverProps } from "../../popover/Popover";
 
 const Context =
   createContext<
@@ -16,7 +16,7 @@ const Context =
 
 interface BasicSelectProps<T>
   extends SafeOmit<
-    BasicPopoverProps,
+    PopoverProps,
     "displayAction" | "content" | "placement" | "allowInteractions"
   > {
   isSelected?: (option: BasicSelectProps<T>["options"][number]) => boolean;
@@ -37,7 +37,7 @@ interface BasicSelectProps<T>
 function BasicSelect<T extends string | number>(props: BasicSelectProps<T>) {
   return (
     <Context.Provider value={props}>
-      <BasicPopover
+      <Popover
         {...props}
         backdropBlur={props.backdropBlur}
         padding={props.padding || "md"}

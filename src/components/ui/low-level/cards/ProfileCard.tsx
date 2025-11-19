@@ -1,57 +1,22 @@
-import { BasicAvatar, BasicColor, BasicSpan, ellipsis } from "@/main";
-import { type JSX } from "react";
-import { BasicAvatarProps } from "../../low-level/avatar/BasicAvatar";
-import BasicDiv, { BasicDivProps } from "../../low-level/html/div/BasicDiv";
-import { BasicSpanProps } from "../../low-level/html/span/BasicSpan";
+import { Avatar, BasicColor, ellipsis } from "@/main";
 import { AddPrefix } from "@wavy/types";
+import { type JSX } from "react";
+import { AvatarProps } from "../avatar/Avatar";
 import applyBasicStyle from "../html/BasicStyle";
+import BasicDiv, { BasicDivProps } from "../html/div/BasicDiv";
+import { BasicSpanProps } from "../html/span/BasicSpan";
 
-interface BasicProfileCardProps
-  extends Partial<
-      AddPrefix<
-        {
-          fontSize: BasicSpanProps["fontSize"];
-          fade: BasicDivProps["fade"];
-          fontWeight: BasicSpanProps["fontWeight"];
-        },
-        "title" | "description"
-      >
-    >,
-    Partial<
-      AddPrefix<
-        {
-          size: BasicAvatarProps["size"];
-          src: BasicAvatarProps["src"];
-          fallback: BasicAvatarProps["fallback"];
-          backgroundColor?: BasicColor;
-          color?: BasicColor;
-        },
-        "avatar"
-      >
-    > {
-  className?: string;
-  title: string;
-  description: string;
-  children?: JSX.Element;
-  backgroundColor?: BasicColor;
-  color?: BasicColor;
-  width?: BasicDivProps["width"];
-  height?: BasicDivProps["height"];
-  padding?: BasicDivProps["padding"];
-  corners?: BasicDivProps["corners"];
-  disableBoxShadow?: boolean;
-  style?: BasicDivProps["style"];
-}
-function BasicProfileCard(props: BasicProfileCardProps) {
-  const defaults: Partial<BasicProfileCardProps> = {
+function Root(props: ProfileCardProps.RootProps) {
+  const defaults: Partial<ProfileCardProps.RootProps> = {
     backgroundColor: "onSurface",
     color: "surface",
     padding: "md",
     corners: "lg",
   };
-  const getParentProp = <Key extends keyof BasicProfileCardProps>(key: Key) =>
-    props[key] ?? defaults[key];
-  const getProp = <Key extends keyof BasicProfileCardProps>(key: Key) => {
+  const getParentProp = <Key extends keyof ProfileCardProps.RootProps>(
+    key: Key
+  ) => props[key] ?? defaults[key];
+  const getProp = <Key extends keyof ProfileCardProps.RootProps>(key: Key) => {
     if (props.children) return;
     return props[key] || defaults[key];
   };
@@ -89,7 +54,7 @@ function BasicProfileCard(props: BasicProfileCardProps) {
         spill={"hidden"}
         style={props.children ? undefined : { ...props.style, boxShadow }}
       >
-        <BasicAvatar
+        <Avatar
           src={props.avatarSrc}
           size={props.avatarSize ?? "sm"}
           fallback={props.avatarFallback}
@@ -124,6 +89,45 @@ function BasicProfileCard(props: BasicProfileCardProps) {
   );
 }
 
-BasicProfileCard.Content = BasicDiv;
+const ProfileCard = { Root, Content: BasicDiv };
 
-export default BasicProfileCard;
+declare namespace ProfileCardProps {
+  interface RootProps
+    extends Partial<
+        AddPrefix<
+          {
+            fontSize: BasicSpanProps["fontSize"];
+            fade: BasicDivProps["fade"];
+            fontWeight: BasicSpanProps["fontWeight"];
+          },
+          "title" | "description"
+        >
+      >,
+      Partial<
+        AddPrefix<
+          {
+            size: AvatarProps["size"];
+            src: AvatarProps["src"];
+            fallback: AvatarProps["fallback"];
+            backgroundColor?: BasicColor;
+            color?: BasicColor;
+          },
+          "avatar"
+        >
+      > {
+    className?: string;
+    title: string;
+    description: string;
+    children?: JSX.Element;
+    backgroundColor?: BasicColor;
+    color?: BasicColor;
+    width?: BasicDivProps["width"];
+    height?: BasicDivProps["height"];
+    padding?: BasicDivProps["padding"];
+    corners?: BasicDivProps["corners"];
+    disableBoxShadow?: boolean;
+    style?: BasicDivProps["style"];
+  }
+}
+
+export { ProfileCard, type ProfileCardProps };

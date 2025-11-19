@@ -12,16 +12,16 @@ import {
 import { JSX } from "@emotion/react/jsx-runtime";
 import { strictArray } from "@wavy/fn";
 import { createContext, useContext, useEffect, useState } from "react";
-import { BasicOlProps } from "../html/ol/BasicOl";
-import BasicDialog from "./BasicDialog";
+import { BasicOlProps } from "../../html/ol/BasicOl";
+import { Dialog } from "../Dialog";
 
-const FormContext = createContext<{
+const Context = createContext<{
   rawSections: BasicOlProps<string>["items"];
   activeSection: string;
   completedSections: string[];
 }>(null);
 
-interface BasicFormDialogProps<Section extends string> {
+interface FancyFormDialogProps<Section extends string> {
   triggerElement?: JSX.Element;
   controller?: UseDialogControllerReturn;
   title?: React.ReactNode;
@@ -54,8 +54,8 @@ interface BasicFormDialogProps<Section extends string> {
   onSubmit?: () => Promise<void>;
 }
 
-function BasicFormDialog<Sections extends string>(
-  props: BasicFormDialogProps<Sections>
+function FancyFormDialog<Sections extends string>(
+  props: FancyFormDialogProps<Sections>
 ) {
   const sections = props.sections.flatMap((sect) =>
     typeof sect === "object" ? sect.nestedItems : sect
@@ -135,14 +135,14 @@ function BasicFormDialog<Sections extends string>(
     setActiveSectionIdx(activeSectionIdx - 1);
   };
   return (
-    <FormContext.Provider
+    <Context.Provider
       value={{
         activeSection,
         completedSections: completedSectionsRef.read(),
         rawSections: props.sections,
       }}
     >
-      <BasicDialog.Root
+      <Dialog.Root
         controller={props.controller}
         triggerElement={props.triggerElement}
         unmountOnExit={props.unmountOnExit}
@@ -155,7 +155,7 @@ function BasicFormDialog<Sections extends string>(
         backgroundColor="transparent"
         spill={"hidden"}
       >
-        <BasicDialog.Body
+        <Dialog.Body
           grid
           gap="0px"
           width="full"
@@ -173,9 +173,9 @@ function BasicFormDialog<Sections extends string>(
             incompleteSections={getIncompleteSections()}
             onSubmitClick={props.onSubmit}
           />
-        </BasicDialog.Body>
-      </BasicDialog.Root>
-    </FormContext.Provider>
+        </Dialog.Body>
+      </Dialog.Root>
+    </Context.Provider>
   );
 }
 
@@ -187,7 +187,7 @@ function Sidebar(props: {
     rawSections: sections,
     activeSection,
     completedSections,
-  } = useContext(FormContext);
+  } = useContext(Context);
   return (
     <BasicDiv
       size="full"
@@ -214,14 +214,14 @@ function Sidebar(props: {
 
 function Main(props: {
   previousDisabled: boolean;
-  sectionMapper: BasicFormDialogProps<string>["sectionMapper"];
+  sectionMapper: FancyFormDialogProps<string>["sectionMapper"];
   incompleteSections: string[];
   hideSubmitButton?: boolean;
   onPreviousClick: () => void;
   onNextClick: () => void;
   onSubmitClick?: () => Promise<void>;
 }) {
-  const { activeSection } = useContext(FormContext);
+  const { activeSection } = useContext(Context);
   const {
     title,
     description,
@@ -273,4 +273,4 @@ function Main(props: {
   );
 }
 
-export default BasicFormDialog;
+export { FancyFormDialog, type FancyFormDialogProps };

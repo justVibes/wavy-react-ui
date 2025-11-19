@@ -1,5 +1,4 @@
 import { BasicColor, BasicDiv } from "@/main";
-import React from "react";
 import { BasicDivProps } from "../html/div/BasicDiv";
 
 enum Size {
@@ -12,7 +11,7 @@ enum Size {
   "2xs" = ".5rem",
 }
 
-interface BasicIndicatorProps {
+interface IndicatorProps {
   content?: number | string;
   /**
    * @default "orange"
@@ -36,7 +35,7 @@ interface BasicIndicatorProps {
   padding?: BasicDivProps["padding"];
   hide?: boolean;
 }
-function BasicIndicator(props: BasicIndicatorProps) {
+function Indicator(props: IndicatorProps) {
   const size = Size[props.size || "sm"];
   return (
     <BasicDiv
@@ -53,4 +52,4 @@ function BasicIndicator(props: BasicIndicatorProps) {
   );
 }
 
-export default BasicIndicator;
+export { Indicator, type IndicatorProps };

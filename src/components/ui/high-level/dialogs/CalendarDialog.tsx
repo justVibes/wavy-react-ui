@@ -1,6 +1,6 @@
 import {
   BasicColor,
-  BasicDialog,
+  Dialog,
   CancelButton,
   UseDialogControllerReturn,
   useManagedRef,
@@ -52,7 +52,7 @@ function CalendarDialog(props: CalendarDialogProps) {
   };
 
   return (
-    <BasicDialog.Root
+    <Dialog.Root
       hideCloseButton
       onOpenChange={handleOnOpenChange}
       width={"max-content"}
@@ -62,26 +62,26 @@ function CalendarDialog(props: CalendarDialogProps) {
       backdropBlur={backdropBlur || ".5rem"}
     >
       {props.title && (
-        <BasicDialog.Header fontSize={props.titleFontSize}>
+        <Dialog.Header fontSize={props.titleFontSize}>
           {props.title}
-        </BasicDialog.Header>
+        </Dialog.Header>
       )}
-      <BasicDialog.Body>
+      <Dialog.Body>
         <Calendar
           {...rest}
           selectedDate={props.selectedDate || dateRef.read()}
           onDateSelected={handleOnDateClick}
         />
-      </BasicDialog.Body>
-      <BasicDialog.Footer>
-        <BasicDialog.ActionTrigger>
+      </Dialog.Body>
+      <Dialog.Footer>
+        <Dialog.ActionTrigger>
           <CancelButton size={actionButtonSize} fade={0.5} />
-        </BasicDialog.ActionTrigger>
-        <BasicDialog.ActionTrigger>
+        </Dialog.ActionTrigger>
+        <Dialog.ActionTrigger>
           <DoneButton size={actionButtonSize} onClick={handleDoneClick} />
-        </BasicDialog.ActionTrigger>
-      </BasicDialog.Footer>
-    </BasicDialog.Root>
+        </Dialog.ActionTrigger>
+      </Dialog.Footer>
+    </Dialog.Root>
   );
 }
 

@@ -2,22 +2,19 @@ import { BasicColor, resolveBasicColor } from "@/main";
 import {
   AbsoluteCenter,
   Button,
-  ButtonProps,
   Icon,
-  IconProps,
-  Spinner,
+  Spinner
 } from "@chakra-ui/react";
-import React, { JSX, useEffect, useState } from "react";
+import { SafeOmit } from "@wavy/types";
+import React, { JSX, useState } from "react";
 import { IconType } from "react-icons";
 import { FaFolder } from "react-icons/fa";
-import applyBasicStyle, { HtmlElementDim } from "../BasicStyle";
-import { BasicDivProps } from "../div/BasicDiv";
-import { ButtonSize } from "./components/ButtonSize";
-import { SafeOmit } from "@wavy/types";
 import {
   applyCoreHTMLProps,
   BasicHtmlElementCoreProps,
 } from "../BasicHtmlElementCore";
+import applyBasicStyle, { HtmlElementDim } from "../BasicStyle";
+import { BasicDivProps } from "../div/BasicDiv";
 
 const ICON_PRESET_SIZES = [
   "inherit",
@@ -222,5 +219,5 @@ const createBasicButton = <
 };
 
 export default BasicButton;
-export type { BasicButtonProps };
 export { createBasicButton };
+export type { BasicButtonProps };

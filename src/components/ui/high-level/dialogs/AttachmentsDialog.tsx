@@ -1,7 +1,7 @@
 import { imageResolver } from "@/image-resolver/imageResolver";
 import {
-  BasicCard,
-  BasicDialog,
+  Card,
+  Dialog,
   BasicDiv,
   BasicImg,
   BasicSpan,
@@ -96,7 +96,7 @@ function AttachmentsDialog(props: AttachmentsDialogProps) {
         rerender: triggerRerender,
       }}
     >
-      <BasicDialog.Root
+      <Dialog.Root
         onClose={handleOnClose}
         unmountOnExit={props.unmountOnExit}
         maxHeight={"30rem"}
@@ -106,17 +106,17 @@ function AttachmentsDialog(props: AttachmentsDialogProps) {
         controller={props.controller}
         spill={"hidden"}
       >
-        <BasicDialog.Header style={{ flexShrink: 0 }} fontSize="xxl">
+        <Dialog.Header style={{ flexShrink: 0 }} fontSize="xxl">
           Attachments
-        </BasicDialog.Header>
-        <BasicDialog.Body size={"full"} padding={"sm"} spill={"hidden"}>
+        </Dialog.Header>
+        <Dialog.Body size={"full"} padding={"sm"} spill={"hidden"}>
           {isEmpty(attachmentsRef.read()) ? (
             <AttachmentsNotFound />
           ) : (
             <AttachmentsList />
           )}
-        </BasicDialog.Body>
-      </BasicDialog.Root>
+        </Dialog.Body>
+      </Dialog.Root>
     </MainContext.Provider>
   );
 }
@@ -227,7 +227,7 @@ function Attachment(props: {
   const Icon = getFileIcon(typeAlias);
 
   return (
-    <BasicCard.Root
+    <Card.Root
       corners={"md"}
       width={"full"}
       sx={{
@@ -239,7 +239,7 @@ function Attachment(props: {
         },
       }}
     >
-      <BasicCard.LeadingAddOn
+      <Card.LeadingAddOn
         size={"2rem"}
         aspectRatio={1}
         color={typeAlias}
@@ -258,10 +258,10 @@ function Attachment(props: {
         ) : (
           <Icon.outlined size={"100%"} />
         )}
-      </BasicCard.LeadingAddOn>
+      </Card.LeadingAddOn>
 
-      <BasicCard.Content gap={"sm"} width={"full"}>
-        <BasicCard.Item truncateStyle={"ellipsis"} value={filename} />
+      <Card.Content gap={"sm"} width={"full"}>
+        <Card.Item truncateStyle={"ellipsis"} value={filename} />
 
         <BasicDiv
           ref={(r) =>
@@ -283,10 +283,10 @@ function Attachment(props: {
           />
           <BasicSpan fade={0.5} text={format("file-size", sizeInBytes)} />
         </BasicDiv>
-      </BasicCard.Content>
+      </Card.Content>
 
       {(!props.hideDeleteButton || !props.hideOpenAttachmentButton) && (
-        <BasicCard.TrailingAddOn row gap={"sm"} align="center">
+        <Card.TrailingAddOn row gap={"sm"} align="center">
           {!props.hideOpenAttachmentButton && (
             <OpenButton
               iconOnly
@@ -307,9 +307,9 @@ function Attachment(props: {
               onClick={() => props.onDelete?.(props.value)}
             />
           )}
-        </BasicCard.TrailingAddOn>
+        </Card.TrailingAddOn>
       )}
-    </BasicCard.Root>
+    </Card.Root>
   );
 }
 

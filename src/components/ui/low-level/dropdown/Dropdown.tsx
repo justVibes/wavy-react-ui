@@ -44,4 +44,4 @@ function Dropdown<T extends string>(props: DropdownProps<T>) {
   );
 }
 
-export default Dropdown;
+export { Dropdown, type DropdownProps };

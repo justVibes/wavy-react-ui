@@ -1,8 +1,6 @@
 import { useState } from "react";
-import BasicStatus, {
-  BasicStatusProps,
-} from "../../low-level/status/BasicStatus";
-import TextField, { TextFieldProps } from "../../low-level/textfield/TextField";
+import { Status, StatusProps } from "../../low-level/status/Status";
+import { TextField, TextFieldProps } from "../../low-level/textfield/TextField";
 import VerifyButton from "../buttons/VerifyButton";
 import ErrorTooltip from "../tooltip/ErrorTooltip";
 import { useManagedRef } from "@/main";
@@ -27,7 +25,7 @@ function VerifyTextField(
   }
 ) {
   const errorRef = useManagedRef<ErrorMessage | undefined>(props?.verifyError);
-  const [status, setStatus] = useState<BasicStatusProps["status"]>(
+  const [status, setStatus] = useState<StatusProps["status"]>(
     props?.defaultStatus || "pending"
   );
   const handleOnVerifyClick = async () => {
@@ -50,7 +48,7 @@ function VerifyTextField(
           asChild={status !== "error"}
           error={errorRef.read()}
         >
-          <BasicStatus indicatorSize=".4rem" status={status} />
+          <Status indicatorSize=".4rem" status={status} />
         </ErrorTooltip>
       }
       trailingContent={<VerifyButton onClick={handleOnVerifyClick} />}

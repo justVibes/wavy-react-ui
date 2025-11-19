@@ -15,7 +15,7 @@ type VerticalPlacement = "top" | "center" | "bottom";
 type HorizontalPlacement = "left" | "center" | "right";
 type FloaterWidth = BasicDivProps["width"] | "match-anchor";
 
-interface BasicPopoverProps
+interface PopoverProps
   extends Partial<
     Record<`${"min" | "max"}Width`, FloaterWidth> &
       Record<`${"min" | "max"}Height` | "height", BasicDivProps["height"]>
@@ -97,7 +97,7 @@ interface BasicPopoverProps
     >;
   }>;
 }
-function BasicPopover(props: BasicPopoverProps) {
+function Popover(props: PopoverProps) {
   const openedRef = useManagedRef(props.defaultOpen ?? false);
   const { triggerRerender } = useRerender();
   const popoverId = `--${v4()}`;
@@ -291,7 +291,7 @@ function BasicPopover(props: BasicPopoverProps) {
   );
 }
 
-const calcPlacement = (placement: BasicPopoverProps["placement"]) => {
+const calcPlacement = (placement: PopoverProps["placement"]) => {
   let { 0: vertPos, 1: horizPos } = placement?.split("-")!;
   horizPos =
     horizPos === "left"
@@ -303,7 +303,7 @@ const calcPlacement = (placement: BasicPopoverProps["placement"]) => {
 };
 
 const calcAnchorPoint = (
-  anchorPoint: BasicPopoverProps["anchorPoint"],
+  anchorPoint: PopoverProps["anchorPoint"],
   placements: ReturnType<typeof calcPlacement>
 ) => {
   const { 0: vertPoint, 1: horizPoint } = anchorPoint?.split("-")!;
@@ -313,5 +313,4 @@ const calcAnchorPoint = (
   };
 };
 
-export default BasicPopover;
-export type { BasicPopoverProps };
+export { Popover, type PopoverProps };

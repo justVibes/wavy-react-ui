@@ -1,9 +1,9 @@
 import React from 'react'
 
-function BasicDrawer() {
+function Drawer() {
   return (
     <div>BasicDrawer</div>
   )
 }
 
-export default BasicDrawer
+export default Drawer
