@@ -23,6 +23,7 @@ import BasicDiv, { BasicDivProps } from "../html/div/BasicDiv";
 import { isCharAllowed } from "./helper-functions/BasicTextFieldHelperFunctions";
 import { AllowedCharacters } from "./types";
 import { Prettify } from "@wavy/types";
+import { BasicSpanProps } from "../html/span/BasicSpan";
 
 type ElementPos = "leading" | "trailing";
 type ElementType = "Adornment" | "Content";
@@ -82,6 +83,7 @@ interface TextFieldProps extends AdditionalElements {
         [Key in `${ElementPos}Content`]: InputElementProps;
       } & {
         placeholder: Partial<{ color: BasicColor }>;
+        charCounter: Partial<{ fontSize?: BasicSpanProps["fontSize"] }>;
       } & ClipboardHelperWrapperProps["slotProps"] &
         Record<
           "helperText" | "label",
@@ -95,6 +97,7 @@ interface TextFieldProps extends AdditionalElements {
   >;
 
   onEnterKeyPressed?: () => void;
+  onEscapeKeyPressed?: () => void;
   onChange?: (
     value: string,
     event: React.ChangeEvent<HTMLInputElement>
@@ -152,7 +155,9 @@ function TextField(props: TextFieldProps) {
     //Apply styles
     if (props.showCharCounter) {
       Object.assign(inputRef.current?.style, {
-        paddingRight: `calc(${getComputedStyle(charCounterRef.current).width} + 7px)`,
+        paddingRight: `calc(${
+          getComputedStyle(charCounterRef.current).width
+        } + 7px)`,
       });
     }
   }, [text, props.value]);
@@ -253,6 +258,12 @@ function TextField(props: TextFieldProps) {
               <BasicSpan
                 ref={charCounterRef}
                 fade={0.5}
+                fontSize={
+                  props.slotProps?.charCounter?.fontSize ||
+                  (inputRef.current
+                    ? getComputedStyle(inputRef.current).fontSize
+                    : undefined)
+                }
                 text={`${(props.value ?? text).length}/${maxChars}`}
               />
             ) : (
@@ -285,6 +296,7 @@ function TextField(props: TextFieldProps) {
             variant={props.variant}
             onKeyDown={(e) => {
               if (e.key === "Enter") props.onEnterKeyPressed?.();
+              else if (e.key === "Escape") props.onEscapeKeyPressed?.();
             }}
             // pattern="^\s*(\$|€|£|¥)?\s*(-)?\s*(\d{1,3}(?:,\d{3})*|\d+)(\.\d{2})?\s*$"
             // css={{ "&:invalid": { color: "red" } }}

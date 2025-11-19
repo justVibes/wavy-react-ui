@@ -16,6 +16,7 @@ import { BasicButtonProps } from "../html/button/BasicButton";
 import BasicDiv, { BasicDivProps } from "../html/div/BasicDiv";
 import { BasicPopoverProps } from "../popover/BasicPopover";
 import { TextFieldProps } from "../textfield/TextField";
+import { BasicSpanProps } from "../html/span/BasicSpan";
 
 const Context = createContext<{
   padding: BasicButtonProps["padding"];
@@ -52,7 +53,8 @@ interface EditableProps extends Partial<Pick<TextFieldProps, "focusColor">> {
   rowGap?: BasicDivProps["gap"];
   columnGap?: BasicDivProps["gap"];
   showPopoverOnHover?: boolean;
-  showCharCounter?:boolean
+  showCharCounter?: boolean;
+  fontSize?: BasicSpanProps["fontSize"];
   renderPopoverContent?: (value: string) => React.ReactNode;
   onEditClick?: () => void;
   onContentClick?: () => void;
@@ -96,10 +98,11 @@ function Editable(props: EditableProps) {
     if (props.preventDefault) return;
     setEditing(true);
   };
-  const handleOnCancelClick = () => {
+
+  const handleOnCancel = (options = { asClick: true }) => {
     clickedControlRef.upsert("cancel");
     rollbackChanges();
-    props.onCancelClick?.();
+    if (options.asClick) props.onCancelClick?.();
     setEditing(false);
   };
   const handleTextFieldBlur = (e: { preventDefault: VoidFunction }) => {
@@ -192,6 +195,7 @@ function Editable(props: EditableProps) {
                 onChange={handleOnChange}
                 onBlur={handleTextFieldBlur}
                 onEnterKeyPressed={handleOnEnterPressed}
+                onEscapeKeyPressed={() => handleOnCancel({asClick: false})}
               />
             </BasicDiv>
           ) : (
@@ -200,16 +204,14 @@ function Editable(props: EditableProps) {
               width={"full"}
               padding={props.contentPadding ?? ["md", ["top", "bottom"]]}
               corners={"sm"}
-              fontSize={size}
+              fontSize={props.fontSize || size}
               cursor="text"
               css={{
                 transition: "all 200ms linear",
-                ":hover": {
-                  backgroundColor: "onSurface[0.1]",
-                },
+                ":hover": { backgroundColor: "onSurface[0.1]" },
               }}
               onDoubleClick={
-                activationMode === "dblclick" ? handleOnCancelClick : undefined
+                activationMode === "dblclick" ? () => handleOnCancel({asClick: false}) : undefined
               }
               onClick={
                 activationMode === "click" ? handleOnContentClick : undefined
@@ -252,7 +254,7 @@ function Editable(props: EditableProps) {
                     ? undefined
                     : props.hideControls
                 }
-                onCancel={handleOnCancelClick}
+                onCancel={handleOnCancel}
                 onSave={handleOnSave}
                 onEdit={handleOnEditClick}
               />
