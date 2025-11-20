@@ -195,6 +195,9 @@ function Editable(props: EditableProps) {
                 size={props.inputSize || size}
                 placeholder={props.placeholder}
                 showCharCounter={props.showCharCounter}
+                slotProps={{
+                  charCounter: { fontSize: props.charCounterFontSize },
+                }}
                 onChange={handleOnChange}
                 onBlur={handleTextFieldBlur}
                 onEnterKeyPressed={handleOnEnterPressed}

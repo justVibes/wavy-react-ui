@@ -94,6 +94,7 @@ function PageSlider<T>(props: PageSliderProps<T>) {
       onChangeCb?.(from, to);
       props.onChange?.(from, to);
 
+      // if (Math.abs(from - to) > 1 && transition === "smooth") {
       if (transition === "smooth") {
         setTransitioning(true);
         let counter = from;

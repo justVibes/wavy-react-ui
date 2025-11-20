@@ -390,7 +390,7 @@ function getPadding(
 }
 
 function getBorderRadius(radius: BasicHtmlElementStyleProps["corners"]) {
-  const noRadius = 0;
+  const noRadius = "0px";
   const getValue = (radius: HtmlElementDim | keyof typeof CssShapes) => {
     if (!radius) return noRadius;
     if (radius in CssShapes) return CssShapes[radius as keyof typeof CssShapes];
