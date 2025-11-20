@@ -1,5 +1,5 @@
 export * from "@/components/hooks/useAsyncEffect";
-export * from "@/components/hooks/useChangeEffect";
+export * from "@/components/hooks/usePostRenderEffect";
 export * from "@/components/hooks/useComputedStyle";
 export * from "@/components/hooks/useDialogController";
 export * from "@/components/hooks/useEventEmitter";

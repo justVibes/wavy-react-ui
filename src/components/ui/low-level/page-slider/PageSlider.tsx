@@ -1,13 +1,10 @@
-import usePageSliderController, {
-  UsePageSliderControllerReturn,
-} from "@/components/hooks/usePageSliderController";
 import {
   applyBasicStyle,
   BasicColor,
   BasicDiv,
   BasicSpan,
-  useChangeEffect,
-  useManagedRef,
+  usePageSliderController,
+  UsePageSliderControllerReturn
 } from "@/main";
 import { buildArray, hasIndex } from "@wavy/fn";
 import { SafeOmit } from "@wavy/types";
@@ -278,3 +275,4 @@ function PageIndicator(props: { totalPages: number; currentPage: number }) {
 }
 
 export { PageSlider, type PageSliderProps };
+

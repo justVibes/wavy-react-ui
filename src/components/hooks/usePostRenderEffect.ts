@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from "react";
  * @param effect — Imperative function that can return a cleanup function
  * @param deps — If present, effect will only activate if the values in the list change.
  */
-function useChangeEffect(
+function usePostRenderEffect(
   effect: React.EffectCallback,
   deps: React.DependencyList
 ) {
@@ -18,4 +18,4 @@ function useChangeEffect(
   }, deps);
 }
 
-export { useChangeEffect };
+export { usePostRenderEffect };
