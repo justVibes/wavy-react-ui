@@ -1,5 +1,6 @@
 import useAsyncEffect from "@/components/hooks/useAsyncEffect";
 import useChangeEffect from "@/components/hooks/useChangeEffect";
+import useComputedStyle from "@/components/hooks/useComputedStyle";
 import useDialogController, {
   UseDialogControllerReturn,
 } from "@/components/hooks/useDialogController";
@@ -17,6 +18,7 @@ export {
   useManagedRef,
   useAsyncEffect,
   useChangeEffect,
+  useComputedStyle,
   useEventEmitter,
   usePopoverContext,
   useSessionStorage,
