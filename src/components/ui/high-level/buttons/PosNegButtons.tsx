@@ -1,16 +1,16 @@
 import { BasicButton } from "@/main";
 import { IconType } from "react-icons";
 import { BsDash, BsPlus } from "react-icons/bs";
-import { BasicColor, HtmlElementDim } from "../../low-level/html/BasicStyle";
+import { BasicColor, ElementDim } from "../../low-level/html/BasicStyle";
 import { Icon } from "@chakra-ui/react";
 import { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 
 interface Props {
-  size?: HtmlElementDim;
+  size?: ElementDim;
   disabled?: boolean;
   backgroundColor?: BasicColor;
   color?: BasicColor;
-  iconSize?: HtmlElementDim;
+  iconSize?: ElementDim;
   padding?: BasicDivProps["padding"];
   onClick?: () => void;
 }

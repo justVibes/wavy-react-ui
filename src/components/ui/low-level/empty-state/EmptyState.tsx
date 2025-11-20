@@ -2,7 +2,7 @@ import { BasicDiv, BasicSpan } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { BasicDivProps } from "../html/div/BasicDiv";
 import { createContext, useContext } from "react";
-import { HtmlElementDim } from "../html/BasicStyle";
+import { ElementDim } from "../html/BasicStyle";
 import { BasicSpanProps } from "../html/span/BasicSpan";
 
 const FadeContext = createContext<{ fade: BasicDivProps["fade"] }>(null);
@@ -64,7 +64,7 @@ declare namespace EmptyStateProps {
   }
   interface IndicatorProps {
     /**@default "4rem" */
-    size?: HtmlElementDim;
+    size?: ElementDim;
     element: JSX.Element;
     disableFade?: boolean;
   }

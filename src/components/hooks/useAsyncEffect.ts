@@ -14,4 +14,4 @@ function useAsyncEffect(
   }, deps);
 }
 
-export default useAsyncEffect;
+export { useAsyncEffect };

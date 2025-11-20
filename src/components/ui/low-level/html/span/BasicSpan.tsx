@@ -8,12 +8,12 @@ import {
   applyCoreHTMLProps,
   BasicHtmlElementCoreProps,
 } from "../BasicHtmlElementCore";
-import applyBasicStyle, { BasicHtmlElementStyleProps } from "../BasicStyle";
+import applyBasicStyle, { BasicStyleProps } from "../BasicStyle";
 import StyledElement, { InlineCss } from "../StyledElements";
 import { TextAlign } from "./types/BasicSpanTypes";
 
 interface BasicSpanProps
-  extends BasicHtmlElementStyleProps,
+  extends BasicStyleProps,
     BasicHtmlElementCoreProps<HTMLSpanElement> {
   text?: string;
   link?: boolean;

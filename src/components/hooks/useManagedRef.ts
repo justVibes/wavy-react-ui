@@ -86,4 +86,4 @@ function useManagedRef<T extends NonFunction<unknown>>(initialValue: T) {
   };
 }
 
-export default useManagedRef;
+export { useManagedRef };

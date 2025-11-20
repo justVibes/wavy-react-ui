@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import globalEventEmitter from "../events/EventEmitter";
-import useManagedRef from "./useManagedRef";
 
 type DispatchOptions = Partial<{ skipRender: boolean }>;
 
@@ -52,4 +51,5 @@ function useEventEmitter<T>(eventName: string) {
   };
 }
 
-export default useEventEmitter;
+export { useEventEmitter };
+

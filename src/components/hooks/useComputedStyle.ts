@@ -1,10 +1,9 @@
-import { applyBasicStyle, BasicHtmlElementStyleProps } from "@/main";
+import { applyBasicStyle, BasicStyleProps } from "@/main";
 import type { SafeOmit } from "@wavy/types";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/server";
 
-interface ComputedStyleProps
-  extends SafeOmit<BasicHtmlElementStyleProps, "className"> {
+interface ComputedStyleProps extends SafeOmit<BasicStyleProps, "className"> {
   children?: React.ReactNode;
 }
 
@@ -70,6 +69,4 @@ function useComputedStyle(
   return { style };
 }
 
-export default useComputedStyle;
-export type { ComputedStyleProps };
-
+export { useComputedStyle, type ComputedStyleProps };

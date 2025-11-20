@@ -1,8 +1,5 @@
 import { resolveBasicColor } from "@/css/helper-functions/CssHelperFunctions";
-import applyBasicStyle, {
-  BasicColor,
-  BasicHtmlElementStyleProps,
-} from "../BasicStyle";
+import applyBasicStyle, { BasicColor, BasicStyleProps } from "../BasicStyle";
 import StyledElement, { InlineCss } from "../StyledElements";
 import {
   applyCoreHTMLProps,
@@ -10,7 +7,7 @@ import {
 } from "../BasicHtmlElementCore";
 
 interface BasicImgProps
-  extends BasicHtmlElementStyleProps,
+  extends BasicStyleProps,
     BasicHtmlElementCoreProps<HTMLImageElement> {
   src: string;
   alt?: string;

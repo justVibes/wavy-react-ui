@@ -18,4 +18,4 @@ function useChangeEffect(
   }, deps);
 }
 
-export default useChangeEffect;
+export { useChangeEffect };

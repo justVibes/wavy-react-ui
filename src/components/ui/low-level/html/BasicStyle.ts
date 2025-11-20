@@ -4,7 +4,7 @@ import CssColors from "@/css/resources/CssColors";
 import CssShapes from "@/css/resources/CssShapes";
 import CssSpacing from "@/css/resources/CssSpacing";
 import FontSize from "@/css/resources/FontSize";
-import { NoUndefinedField, RemoveSuffix, SafeExtract } from "@wavy/types";
+import { NoUndefinedField, SafeExtract } from "@wavy/types";
 import type * as CSS from "csstype";
 
 const BORDER_STYLES = ["dashed", "solid", "dotted", "double"] as const;
@@ -13,13 +13,13 @@ const CLOCKWISE_SIDES = ["top", "right", "bottom", "left"] as const;
 type BasicHtmlElementPosition = 0 | string;
 type ElementSide = (typeof CLOCKWISE_SIDES)[number];
 type BorderStyle = (typeof BORDER_STYLES)[number];
-type HtmlElementDim = `${number}${"rem" | "px" | "%" | "vh" | "vw" | "em"}`;
+type ElementDim = `${number}${"rem" | "px" | "%" | "vh" | "vw" | "em"}`;
 type Size =
   | 0
   | "full"
   | `${"max" | "min" | "fit"}-content`
   | "auto"
-  | HtmlElementDim;
+  | ElementDim;
 
 type Append5<range extends number> = range | `${range}${5}`;
 type BasicColor =
@@ -34,7 +34,7 @@ type BasicColor =
 
 type ElementCorners = `top${"Left" | "Right"}` | `bottom${"Left" | "Right"}`;
 
-interface BasicHtmlElementStyleProps
+interface BasicStyleProps
   extends Partial<
       Record<
         "spill",
@@ -63,12 +63,12 @@ interface BasicHtmlElementStyleProps
   padding?:
     | 0
     | keyof typeof CssSpacing
-    | HtmlElementDim
+    | ElementDim
     | [
-        padding: keyof typeof CssSpacing | HtmlElementDim,
+        padding: keyof typeof CssSpacing | ElementDim,
         sides: ElementSide | "all" | ElementSide[]
       ]
-    | Partial<Record<ElementSide, keyof typeof CssSpacing | HtmlElementDim>>
+    | Partial<Record<ElementSide, keyof typeof CssSpacing | ElementDim>>
     | undefined;
   translate?: Partial<{ x: string; y: string }> | undefined;
   fontSize?: keyof typeof FontSize | (string & {}) | undefined;
@@ -96,9 +96,9 @@ interface BasicHtmlElementStyleProps
     | Partial<Record<ElementSide, BasicColor>>
     | undefined;
   borderWidth?:
-    | HtmlElementDim
-    | [width: HtmlElementDim, sides: ElementSide | "all" | ElementSide[]]
-    | Partial<Record<ElementSide, HtmlElementDim>>
+    | ElementDim
+    | [width: ElementDim, sides: ElementSide | "all" | ElementSide[]]
+    | Partial<Record<ElementSide, ElementDim>>
     | undefined;
   borderStyle?:
     | BorderStyle
@@ -107,21 +107,21 @@ interface BasicHtmlElementStyleProps
     | undefined;
   blur?: string | undefined;
   backdropBlur?: string | undefined;
-  gap?: 0 | keyof typeof CssSpacing | HtmlElementDim | undefined;
+  gap?: 0 | keyof typeof CssSpacing | ElementDim | undefined;
   cursor?: CSS.Properties["cursor"] | undefined;
   scrollbarBackgroundColor?: BasicColor | undefined;
   scrollbarThumbColor?: BasicColor | undefined;
   corners?:
     | 0
-    | HtmlElementDim
+    | ElementDim
     | keyof typeof CssShapes
     | Partial<
-        Record<ElementCorners, keyof typeof CssShapes | HtmlElementDim | 0> &
+        Record<ElementCorners, keyof typeof CssShapes | ElementDim | 0> &
           Record<"top" | "bottom", never>
       >
     | Partial<
         Record<ElementCorners, never> &
-          Record<"top" | "bottom", keyof typeof CssShapes | HtmlElementDim | 0>
+          Record<"top" | "bottom", keyof typeof CssShapes | ElementDim | 0>
       >
     | undefined;
   align?: "start" | "center" | "end" | "stretch" | undefined;
@@ -133,7 +133,7 @@ interface BasicHtmlElementStyleProps
     | "space-between"
     | undefined;
   fade?: `0.${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}` | number;
-  debug?: boolean;
+  log?: boolean;
   style?: CSS.Properties | undefined;
 }
 
@@ -141,33 +141,14 @@ const translate = (x: string, y: string) => `translate(${x}, ${y})`;
 const translateX = (amt: string) => `translateX(${amt})`;
 const translateY = (amt: string) => `translateY(${amt})`;
 const applyBasicStyle = (
-  props: NoUndefinedField<BasicHtmlElementStyleProps>,
-  debug?: boolean
+  props: NoUndefinedField<BasicStyleProps>,
+  log?: boolean
 ): NoUndefinedField<CSS.Properties> => {
   const fontSize = (() => {
     if (props.fontSize in FontSize)
       return FontSize[props.fontSize as keyof typeof FontSize];
     return props.fontSize;
   })();
-
-  // const extractBorderDetails = (border: BasicHtmlElementBorder) => {
-  //   const isPos1Thickness = !!border?.[1] && typeof border[1] === "number";
-  //   const thickness = (value: number) =>
-  //     value !== undefined ? `${value}px` : undefined;
-
-  //   return {
-  //     thickness: thickness(
-  //       isPos1Thickness ? (border?.[1] as number) : (border?.[2] as number)
-  //     ),
-  //     side: isPos1Thickness
-  //       ? undefined
-  //       : (border?.[1] as ElementSide | ElementSide[]),
-  //     type:
-  //       ((isPos1Thickness
-  //         ? border?.[2]
-  //         : border?.[3]) as BasicHtmlElementBorder["3"]) ?? "solid",
-  //   };
-  // };
 
   const { overflowX, overflowY } = (() => {
     const spill = props?.spill || {};
@@ -278,12 +259,12 @@ const applyBasicStyle = (
     if (!value && value !== 0) delete style[validKey];
   });
 
-  if (debug || props.debug) console.log({ props, style });
+  if (log || props.log) console.log({ props, style });
 
   return style;
 };
 
-function getBorderColor(color: BasicHtmlElementStyleProps["borderColor"]) {
+function getBorderColor(color: BasicStyleProps["borderColor"]) {
   if (!color) return;
 
   const noColor = "transparent";
@@ -306,7 +287,7 @@ function getBorderColor(color: BasicHtmlElementStyleProps["borderColor"]) {
 }
 
 function getBorderWidth(
-  width: BasicHtmlElementStyleProps["borderWidth"],
+  width: BasicStyleProps["borderWidth"],
   defaultWidth: string
 ) {
   if (!width) return defaultWidth;
@@ -332,7 +313,7 @@ function getBorderWidth(
 }
 
 function getBorderStyle(
-  style: BasicHtmlElementStyleProps["borderStyle"],
+  style: BasicStyleProps["borderStyle"],
   defaultStyle: BorderStyle
 ) {
   if (!style) return defaultStyle;
@@ -357,9 +338,7 @@ function getBorderStyle(
   }).join(" ");
 }
 
-function getPadding(
-  padding: BasicHtmlElementStyleProps["padding"] | undefined
-) {
+function getPadding(padding: BasicStyleProps["padding"] | undefined) {
   const noPadding = "0px";
 
   const getPaddingValue = (pad: string) => {
@@ -389,12 +368,12 @@ function getPadding(
   }).join(" ");
 }
 
-function getBorderRadius(radius: BasicHtmlElementStyleProps["corners"]) {
+function getBorderRadius(radius: BasicStyleProps["corners"]) {
   const noRadius = "0px";
-  const getValue = (radius: HtmlElementDim | keyof typeof CssShapes) => {
+  const getValue = (radius: ElementDim | keyof typeof CssShapes) => {
     if (!radius) return noRadius;
     if (radius in CssShapes) return CssShapes[radius as keyof typeof CssShapes];
-    return radius as HtmlElementDim;
+    return radius as ElementDim;
   };
 
   if (!radius) return noRadius;
@@ -422,16 +401,11 @@ function getBorderRadius(radius: BasicHtmlElementStyleProps["corners"]) {
     .join(" ");
 }
 
-function getGap(gap: BasicHtmlElementStyleProps["gap"]) {
+function getGap(gap: BasicStyleProps["gap"]) {
   if (!gap || typeof gap !== "string") return;
   if (gap in CssSpacing) return CssSpacing[gap as keyof typeof CssSpacing];
   return gap;
 }
 
-export type {
-  BasicColor,
-  BasicHtmlElementStyleProps,
-  Size as ElementSize,
-  HtmlElementDim,
-};
+export type { BasicColor, BasicStyleProps, Size as ElementSize, ElementDim };
 export default applyBasicStyle;

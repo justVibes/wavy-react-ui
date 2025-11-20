@@ -8,7 +8,7 @@ import {
 } from "@/main";
 import "./assets/styles.css";
 import { BasicDivProps } from "../html/div/BasicDiv";
-import { BasicColor, HtmlElementDim } from "../html/BasicStyle";
+import { BasicColor, ElementDim } from "../html/BasicStyle";
 import { BasicPopoverContext } from "@/components/contexts/BasicPopoverContext";
 
 type VerticalPlacement = "top" | "center" | "bottom";
@@ -253,7 +253,7 @@ function Popover(props: PopoverProps) {
     defaults?: BasicDivProps["width"]
   ) => {
     if (width === "match-anchor")
-      return getComputedStyle(childRef.current)?.width as HtmlElementDim;
+      return getComputedStyle(childRef.current)?.width as ElementDim;
     return width ?? defaults;
   };
   const delay = (callback: () => void, value?: "open" | "close") => {

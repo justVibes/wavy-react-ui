@@ -12,10 +12,9 @@ import {
   LocalFile,
 } from "@wavy/types";
 import React, { useRef } from "react";
-import applyBasicStyle, { BasicHtmlElementStyleProps } from "../BasicStyle";
+import applyBasicStyle, { BasicStyleProps } from "../BasicStyle";
 
-interface BasicFileInputProps
-  extends BasicHtmlElementStyleProps {
+interface BasicFileInputProps extends BasicStyleProps {
   allowDrop?: boolean;
   fileClass?: string;
   /**

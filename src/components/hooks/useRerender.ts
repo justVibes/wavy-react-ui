@@ -1,13 +1,10 @@
 import { useState } from "react";
 
 function useRerender() {
-  const [, rerender] = useState(false);
+  const [, setRendered] = useState(false);
   return {
-    triggerRerender: () => {
-      rerender(true);
-      setTimeout(() => rerender(false), 10);
-    },
+    triggerRerender: () => setRendered((rendered) => !rendered),
   };
 }
 
-export default useRerender;
+export { useRerender };

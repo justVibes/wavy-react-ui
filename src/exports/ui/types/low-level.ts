@@ -1,6 +1,6 @@
 export type {
   BasicColor,
-  BasicHtmlElementStyleProps,
+  BasicStyleProps,
 } from "@/components/ui/low-level/html/BasicStyle";
 
 export type {
@@ -8,5 +8,5 @@ export type {
   CssProperties,
 } from "@/components/ui/low-level/html/StyledElements";
 
-export type { TooltipPlacement as BasicTooltipPlacement } from "@/components/ui/low-level/tooltip/Tooltip";
-export type { MenuPlacement as BasicMenuPlacement } from "@/components/ui/low-level/menu/Menu";
+export type { TooltipPlacement } from "@/components/ui/low-level/tooltip/Tooltip";
+export type { MenuPlacement } from "@/components/ui/low-level/menu/Menu";

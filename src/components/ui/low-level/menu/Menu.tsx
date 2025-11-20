@@ -8,7 +8,7 @@ import {
 import { JSX } from "@emotion/react/jsx-runtime";
 import React, { createContext, useContext } from "react";
 import { LuChevronRight } from "react-icons/lu";
-import applyBasicStyle, { HtmlElementDim } from "../html/BasicStyle";
+import applyBasicStyle, { ElementDim } from "../html/BasicStyle";
 import { BasicDivProps } from "../html/div/BasicDiv";
 
 const Context = createContext<{
@@ -23,7 +23,7 @@ interface MenuProps<Item extends string>
   extends Partial<
     Record<
       `${"max" | "min"}${"Height" | "Width"}` | "height" | "width",
-      HtmlElementDim | 0
+      ElementDim | 0
     >
   > {
   inDialog?: boolean;

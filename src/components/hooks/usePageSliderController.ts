@@ -11,7 +11,6 @@ function usePageSliderController<T = void>(
   };
 }
 
-// document.getElementById().scrollIntoView({"behavior": ""})
 
 type UsePageSliderControllerReturn<T = void> = {
   defaultPage: number;
@@ -33,5 +32,4 @@ type UsePageSliderControllerReturn<T = void> = {
   onPageChange: (callback: (from: number, to: number) => void) => void;
 };
 
-export default usePageSliderController;
-export type { UsePageSliderControllerReturn };
+export { usePageSliderController, type UsePageSliderControllerReturn };

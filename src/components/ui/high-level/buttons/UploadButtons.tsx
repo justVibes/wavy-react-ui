@@ -6,12 +6,12 @@ import BasicFileInput, {
 import { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 import { BasicButtonProps } from "../../low-level/html/button/BasicButton";
 import { SafeOmit } from "@wavy/types";
-import { BasicHtmlElementStyleProps } from "../../low-level/html/BasicStyle";
+import { BasicStyleProps } from "../../low-level/html/BasicStyle";
 
 interface UploadFileButtonProps
   extends SafeOmit<
     BasicFileInputProps,
-    "children" | keyof BasicHtmlElementStyleProps | "allowDrop"
+    "children" | keyof BasicStyleProps | "allowDrop"
   > {
   fileClass?: string;
   fontSize?: BasicDivProps["fontSize"];
@@ -54,7 +54,7 @@ function createButton<Props extends UploadFileButtonProps>(
         allowDrop={false}
       >
         <BasicButton
-          debug={props.debug}
+          log={props.debug}
           disabled={props.disabled}
           width={props.width}
           backgroundColor={backgroundColor}

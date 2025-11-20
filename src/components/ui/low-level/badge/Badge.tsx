@@ -1,7 +1,7 @@
 import { Box, Float, FloatProps } from "@chakra-ui/react";
 import { JSX } from "@emotion/react/jsx-runtime";
 import React, { useRef } from "react";
-import { HtmlElementDim } from "../html/BasicStyle";
+import { ElementDim } from "../html/BasicStyle";
 
 interface BadgeProps {
   children: JSX.Element;
@@ -12,7 +12,7 @@ interface BadgeProps {
   placement?: FloatProps["placement"];
   circleChild?: boolean;
   asChild?: boolean;
-  offset?: HtmlElementDim;
+  offset?: ElementDim;
 }
 function Badge(props: BadgeProps) {
   const boxRef = useRef<HTMLDivElement>(null);

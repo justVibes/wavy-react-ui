@@ -1,10 +1,5 @@
 import { BasicColor, resolveBasicColor } from "@/main";
-import {
-  AbsoluteCenter,
-  Button,
-  Icon,
-  Spinner
-} from "@chakra-ui/react";
+import { AbsoluteCenter, Button, Icon, Spinner } from "@chakra-ui/react";
 import { SafeOmit } from "@wavy/types";
 import React, { JSX, useState } from "react";
 import { IconType } from "react-icons";
@@ -13,7 +8,7 @@ import {
   applyCoreHTMLProps,
   BasicHtmlElementCoreProps,
 } from "../BasicHtmlElementCore";
-import applyBasicStyle, { HtmlElementDim } from "../BasicStyle";
+import applyBasicStyle, { ElementDim } from "../BasicStyle";
 import { BasicDivProps } from "../div/BasicDiv";
 
 const ICON_PRESET_SIZES = [
@@ -59,10 +54,10 @@ interface BaseProps
   /**
    * @default "md"
    */
-  size?: (typeof BUTTON_PRESET_SIZES)[number] | HtmlElementDim;
+  size?: (typeof BUTTON_PRESET_SIZES)[number] | ElementDim;
   variant?: "outline" | "standard";
   borderColor?: BasicColor;
-  iconSize?: (typeof ICON_PRESET_SIZES)[number] | HtmlElementDim;
+  iconSize?: (typeof ICON_PRESET_SIZES)[number] | ElementDim;
   // onClick?: (
   //   event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   // ) => void | Promise<void>;
@@ -204,7 +199,7 @@ const createBasicButton = <
         const validKey = key as keyof BasicButtonProps;
         const propExists = validKey in propsCopy;
         const propUnset = [undefined, null].includes(propsCopy[validKey]);
-        
+
         if (!propExists || propUnset) {
           //@ts-expect-error
           propsCopy[validKey] = defaults.optional[validKey];

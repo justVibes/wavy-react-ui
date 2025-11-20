@@ -38,4 +38,4 @@ function useSessionStorage<Value extends NonFunction<any>>(
   return [storedValue, setValue, deleteValue] as const;
 }
 
-export default useSessionStorage;
+export { useSessionStorage };

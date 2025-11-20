@@ -11,14 +11,12 @@ import {
   BsExclamationTriangle,
   BsInfoCircle,
 } from "react-icons/bs";
-import applyBasicStyle, { HtmlElementDim } from "../html/BasicStyle";
+import applyBasicStyle, { ElementDim } from "../html/BasicStyle";
 import { BasicDivProps } from "../html/div/BasicDiv";
 import BasicSpan, { BasicSpanProps } from "../html/span/BasicSpan";
 
 interface DisclaimerProps
-  extends Partial<
-    Record<"top" | "left" | "bottom" | "right", HtmlElementDim | 0>
-  > {
+  extends Partial<Record<"top" | "left" | "bottom" | "right", ElementDim | 0>> {
   severity: "warning" | "error" | "info";
   message: string;
   pos?: BasicDivProps["pos"];
@@ -33,7 +31,7 @@ interface DisclaimerProps
   /**
    * @default "1rem"
    */
-  iconSize?: HtmlElementDim;
+  iconSize?: ElementDim;
   /**
    * @default "md"
    */

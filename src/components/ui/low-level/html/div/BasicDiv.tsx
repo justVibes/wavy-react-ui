@@ -11,7 +11,7 @@ import { isOverflown } from "@/css/helper-functions/CssHelperFunctions";
 import CssSpacing from "@/css/resources/CssSpacing";
 import { useManagedRef } from "@/main";
 import { isEmpty, strictArray } from "@wavy/fn";
-import applyBasicStyle, { BasicHtmlElementStyleProps } from "../BasicStyle";
+import applyBasicStyle, { BasicStyleProps } from "../BasicStyle";
 import StyledElement, { InlineCss } from "../StyledElements";
 import {
   applyCoreHTMLProps,
@@ -19,7 +19,7 @@ import {
 } from "../BasicHtmlElementCore";
 
 interface BasicDivProps
-  extends BasicHtmlElementStyleProps,
+  extends BasicStyleProps,
     BasicHtmlElementCoreProps<HTMLDivElement> {
   flexWrap?: boolean | undefined;
   grid?: boolean | undefined;

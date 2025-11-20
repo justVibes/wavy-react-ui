@@ -2,7 +2,7 @@ import {
   applyBasicStyle,
   BasicColor,
   BasicDiv,
-  BasicHtmlElementStyleProps,
+  BasicStyleProps,
   resolveBasicColor,
   useManagedRef,
 } from "@/main";
@@ -120,7 +120,7 @@ function Item(props: TimelineProps.ItemProps) {
 function ItemContent(props: {
   children: React.ReactNode;
   disabled?: boolean;
-  style?: BasicHtmlElementStyleProps;
+  style?: BasicStyleProps;
 }) {
   return (
     <BasicDiv
@@ -157,7 +157,7 @@ const Timeline = {
 declare namespace TimelineProps {
   interface RootProps {
     /**@default "fit-content" */
-    width?: BasicHtmlElementStyleProps["width"];
+    width?: BasicStyleProps["width"];
     /**@default "onSurface[0.5]" */
     lineSeparatorColor?: BasicColor;
     rowGap?: string;
@@ -173,13 +173,13 @@ declare namespace TimelineProps {
     after?: React.ReactNode;
     disabled?: boolean;
     styles?: Partial<
-      Record<"before" | "after", BasicHtmlElementStyleProps> & {
+      Record<"before" | "after", BasicStyleProps> & {
         indicator: Partial<
-          BasicHtmlElementStyleProps & {
+          BasicStyleProps & {
             /**@default ".6rem" */
-            size: BasicHtmlElementStyleProps["size"];
+            size: BasicStyleProps["size"];
             /**@default "circle" */
-            corners: BasicHtmlElementStyleProps["corners"];
+            corners: BasicStyleProps["corners"];
             /**@default "onSurface" */
             backgroundColor: BasicColor;
           }

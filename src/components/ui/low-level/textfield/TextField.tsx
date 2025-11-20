@@ -18,7 +18,7 @@ import {
 import { JSX } from "@emotion/react/jsx-runtime";
 import { takeLast } from "@wavy/fn";
 import { useEffect, useRef, useState } from "react";
-import applyBasicStyle, { HtmlElementDim } from "../html/BasicStyle";
+import applyBasicStyle, { ElementDim } from "../html/BasicStyle";
 import BasicDiv, { BasicDivProps } from "../html/div/BasicDiv";
 import { isCharAllowed } from "./helper-functions/BasicTextFieldHelperFunctions";
 import { AllowedCharacters } from "./types";
@@ -57,7 +57,7 @@ interface TextFieldProps extends AdditionalElements {
   maxChars?: number;
   showCharCounter?: boolean;
   helperText?: string;
-  indent?: HtmlElementDim | Partial<Record<"left" | "right", HtmlElementDim>>;
+  indent?: ElementDim | Partial<Record<"left" | "right", ElementDim>>;
   onPasteClick?: (text: string) => void;
   width?: BasicDivProps["width"];
   onFocus?: React.FocusEventHandler<HTMLInputElement>;

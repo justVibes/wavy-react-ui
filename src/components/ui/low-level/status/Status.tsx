@@ -2,12 +2,12 @@ import { ColorResources } from "@/main";
 import BasicDiv from "../html/div/BasicDiv";
 import BasicSpan from "../html/span/BasicSpan";
 import { upperFirst } from "@wavy/fn";
-import { HtmlElementDim } from "../html/BasicStyle";
+import { ElementDim } from "../html/BasicStyle";
 import { TaskResultStatus } from "@wavy/types";
 
 interface StatusProps {
   status: TaskResultStatus;
-  indicatorSize?: HtmlElementDim;
+  indicatorSize?: ElementDim;
   indicatorOnly?: boolean;
 }
 function Status(props: StatusProps) {
@@ -46,4 +46,4 @@ function Status(props: StatusProps) {
   );
 }
 
-export { Status, type StatusProps  };
+export { Status, type StatusProps };

@@ -5,4 +5,4 @@ function usePopoverContext() {
   return useContext(BasicPopoverContext);
 }
 
-export default usePopoverContext;
+export { usePopoverContext };

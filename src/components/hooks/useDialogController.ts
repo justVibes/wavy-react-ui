@@ -17,5 +17,4 @@ function useDialogController<Value>(defaultValue?: Value) {
 
 type UseDialogControllerReturn<T = {}> = ReturnType<typeof useDialogController<T>>;
 
-export default useDialogController;
-export type { UseDialogControllerReturn };
+export { useDialogController, type UseDialogControllerReturn };

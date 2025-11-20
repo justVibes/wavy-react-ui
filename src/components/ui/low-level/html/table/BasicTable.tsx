@@ -9,7 +9,7 @@ import React, {
   useState,
   type JSX,
 } from "react";
-import { BasicColor, BasicHtmlElementStyleProps } from "../BasicStyle";
+import { BasicColor, BasicStyleProps } from "../BasicStyle";
 import { BasicDivProps } from "../div/BasicDiv";
 import { TableColumnConfig } from "./components/types";
 
@@ -31,15 +31,15 @@ const Context = createContext<
 >(null);
 
 type RootStyles = {
-  gap?: BasicHtmlElementStyleProps["gap"];
-  rowGap?: BasicHtmlElementStyleProps["gap"];
+  gap?: BasicStyleProps["gap"];
+  rowGap?: BasicStyleProps["gap"];
   /**@default "onSurface[0.25]" */
   separatorColor?: BasicColor;
   /**@default "lg" */
-  columnGap?: BasicHtmlElementStyleProps["gap"];
+  columnGap?: BasicStyleProps["gap"];
   textAlign?: "left" | "center" | "right";
   /**@default "sm" */
-  padding?: BasicHtmlElementStyleProps["padding"];
+  padding?: BasicStyleProps["padding"];
   corners?: BasicDivProps["corners"];
   spill?: BasicDivProps["spill"];
   fontSize?: BasicDivProps["fontSize"];
@@ -460,7 +460,7 @@ declare namespace BasicTableProps {
       Partial<
         Record<
           "width" | "height" | `${"min" | "max"}${"Height" | "Width"}`,
-          BasicHtmlElementStyleProps["width"]
+          BasicStyleProps["width"]
         >
       > {
     selectable?: boolean;

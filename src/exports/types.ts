@@ -1,1 +1,0 @@
-export type { KnownFileTypeAlias } from "@wavy/types";
