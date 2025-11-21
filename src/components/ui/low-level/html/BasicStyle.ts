@@ -73,7 +73,7 @@ interface BasicStyleProps
   translate?: Partial<{ x: string; y: string }> | undefined;
   fontSize?: keyof typeof FontSize | (string & {}) | undefined;
   centerContent?: boolean | undefined;
-  flex?: string | undefined;
+  flex?: CSS.Properties["flex"] | undefined;
   hide?: boolean | undefined;
   row?: boolean | undefined;
   fontWeight?:

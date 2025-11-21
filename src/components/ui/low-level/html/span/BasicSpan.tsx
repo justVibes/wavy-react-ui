@@ -23,10 +23,9 @@ interface BasicSpanProps
   italic?: boolean;
   strikeThrough?: boolean;
   underline?: boolean;
-  clickable?: boolean;
   textAlign?: TextAlign;
   ellipsis?: boolean;
-  ref?: React.Ref<HTMLSpanElement>;
+  clickable?: boolean;
   sx?: InlineCss;
   children?: React.ReactNode;
 }

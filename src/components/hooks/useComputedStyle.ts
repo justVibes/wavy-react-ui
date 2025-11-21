@@ -2,6 +2,7 @@ import { applyBasicStyle, BasicStyleProps } from "@/main";
 import type { SafeOmit } from "@wavy/types";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/server";
+import * as CSS from "csstype";
 
 interface ComputedStyleProps extends SafeOmit<BasicStyleProps, "className"> {
   children?: React.ReactNode;
@@ -10,10 +11,12 @@ interface ComputedStyleProps extends SafeOmit<BasicStyleProps, "className"> {
 function useComputedStyle(
   elementTag: keyof HTMLElementTagNameMap,
   props: ComputedStyleProps,
-  options?: Partial<{ log: boolean }>
+  options?: Partial<{ log: boolean; inject: () => CSS.Properties }>
 ) {
   const [style, setStyle] = useState<{ [key: string]: string }>({});
-  const basicStyle = applyBasicStyle(props);
+  let basicStyle = applyBasicStyle(props);
+  basicStyle = { ...basicStyle, ...(options?.inject?.() || {}) };
+
   const root = document.getElementById("root") ?? document.body;
 
   useEffect(() => {
