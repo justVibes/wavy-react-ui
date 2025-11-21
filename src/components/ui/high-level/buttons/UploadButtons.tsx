@@ -54,7 +54,7 @@ function createButton<Props extends UploadFileButtonProps>(
         allowDrop={false}
       >
         <BasicButton
-          log={props.debug}
+          debug={props.debug}
           disabled={props.disabled}
           width={props.width}
           backgroundColor={backgroundColor}

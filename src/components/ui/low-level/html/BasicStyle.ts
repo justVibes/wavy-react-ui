@@ -133,7 +133,7 @@ interface BasicStyleProps
     | "space-between"
     | undefined;
   fade?: `0.${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}` | number;
-  log?: boolean;
+  debug?: boolean;
   style?: CSS.Properties | undefined;
 }
 
@@ -259,7 +259,7 @@ const applyBasicStyle = (
     if (!value && value !== 0) delete style[validKey];
   });
 
-  if (log || props.log) console.log({ props, style });
+  if (log || props.debug) console.log({ props, style });
 
   return style;
 };

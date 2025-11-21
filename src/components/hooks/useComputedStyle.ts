@@ -11,7 +11,7 @@ interface ComputedStyleProps extends SafeOmit<BasicStyleProps, "className"> {
 function useComputedStyle(
   elementTag: keyof HTMLElementTagNameMap,
   props: ComputedStyleProps,
-  options?: Partial<{ log: boolean; inject: () => CSS.Properties }>
+  options?: Partial<{ debug: boolean; inject: () => CSS.Properties }>
 ) {
   const [style, setStyle] = useState<{ [key: string]: string }>({});
   let basicStyle = applyBasicStyle(props);
@@ -20,7 +20,7 @@ function useComputedStyle(
   const root = document.getElementById("root") ?? document.body;
 
   useEffect(() => {
-    if (options?.log)
+    if (options?.debug)
       console.log({
         elementTag,
         props,
