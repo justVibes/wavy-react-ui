@@ -229,9 +229,9 @@ function Editable(props: EditableProps) {
                 {...props.slotProps?.popover}
                 allowInteractions
                 asChild={
-                  props.showPopoverOnHover
-                    ? !!text
-                    : props.slotProps?.popover?.asChild
+                  props.showPopoverOnHover === false
+                    ? true
+                    : props.slotProps?.popover?.asChild ?? !!text
                 }
                 content={
                   (props.slotProps?.popover?.content ||
