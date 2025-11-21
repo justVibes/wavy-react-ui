@@ -4,6 +4,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import { BasicDivProps } from "../html/div/BasicDiv";
 
 interface CheckboxProps {
+  defaultChecked?: boolean;
   checked?: boolean;
   size?: BasicDivProps["size"];
   /**@default "sm" */
@@ -24,12 +25,16 @@ interface CheckboxProps {
 }
 
 function Checkbox(props: CheckboxProps) {
-  const [checked, setChecked] = useState(props.checked ?? false);
+  const [localChecked, setChecked] = useState(props.defaultChecked ?? false);
+  const checked = props.checked ?? localChecked;
+  const controlled = props.checked !== undefined;
 
   const toggleChecked = () => {
-    props.onChange?.(!checked);
     props.onClick?.();
-    setChecked(!checked);
+    if (!controlled) {
+      props.onChange?.(!checked);
+      setChecked(!checked);
+    }
   };
   return (
     <BasicDiv
