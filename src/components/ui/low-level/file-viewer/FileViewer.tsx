@@ -12,7 +12,7 @@ import {
 import { createContext, useContext, useEffect, useRef, type JSX } from "react";
 import type { IconType } from "react-icons";
 import { BasicDivProps } from "../html/div/BasicDiv";
-import { LocalFile, SafeOmit, SanitizeFile } from "@wavy/types";
+import { LocalFile, SafeExtract, SafeOmit, SanitizeFile } from "@wavy/types";
 import { format } from "@wavy/fn";
 import { BasicSpanProps } from "../html/span/BasicSpan";
 
@@ -83,37 +83,39 @@ function Indicator(props: FileViewerProps.IndicatorProps) {
           },
         })}
       />
-      <BasicDiv>
+      <BasicDiv asChildren={props.hideFileMetadata}>
         <BasicSpan
           color={props.styles?.filename?.color}
           fontWeight={props.styles?.filename?.fontWeight}
           fontSize={props.styles?.filename?.fontSize || "1rem"}
           text={props.file.name}
         />
-        <BasicDiv
-          row
-          fontSize={props.styles?.fileMetadata?.fontSize || ".7rem"}
-          gap={props.styles?.fileMetadata?.gap ?? "sm"}
-          fade={props.styles?.fileMetadata?.fade ?? 0.5}
-          color={props.styles?.fileMetadata?.color}
-          align="center"
-        >
-          <BasicSpan
-            fontWeight="bold"
-            text={(props.file.ext || props.file.typeAlias)?.toUpperCase()}
-          />
+        {!props.hideFileMetadata && (
           <BasicDiv
-            size={props.styles?.fileMetadataSeparator?.size || ".3rem"}
-            corners={props.styles?.fileMetadataSeparator?.corners ?? "circle"}
-            backgroundColor={
-              props.styles?.fileMetadataSeparator?.color || "onSurface"
-            }
-          />
-          <BasicSpan
-            fade={0.75}
-            text={format("file-size", props.file.sizeInBytes)}
-          />
-        </BasicDiv>
+            row
+            fontSize={props.styles?.fileMetadata?.fontSize || ".7rem"}
+            gap={props.styles?.fileMetadata?.gap ?? "sm"}
+            fade={props.styles?.fileMetadata?.fade ?? 0.5}
+            color={props.styles?.fileMetadata?.color}
+            align="center"
+          >
+            <BasicSpan
+              fontWeight="bold"
+              text={(props.file.ext || props.file.typeAlias)?.toUpperCase()}
+            />
+            <BasicDiv
+              size={props.styles?.fileMetadataSeparator?.size || ".3rem"}
+              corners={props.styles?.fileMetadataSeparator?.corners ?? "circle"}
+              backgroundColor={
+                props.styles?.fileMetadataSeparator?.color || "onSurface"
+              }
+            />
+            <BasicSpan
+              fade={0.75}
+              text={format("file-size", props.file.sizeInBytes)}
+            />
+          </BasicDiv>
+        )}
       </BasicDiv>
     </BasicDiv>
   );
@@ -318,6 +320,7 @@ type SanitizedBasicDivProps = SafeOmit<
   | "aspectRatio"
 >;
 
+
 declare namespace FileViewerProps {
   interface RootProps
     extends Partial<
@@ -387,6 +390,7 @@ declare namespace FileViewerProps {
 
   interface IndicatorProps {
     file: LocalFile | SanitizeFile<LocalFile>;
+    hideFileMetadata?: boolean;
     styles?: Partial<{
       icon: Partial<{
         /**@default RootProps.navThickness */
