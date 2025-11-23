@@ -13,7 +13,7 @@ const CLOCKWISE_SIDES = ["top", "right", "bottom", "left"] as const;
 type BasicHtmlElementPosition = 0 | string;
 type ElementSide = (typeof CLOCKWISE_SIDES)[number];
 type BorderStyle = (typeof BORDER_STYLES)[number];
-type ElementDim = `${number}${"rem" | "px" | "%" | "vh" | "vw" | "em"}`;
+type ElementDim = `${number}${"rem" | "px" | "%" | "vh" | "vw" | "em" | "in" | "mm" | "cm"}`;
 type Size =
   | 0
   | "full"

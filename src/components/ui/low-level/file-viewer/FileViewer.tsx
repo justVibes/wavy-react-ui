@@ -15,6 +15,7 @@ import { BasicDivProps } from "../html/div/BasicDiv";
 import { LocalFile, SafeExtract, SafeOmit, SanitizeFile } from "@wavy/types";
 import { format } from "@wavy/fn";
 import { BasicSpanProps } from "../html/span/BasicSpan";
+import { ElementSize } from "../html/BasicStyle";
 
 const ID = {
   sidebar: "fv-sidebar",
@@ -294,6 +295,18 @@ function Viewer(props: FileViewerProps.ViewerProps) {
   );
 }
 
+function Sep(props: FileViewerProps.SepProps) {
+  const thickness = props.thickness || "0.0104in";
+  const length = props.length || "70%";
+
+  const dim = {
+    horizontal: { height: thickness, width: length } as const,
+    vertical: { height: length, width: thickness } as const,
+  }[props.orientation || "vertical"];
+
+  return <BasicDiv {...dim} backgroundColor={props.color || "outline[0.1]"} />;
+}
+
 const FileViewer = {
   Root,
   Sidebar: SidebarRoot,
@@ -301,6 +314,7 @@ const FileViewer = {
   Topbar,
   Viewer,
   Indicator,
+  Sep,
 };
 
 type SanitizedBasicDivProps = SafeOmit<
@@ -319,7 +333,6 @@ type SanitizedBasicDivProps = SafeOmit<
   | "asChildren"
   | "aspectRatio"
 >;
-
 
 declare namespace FileViewerProps {
   interface RootProps
@@ -422,6 +435,16 @@ declare namespace FileViewerProps {
         color?: BasicColor;
       }>;
     }>;
+  }
+  interface SepProps {
+    /**@default "vertical" */
+    orientation?: "horizontal" | "vertical";
+    /**@default "0.0104in" */
+    thickness?: ElementSize;
+    /**@default "70%" */
+    length?: ElementSize;
+    /**@default "outline[0.1]" */
+    color?: BasicColor;
   }
 }
 
