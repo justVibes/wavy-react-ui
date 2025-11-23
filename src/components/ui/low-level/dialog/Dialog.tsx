@@ -27,6 +27,7 @@ function Root<T>(props: DialogProps.RootProps<T>) {
   };
   const handleOnExit = () => {
     props.onClose?.();
+    props.controller?.hide?.()
     props.rerenderOnClose && triggerRerender();
   };
   return (

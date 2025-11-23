@@ -1,11 +1,10 @@
 import {
   BasicButton,
   BasicColor,
-  Dialog,
   BasicDiv,
-  FontSize,
+  Dialog,
   resolveBasicColor,
-  UseDialogControllerReturn,
+  UseDialogControllerReturn
 } from "@/main";
 import { SuccessMessage, TaskResult } from "@wavy/types";
 import { createContext, useContext } from "react";
@@ -14,12 +13,27 @@ import { BsCheck2Circle } from "react-icons/bs";
 import { GrRotateLeft } from "react-icons/gr";
 import { IoWarningOutline } from "react-icons/io5";
 import { RiMailCloseLine, RiMailSendLine } from "react-icons/ri";
+import applyBasicStyle, {
+  ElementDim,
+  ElementSize,
+} from "../../low-level/html/BasicStyle";
+import { BasicSpanProps } from "../../low-level/html/span/BasicSpan";
 
 const MainContext = createContext<{ color: BasicColor }>(null);
 
 interface TaskResultDialogProps {
   controller: UseDialogControllerReturn<TaskResult<SuccessMessage>>;
   unmountOnExit?: boolean;
+  /**@default "2.75rem" */
+  indicatorSize?: ElementDim | ((status: "success" | "error") => ElementDim);
+  /**@default "25rem" */
+  maxWidth?: ElementSize;
+  width?: ElementSize;
+  minWidth?: ElementSize;
+  /**@default "lg" */
+  titleFontSize?: BasicSpanProps["fontSize"];
+  /**@default "sm" */
+  descriptionFontSize?: BasicSpanProps["fontSize"];
   disableColorIndicator?: boolean;
   /**
    * @default "normal"
@@ -45,38 +59,62 @@ function TaskResultDialog(props: TaskResultDialogProps) {
   })()!;
   const actionButton = props.actionButton?.(isSuccess ? "succes" : "error");
 
+  const styles = {
+    title: applyBasicStyle({ fontSize: props.titleFontSize || "lg" }),
+    description: applyBasicStyle({
+      fontSize: props.descriptionFontSize || "sm",
+      fade: 0.5,
+    }),
+  };
+  const applyTextStyle = ({
+    fontSize,
+    lineHeight,
+    opacity,
+  }: React.CSSProperties) => {
+    return { fontSize, lineHeight, opacity };
+  };
+
   return (
     <MainContext.Provider value={{ color }}>
       <Dialog.Root
         controller={controller}
-        width={"25rem"}
+        width={props.width}
+        minWidth={props.minWidth}
+        maxWidth={props.maxWidth ?? "25rem"}
         gap={"sm"}
         unmountOnExit={props.unmountOnExit}
         borderColor={props.disableColorIndicator ? undefined : [color, "left"]}
       >
         <Dialog.Body grid gridCols="auto 1fr" gap={"lg"}>
-          <Indicator color={resolveBasicColor(color)} size={"2.75rem"} />
+          <Indicator
+            color={resolveBasicColor(color)}
+            size={
+              typeof props.indicatorSize === "function"
+                ? props.indicatorSize(isSuccess ? "success" : "error")
+                : props.indicatorSize ?? "2.75rem"
+            }
+          />
           <BasicDiv
             width={"full"}
             gap={"sm"}
             spill={"hidden"}
             padding={["md", "top"]}
           >
-            <span style={{ fontSize: FontSize.lg }}>{title}</span>
-            <span style={{ fontSize: FontSize.sm, opacity: 0.5 }}>
-              {message}
-            </span>
+            <span style={applyTextStyle(styles.title)}>{title}</span>
+            <span style={applyTextStyle(styles.description)}>{message}</span>
           </BasicDiv>
         </Dialog.Body>
 
         <Dialog.Footer row gap={"md"} align="center">
-          <BasicButton
-            size="xs"
-            backgroundColor={actionButton ? "transparent" : "onSurface[0.1]"}
-            color="onSurface[0.75]"
-            text="Dismiss"
-            onClick={controller.hide}
-          />
+          <Dialog.ActionTrigger>
+            <BasicButton
+              size="xs"
+              backgroundColor={actionButton ? "transparent" : "onSurface[0.1]"}
+              color="onSurface[0.75]"
+              text="Dismiss"
+              onClick={controller.hide}
+            />
+          </Dialog.ActionTrigger>
           {actionButton && <ActionButton {...actionButton} />}
         </Dialog.Footer>
       </Dialog.Root>
