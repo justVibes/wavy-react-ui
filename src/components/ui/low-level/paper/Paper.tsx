@@ -19,7 +19,7 @@ function Paper(props: PaperProps) {
       backgroundColor="paper"
       color="onPaper"
       style={{
-        ...getPaperDim(props.size, { responsive: props.responsive }),
+        ...getPaperDim(props.size, { responsive: props.responsive ?? true }),
         ...props.style,
       }}
     >
