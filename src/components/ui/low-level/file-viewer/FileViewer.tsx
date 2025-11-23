@@ -73,17 +73,19 @@ function Indicator(props: FileViewerProps.IndicatorProps) {
 
   return (
     <BasicDiv row align="center">
-      <Icon.filled
-        style={applyBasicStyle({
-          size: navThickness || props.styles?.icon?.size,
-          color: "pdf",
-          style: {
-            padding: applyBasicStyle({
-              padding: props.styles?.icon?.padding || ".65rem",
-            })?.padding,
-          },
-        })}
-      />
+      {Icon && (
+        <Icon.filled
+          style={applyBasicStyle({
+            size: navThickness || props.styles?.icon?.size,
+            color: "pdf",
+            style: {
+              padding: applyBasicStyle({
+                padding: props.styles?.icon?.padding || ".65rem",
+              })?.padding,
+            },
+          })}
+        />
+      )}
       <BasicDiv asChildren={props.hideFileMetadata}>
         <BasicSpan
           color={props.styles?.filename?.color}
