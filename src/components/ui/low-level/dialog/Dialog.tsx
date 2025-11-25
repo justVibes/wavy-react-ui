@@ -31,48 +31,50 @@ function Root<T>(props: DialogProps.RootProps<T>) {
     props.rerenderOnClose && triggerRerender();
   };
   return (
-    <ChakraDialog.Root
-      unmountOnExit={props.unmountOnExit}
-      open={props.controller?.isOpen}
-      onEscapeKeyDown={
-        props.closeOnEscape ?? true ? props.controller?.hide : undefined
-      }
-      scrollBehavior={props.scrollBehavior}
-      onInteractOutside={
-        props.closeOnInteractOutside ?? true
-          ? props.controller?.hide
-          : undefined
-      }
-      placement={props.placement || "center"}
-      closeOnEscape={props.closeOnEscape}
-      closeOnInteractOutside={props.closeOnInteractOutside}
-      onOpenChange={handleOnOpenChange}
-      onExitComplete={handleOnExit}
-      motionPreset={props.enterAnimation || "slide-in-bottom"}
-    >
-      {props.triggerElement && (
-        <ChakraDialog.Trigger asChild>
-          {props.triggerElement}
-        </ChakraDialog.Trigger>
-      )}
-      <Portal>
-        <ChakraDialog.Backdrop />
-        <ChakraDialog.Positioner>
-          <ChakraDialog.Content style={style}>
-            {props.children}
+    <div>
+      <ChakraDialog.Root
+        unmountOnExit={props.unmountOnExit}
+        open={props.controller?.isOpen}
+        onEscapeKeyDown={
+          props.closeOnEscape ?? true ? props.controller?.hide : undefined
+        }
+        scrollBehavior={props.scrollBehavior}
+        onInteractOutside={
+          props.closeOnInteractOutside ?? true
+            ? props.controller?.hide
+            : undefined
+        }
+        placement={props.placement || "center"}
+        closeOnEscape={props.closeOnEscape}
+        closeOnInteractOutside={props.closeOnInteractOutside}
+        onOpenChange={handleOnOpenChange}
+        onExitComplete={handleOnExit}
+        motionPreset={props.enterAnimation || "slide-in-bottom"}
+      >
+        {props.triggerElement && (
+          <ChakraDialog.Trigger asChild>
+            {props.triggerElement}
+          </ChakraDialog.Trigger>
+        )}
+        <Portal>
+          <ChakraDialog.Backdrop />
+          <ChakraDialog.Positioner>
+            <ChakraDialog.Content style={style}>
+              {props.children}
 
-            {!props.hideCloseButton && (
-              <ChakraDialog.CloseTrigger asChild>
-                <CloseButton
-                  size={props.closeButtonSize || "sm"}
-                  onClick={props.controller?.hide}
-                />
-              </ChakraDialog.CloseTrigger>
-            )}
-          </ChakraDialog.Content>
-        </ChakraDialog.Positioner>
-      </Portal>
-    </ChakraDialog.Root>
+              {!props.hideCloseButton && (
+                <ChakraDialog.CloseTrigger asChild>
+                  <CloseButton
+                    size={props.closeButtonSize || "sm"}
+                    onClick={props.controller?.hide}
+                  />
+                </ChakraDialog.CloseTrigger>
+              )}
+            </ChakraDialog.Content>
+          </ChakraDialog.Positioner>
+        </Portal>
+      </ChakraDialog.Root>
+    </div>
   );
 }
 
