@@ -49,7 +49,7 @@ function TaskResultDialog(props: TaskResultDialogProps) {
   const color: BasicColor = isSuccess ? "carlsbergGreen" : "billsRed";
 
   const Indicator = (() => {
-    if (!controller.value) return;
+    if (!controller?.value) return;
 
     if (!props.indicator || props.indicator === "normal")
       return isSuccess ? BsCheck2Circle : IoWarningOutline;
@@ -115,7 +115,7 @@ function TaskResultDialog(props: TaskResultDialogProps) {
               onClick={controller.hide}
             />
           </Dialog.ActionTrigger>
-          {actionButton && <ActionButton {...actionButton} />}
+          {actionButton ? <ActionButton {...actionButton} /> : undefined}
         </Dialog.Footer>
       </Dialog.Root>
     </MainContext.Provider>

@@ -30,8 +30,9 @@ function Root<T>(props: DialogProps.RootProps<T>) {
     props.controller?.hide?.()
     props.rerenderOnClose && triggerRerender();
   };
+
+  if(props.controller?.isOpen === false) return
   return (
-    <div>
       <ChakraDialog.Root
         unmountOnExit={props.unmountOnExit}
         open={props.controller?.isOpen}
@@ -74,7 +75,6 @@ function Root<T>(props: DialogProps.RootProps<T>) {
           </ChakraDialog.Positioner>
         </Portal>
       </ChakraDialog.Root>
-    </div>
   );
 }
 
