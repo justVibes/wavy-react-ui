@@ -64,9 +64,9 @@ function BasicSpan(props: BasicSpanProps) {
       style={getStyleWrapper({
         ...basicStyle,
         width: props.ellipsis ? "100%" : basicStyle.width,
-        textAlign: props.textAlign || "justify",
-        fontStyle: props.italic ? "italic" : undefined,
-        textDecoration: getTextDecoration() || undefined,
+        textAlign: basicStyle.textAlign || props.textAlign || "justify",
+        fontStyle: basicStyle.fontStyle || props.italic ? "italic" : undefined,
+        textDecoration: basicStyle.textDecoration ||  getTextDecoration() || undefined,
       })}
     >
       {props.text || props.children}

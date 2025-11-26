@@ -1,5 +1,5 @@
 import { BasicDiv, BasicSpan, Checkbox } from "@/main";
-import { camelCaseToLetter, distinct, lastIndex } from "@wavy/fn";
+import { camelCaseToLetter, distinct, lastIndex, run } from "@wavy/fn";
 import type { SafeOmit } from "@wavy/types";
 import React, {
   createContext,
@@ -9,9 +9,10 @@ import React, {
   useState,
   type JSX,
 } from "react";
-import { BasicColor, BasicStyleProps } from "../BasicStyle";
+import applyBasicStyle, { BasicColor, BasicStyleProps } from "../BasicStyle";
 import { BasicDivProps } from "../div/BasicDiv";
 import { TableColumnConfig } from "./components/types";
+import * as CSS from "csstype";
 
 const Context = createContext<
   | (Pick<
@@ -37,7 +38,6 @@ type RootStyles = {
   separatorColor?: BasicColor;
   /**@default "lg" */
   columnGap?: BasicStyleProps["gap"];
-  textAlign?: "left" | "center" | "right";
   /**@default "sm" */
   padding?: BasicStyleProps["padding"];
   corners?: BasicDivProps["corners"];
@@ -119,9 +119,17 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
         ...colConfig,
         name: getColName(col),
         weight: "weight" in colConfig ? colConfig.weight : props.columnWeight,
+        textAlign:
+          "textAlign" in colConfig
+            ? colConfig.textAlign
+            : props.textAlign || "start",
       };
     });
   };
+
+  useEffect(() => {
+    // console.log(getColumns());
+  }, []);
   return (
     <Context.Provider
       value={{
@@ -180,9 +188,6 @@ function Header(props: BasicTableProps.HeaderProps) {
   const ctx = useContext(Context)!;
   const separatorColor = props.separatorColor || ctx.separatorColor;
 
-  // const handleSelectClick = () => {
-  //   props.on
-  // };
   return (
     <BasicDiv
       grid
@@ -211,6 +216,8 @@ function Header(props: BasicTableProps.HeaderProps) {
       )}
       {ctx.columns.map((col, i) => {
         const colName = getColName(col);
+        // const textAlign =
+        // const validCol =
         return (
           <BasicSpan
             key={colName + i}
@@ -220,14 +227,13 @@ function Header(props: BasicTableProps.HeaderProps) {
                 ? [separatorColor, "right"]
                 : undefined
             }
-            textAlign={props.textAlign ?? ctx.textAlign}
             text={
               !props.formatColumnName ||
               props.formatColumnName === "camelToLetter"
                 ? camelCaseToLetter(colName)
                 : props.formatColumnName?.(colName) ?? colName
             }
-            style={{ flexGrow: 1 }}
+            style={{ flexGrow: 1, textAlign: getColProp("textAlign", col) }}
           />
         );
       })}
@@ -235,13 +241,13 @@ function Header(props: BasicTableProps.HeaderProps) {
   );
 }
 
-function Body(props: BasicTableProps.BodyProps) {
+function Body<T extends string>(props: BasicTableProps.BodyProps<T>) {
   const ctx = useContext(Context)!;
-  let columnWidthMap = new Map<string, number>();
+  let columnWidthMap = useRef(new Map<string, number>());
 
   useEffect(() => {
     const cleanup = () => {
-      columnWidthMap.clear();
+      columnWidthMap.current.clear();
     };
 
     return cleanup;
@@ -262,18 +268,24 @@ function Body(props: BasicTableProps.BodyProps) {
             key={index}
             rowData={entry}
             index={index}
+            style={props.styleRow?.(index)}
+            styleCell={props.styleCell}
             onColWidthComputed={(colName, width) => {
-              const maxWidth = columnWidthMap.get(colName);
+              const maxWidth = columnWidthMap.current.get(colName);
               if (!maxWidth || width > maxWidth) {
-                columnWidthMap.set(colName, width);
+                columnWidthMap.current.set(colName, width);
               }
             }}
             onCellRendered={(colIdx) => {
               const isLastRow = index === lastIndex(ctx.entries);
               const isLastColumn = colIdx === lastIndex(ctx.columns);
 
-              if (isLastRow && isLastColumn && columnWidthMap.size > 0) {
-                ctx.onAutoColumnWidthsComputed(columnWidthMap);
+              if (
+                isLastRow &&
+                isLastColumn &&
+                columnWidthMap.current.size > 0
+              ) {
+                ctx.onAutoColumnWidthsComputed(columnWidthMap.current);
               }
             }}
           />
@@ -287,48 +299,89 @@ function Row(props: {
   index: number;
   padding?: BasicDivProps["padding"];
   rowData: Record<string, string | React.ReactElement | undefined>;
+  styleCell?: BasicTableProps.BodyProps<string>["styleCell"];
+  style?: BasicDivProps["style"];
   onCellRendered: (colIdx: number) => void;
   onColWidthComputed: (colName: string, width: number) => void;
 }) {
   const ctx = useContext(Context)!;
   const selected = ctx.selectedRowIndices.includes(props.index);
 
-  const handleSelectClick = () => {
-    ctx.onSelectRowClick(props.index);
-  };
+  const handleSelectClick = () => ctx.onSelectRowClick(props.index);
 
+  const { gap, padding, backgroundColor } = applyBasicStyle({
+    gap: ctx.columnGap,
+    padding: ctx.padding ?? props.padding,
+    backgroundColor: selected ? "onSurface[0.1]" : "transparent",
+  });
   return (
     <BasicDiv
-      width={"full"}
-      grid
-      align="center"
-      gridCols={ctx.gridCols}
-      gap={ctx.columnGap}
-      padding={ctx.padding ?? props.padding}
-      backgroundColor={selected ? "onSurface[0.1]" : "transparent"}
+      style={{
+        gap,
+        padding,
+        backgroundColor,
+        width: "100%",
+        display: "grid",
+        alignItems: "center",
+        gridTemplateColumns: ctx.gridCols,
+        ...props.style,
+      }}
     >
       {ctx.selectable && (
         <Select selected={selected} onClick={handleSelectClick} />
       )}
 
-      {ctx.columns.map((col, colIndex) => {
+      {ctx.columns.map((col, colIndex, arr) => {
         const colName = getColName(col);
         const cellData = props.rowData[colName];
+
         const placeholder =
           typeof col === "object" ? col?.placeholder : undefined;
-        const handleOnRender = () => {
-          props.onCellRendered?.(colIndex);
-        };
+        const handleOnRender = () => props.onCellRendered?.(colIndex);
+
         const key = colIndex + getColName(col);
+        const textAlign = getColProp("textAlign", col);
+
+        // console.log({ colName, textAlign });
+
+        const cellStyle: CSS.Properties = {
+          textAlign,
+          justifyContent: textAlign,
+          color: getColProp("color", col),
+          opacity: getColProp("opacity", col, 1),
+          backgroundColor: getColProp("backgroundColor", col),
+          ...(props.styleCell?.({
+            cellIndex: props.index * ctx.columns.length + colIndex,
+            columnName: colName,
+            columnIndex: colIndex,
+            rowIndex: props.index,
+            data: typeof cellData === "string" ? cellData : null,
+            siblingData: {
+              previous:
+                colIndex === 0
+                  ? null
+                  : run(props.rowData[getColName(arr[colIndex - 1])], (v) =>
+                      typeof v === "string" ? v : null
+                    ),
+              next:
+                colIndex === arr.length - 1
+                  ? null
+                  : run(props.rowData[getColName(arr[colIndex + 1])], (v) =>
+                      typeof v === "string" ? v : null
+                    ),
+            },
+          }) || {}),
+        };
 
         if (typeof col === "object" && col.weight === "auto") {
           return (
             <AutoCell
               key={key}
               data={cellData}
+              style={cellStyle}
+              onRender={handleOnRender}
               placeholder={placeholder}
               onWidthComputed={(w) => props.onColWidthComputed(colName, w)}
-              onRender={handleOnRender}
             />
           );
         }
@@ -336,8 +389,9 @@ function Row(props: {
         return (
           <Cell
             key={key}
-            placeholder={placeholder}
             data={cellData}
+            style={cellStyle}
+            placeholder={placeholder}
             onRender={handleOnRender}
           />
         );
@@ -372,6 +426,7 @@ function Select(props: { selected: boolean; onClick: () => void }) {
 function AutoCell(props: {
   data: CellProps["data"];
   placeholder?: string;
+  style: BasicDivProps["style"];
   onRender?: () => void;
   onWidthComputed: (width: number) => void;
 }) {
@@ -393,10 +448,11 @@ function AutoCell(props: {
 
   return (
     <Cell
+      noWrap
       data={props.data}
       placeholder={props.placeholder}
-      noWrap
       ref={cellRef}
+      style={props.style}
       onRender={props.onRender}
     />
   );
@@ -407,38 +463,43 @@ interface CellProps {
   ref?: React.Ref<HTMLElement | null>;
   placeholder?: string;
   noWrap?: boolean;
+  style: BasicDivProps["style"];
   onRender?: () => void;
 }
 function Cell(props: CellProps) {
   useEffect(() => {
     props.onRender?.();
+    // console.log({ data: props.data, style: props.style });
   }, []);
 
-  if (typeof props.data === "string")
+  if (typeof props.data === "string" || !props.data)
     return (
-      <BasicSpan
-        style={{ whiteSpace: props.noWrap ? "nowrap" : undefined }}
+      <BasicSpan 
         ref={props.ref}
-        children={props.data}
+        children={props.data || "-"}
+        fade={props.data ? 1 : 0.75}
+        style={{
+          ...props.style,
+          whiteSpace: props.noWrap ? "nowrap" : undefined,
+          width: "100%",
+        }}
       />
     );
-  return props.data ? (
-    props.ref ? (
-      // The div ref throws an error because of a missing property in props.ref
+  return props.ref ? (
+    // The div ref throws an error because of a missing property in props.ref
+    <div
       //@ts-expect-error
-      <div ref={props.ref} style={{ width: "100%", overflow: "hidden" }}>
-        {props.data}
-      </div>
-    ) : (
-      props.data
-    )
-  ) : (
-    <BasicSpan
       ref={props.ref}
-      fade={0.75}
-      width={"full"}
-      text={props.placeholder ?? "-"}
-    />
+      style={{
+        ...props.style,
+        width: "100%",
+        overflow: "hidden",
+      }}
+    >
+      {props.data}
+    </div>
+  ) : (
+    props.data
   );
 }
 
@@ -446,6 +507,14 @@ const getColName = (
   column: BasicTableProps.RootProps<string>["columns"][number]
 ) => {
   return typeof column === "string" ? column : column.name;
+};
+
+const getColProp = <Key extends keyof TableColumnConfig>(
+  key: Key,
+  column: TableColumnConfig | string,
+  defaults?: TableColumnConfig[Key]
+) => {
+  return typeof column === "object" && key in column ? column[key] : defaults;
 };
 
 const BasicTable = {
@@ -464,6 +533,10 @@ declare namespace BasicTableProps {
         >
       > {
     selectable?: boolean;
+
+    /**The default textAlign for columns
+     * @default "start" */
+    textAlign?: "start" | "center" | "end";
     columns: (T | TableColumnConfig<T>)[];
     backgroundColor?: BasicColor;
     color?: BasicColor;
@@ -472,12 +545,10 @@ declare namespace BasicTableProps {
      * @default "1fr"
      */
     columnWeight?: TableColumnConfig["weight"];
-    children: [JSX.Element, JSX.Element];
+    children: JSX.Element | [JSX.Element, JSX.Element];
   }
 
   interface HeaderProps {
-    /**@default "left" */
-    textAlign?: "left" | "center" | "right";
     /**@default "onSurface[0.1]" */
     separatorColor?: BasicColor | 0 | "none";
     /**@default "camelToLetter" */
@@ -490,11 +561,26 @@ declare namespace BasicTableProps {
     padding?: BasicDivProps["padding"];
     corners?: BasicDivProps["corners"];
   }
-  interface BodyProps {
+  interface BodyProps<T> {
     /**@default [RootProps.rowGap, "top"] */
     padding?: BasicDivProps["padding"];
     color?: BasicColor;
     fontSize?: BasicDivProps["fontSize"];
+    styleCell?: (cell: {
+      siblingData: {
+        /**The data of the cell directly `before` the current cell.
+         */
+        previous: string | null;
+        /**The data of the cell directly `after` the current cell */
+        next: string | null;
+      };
+      cellIndex: number;
+      columnName: T;
+      rowIndex: number;
+      columnIndex: number;
+      data: string;
+    }) => CSS.Properties | null | undefined;
+    styleRow?: (rowIndex: number) => CSS.Properties | null | undefined;
   }
 }
 
