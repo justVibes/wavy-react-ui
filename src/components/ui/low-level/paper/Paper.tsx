@@ -10,14 +10,15 @@ interface PaperProps {
   children: JSX.Element | JSX.Element[];
   style?: CSS.Properties;
   id?: string;
+  
 }
 function Paper(props: PaperProps) {
   const { height, width } = getPaperDim(props.size);
   const responsive = props.responsive ?? true;
 
   const zoom = {
-    a4: 90,
-    a6: 60,
+    a4: 95,
+    a6: 80,
   }[props.size.toLowerCase()];
 
   return (
