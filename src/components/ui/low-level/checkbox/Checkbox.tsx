@@ -4,6 +4,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import { BasicDivProps } from "../html/div/BasicDiv";
 
 interface CheckboxProps {
+  disabled?: boolean;
   defaultChecked?: boolean;
   checked?: boolean;
   size?: BasicDivProps["size"];
@@ -38,7 +39,8 @@ function Checkbox(props: CheckboxProps) {
   };
   return (
     <BasicDiv
-      clickable
+      cursor={props.disabled ? "not-allowed" : "pointer"}
+      fade={props.disabled ? 0.5 : 1}
       size={props.size}
       corners={props.corners ?? "sm"}
       padding={props.padding ?? "sm"}
@@ -52,7 +54,7 @@ function Checkbox(props: CheckboxProps) {
           ? undefined
           : "rgba(0, 0, 0, 0.25) 0px 2px 4px 0px inset",
       }}
-      onClick={toggleChecked}
+      onClick={props.disabled ? undefined : toggleChecked}
     >
       <IoMdCheckmark
         size={props.iconSize}
