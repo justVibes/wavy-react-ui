@@ -27,12 +27,12 @@ interface PopoverProps
    * @default false
    */
   wrap?: boolean;
-  defaultOpen?: boolean;
+  open?: boolean;
   /**The delay between opening and closing the popover in milliseconds
    * @default 200 */
   delay?: number | Record<"open" | "close", number>;
   /**@default "click" */
-  displayAction?: "click" | "hover";
+  displayAction?: "click" | "hover" | "script";
   visibleOnScroll?: boolean;
   rerenderOnClose?: boolean;
   /**@description This stops the popover from closing while attempting to interact with it
@@ -76,6 +76,7 @@ interface PopoverProps
   borderColor?: BasicColor;
   /**@default "surfaceContainer" */
   backgroundColor?: BasicColor;
+  boxShadow?:string
   /**@default "max-content" */
   width?: FloaterWidth;
   /**@default "md" */
@@ -98,7 +99,7 @@ interface PopoverProps
   }>;
 }
 function Popover(props: PopoverProps) {
-  const openedRef = useManagedRef(props.defaultOpen ?? false);
+  const openedRef = useManagedRef(props.open ?? false);
   const { triggerRerender } = useRerender();
   const popoverId = `--${v4()}`;
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -189,7 +190,7 @@ function Popover(props: PopoverProps) {
         spill: props.spill || "auto",
         backdropBlur: props.backdropBlur,
         style: {
-          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+          boxShadow: props.boxShadow || "rgba(0, 0, 0, 0.35) 0px 5px 15px",
           scrollbarWidth: "thin",
         },
       }),
@@ -197,7 +198,7 @@ function Popover(props: PopoverProps) {
   }, []);
 
   useEffect(() => {
-    if (props.defaultOpen) {
+    if (props.open) {
       popoverRef.current?.showPopover();
     }
     const displayAction = props.displayAction || "click";
@@ -219,7 +220,7 @@ function Popover(props: PopoverProps) {
       childRef.current?.addEventListener("click", () => {
         delay(() => popoverRef.current?.togglePopover());
       });
-    } else {
+    } else if (displayAction === "hover") {
       let hidePopoverTimeout: NodeJS.Timeout;
       const gracePeriodInMillis = 20;
 
@@ -280,7 +281,7 @@ function Popover(props: PopoverProps) {
     >
       {ClonedChild}
       <div
-        popover="auto"
+        popover={props.displayAction === "script" ? "manual" : "auto"}
         id={popoverId}
         ref={popoverRef}
         className="popover-transition"
