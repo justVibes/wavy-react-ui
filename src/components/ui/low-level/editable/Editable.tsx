@@ -62,6 +62,8 @@ interface EditableProps extends Partial<Pick<TextFieldProps, "focusColor">> {
   onContentClick?: () => void;
   onCancelClick?: () => void;
   onSaveClick?: (value: string) => void;
+  /** Formats the content when at rest */
+  formatContent?: (value: string) => string;
   onSave?: (value: string) => void;
   /** @param value The content after it was changed (includes reversions)*/
   onChange?: (value: string) => void;
@@ -248,7 +250,7 @@ function Editable(props: EditableProps) {
                     width: "100%",
                   })}
                 >
-                  {text || props.placeholder}
+                  {(props.formatContent?.(text) ?? text) || props.placeholder}
                 </span>
               </Popover>
             </BasicDiv>
