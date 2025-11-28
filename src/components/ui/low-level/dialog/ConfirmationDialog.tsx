@@ -1,8 +1,8 @@
 import {
   BasicButton,
-   Disclaimer,
+  Disclaimer,
   resolveBasicColor,
-  UseDialogControllerReturn,
+  UseModalControlsReturn,
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { TaskResult } from "@wavy/types";
@@ -20,7 +20,7 @@ interface ConfirmationDialogProps
   message: string;
   hideDisclaimerLabel?: boolean;
   disclaimer?: string;
-  controller?: UseDialogControllerReturn;
+  controller?: UseModalControlsReturn;
   triggerElement?: JSX.Element;
   /**
    * @default "error"

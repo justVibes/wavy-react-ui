@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-function useDialogController<Value>(defaultValue?: Value) {
+function useModalControls<Value>(defaultValue?: Value) {
   const [value, setValue] = useState(defaultValue);
-  
+
   return {
     value,
     isOpen: !!value,
@@ -15,6 +15,6 @@ function useDialogController<Value>(defaultValue?: Value) {
   };
 }
 
-type UseDialogControllerReturn<T = {}> = ReturnType<typeof useDialogController<T>>;
+type UseModalControlsReturn<T = {}> = ReturnType<typeof useModalControls<T>>;
 
-export { useDialogController, type UseDialogControllerReturn };
+export { useModalControls, type UseModalControlsReturn };

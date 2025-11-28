@@ -5,7 +5,7 @@ import {
   resolveBasicColor,
   TaskResultDialog,
   TextField,
-  useDialogController,
+  useModalControls,
   useManagedRef,
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
@@ -64,7 +64,7 @@ function EmailComposer<Return extends SendReturnType>(
       ? props.disableSend
       : !!props.onSendClick
   );
-  const dialogController = useDialogController<TaskResult<SuccessMessage>>();
+  const dialogController = useModalControls<TaskResult<SuccessMessage>>();
   const emailRef = useManagedRef({
     subject: props.subject ?? "",
     body: props.body || "",

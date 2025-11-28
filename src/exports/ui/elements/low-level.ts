@@ -9,6 +9,8 @@ import BasicTable, {
 import BasicSelect from "@/components/ui/low-level/html/select/BasicSelect";
 import BasicOption from "@/components/ui/low-level/html/option/BasicOption";
 
+
+export * from "@/components/ui/low-level/drawer/Drawer";
 export * from "@/components/ui/low-level/file-dropzone/FileDropzone";
 export * from "@/components/ui/low-level/editable/Editable";
 export * from "@/components/ui/low-level/empty-state/EmptyState";

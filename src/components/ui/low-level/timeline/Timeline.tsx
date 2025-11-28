@@ -7,7 +7,7 @@ import {
   useManagedRef,
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const Context = createContext<{
   register: () => "first" | "last" | "both" | void;
@@ -60,6 +60,7 @@ function Root(props: TimelineProps.RootProps) {
         grid
         width={props.width ?? "fit-content"}
         gridCols="auto auto auto"
+        justify="end"
         // backgroundColor="billsRed[0.15]"
         style={{ columnGap: props.columnGap || ".5rem" }}
       >
@@ -73,7 +74,10 @@ function Item(props: TimelineProps.ItemProps) {
   const [pos, setPos] = useState<"first" | "last" | "both">();
   const { register } = useContext(Context)!;
 
-  const { indicator, before, after } = props.styles || {};
+  const { indicator, leadingEl, trailingEl } = props.styles || {};
+  const { 0: LeadingEl, 1: TrailingEl } = Array.isArray(props.children)
+    ? props.children
+    : [props.children];
 
   useEffect(() => {
     const pos = register();
@@ -87,9 +91,9 @@ function Item(props: TimelineProps.ItemProps) {
     <>
       <ItemContent
         disabled={props.disabled}
-        style={{ ...before, align: before.align || "end" }}
+        style={{ ...leadingEl, align: leadingEl?.align || "end" }}
       >
-        {props.before}
+        {props.reverse ? TrailingEl : LeadingEl}
       </ItemContent>
 
       <BasicDiv align="center" height={"full"}>
@@ -101,6 +105,7 @@ function Item(props: TimelineProps.ItemProps) {
               size: indicator?.size ?? ".6rem",
               corners: indicator?.corners || "circle",
               backgroundColor: indicator?.backgroundColor || "onSurface",
+              centerContent: indicator?.centerContent ?? true
             }),
             flexShrink: 0,
           }}
@@ -111,8 +116,8 @@ function Item(props: TimelineProps.ItemProps) {
         <LineSeparator hide={isSepHidden("last")} />
       </BasicDiv>
 
-      <ItemContent disabled={props.disabled} style={after}>
-        {props.after}
+      <ItemContent disabled={props.disabled} style={trailingEl}>
+        {props.reverse ? LeadingEl : TrailingEl}
       </ItemContent>
     </>
   );
@@ -128,7 +133,7 @@ function ItemContent(props: {
       style={{
         ...applyBasicStyle({
           ...(props.style || {}),
-          fade: props.disabled ? 0.5 : props.style.fade,
+          fade: props.disabled ? 0.5 : props.style?.fade,
         }),
         justifyContent: "center",
         flexGrow: 1,
@@ -165,15 +170,18 @@ declare namespace TimelineProps {
     columnGap?: string;
     children: JSX.Element | JSX.Element[];
   }
+
   interface ItemProps {
     indicator?: React.ReactNode;
-    /**The node that should be placed `before` (to the left of) the separator */
-    before?: React.ReactNode;
-    /**The node that should be placed `after` (to the right of) the separator */
-    after?: React.ReactNode;
+    // /**The node that should be placed `before` (to the left of) the separator */
+    // before?: React.ReactNode;
+    // /**The node that should be placed `after` (to the right of) the separator */
+    // after?: React.ReactNode;
+    children: React.ReactElement | [React.ReactElement, React.ReactElement];
     disabled?: boolean;
+    reverse?: boolean;
     styles?: Partial<
-      Record<"before" | "after", BasicStyleProps> & {
+      Record<"leadingEl" | "trailingEl", BasicStyleProps> & {
         indicator: Partial<
           BasicStyleProps & {
             /**@default ".6rem" */

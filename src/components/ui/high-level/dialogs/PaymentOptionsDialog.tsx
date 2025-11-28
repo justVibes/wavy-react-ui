@@ -3,8 +3,8 @@ import {
   BasicDiv,
   BasicSpan,
   FontSize,
-  useDialogController,
-  UseDialogControllerReturn,
+  useModalControls,
+  UseModalControlsReturn,
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { indexOf } from "@wavy/fn";
@@ -15,7 +15,7 @@ import { RiBankFill, RiSecurePaymentFill } from "react-icons/ri";
 
 interface PaymentOptionsDialogProps<Variables extends Record<string, any>> {
   triggerElement?: JSX.Element;
-  controller?: UseDialogControllerReturn;
+  controller?: UseModalControlsReturn;
   options: {
     icon: IconType;
     label: string;

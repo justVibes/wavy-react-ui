@@ -5,7 +5,7 @@ import {
   NextButton,
   PreviousButton,
   SubmitButton,
-  UseDialogControllerReturn,
+  UseModalControlsReturn,
   useManagedRef,
   useRerender,
 } from "@/main";
@@ -23,7 +23,7 @@ const Context = createContext<{
 
 interface FancyFormDialogProps<Section extends string> {
   triggerElement?: JSX.Element;
-  controller?: UseDialogControllerReturn;
+  controller?: UseModalControlsReturn;
   title?: React.ReactNode;
   defaultSection?: Section;
   sections: BasicOlProps<Section>["items"];

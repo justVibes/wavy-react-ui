@@ -4,7 +4,7 @@ import {
   BasicDiv,
   Dialog,
   resolveBasicColor,
-  UseDialogControllerReturn
+  UseModalControlsReturn,
 } from "@/main";
 import { SuccessMessage, TaskResult } from "@wavy/types";
 import { createContext, useContext } from "react";
@@ -22,7 +22,7 @@ import { BasicSpanProps } from "../../low-level/html/span/BasicSpan";
 const MainContext = createContext<{ color: BasicColor }>(null);
 
 interface TaskResultDialogProps {
-  controller: UseDialogControllerReturn<TaskResult<SuccessMessage>>;
+  controller: UseModalControlsReturn<TaskResult<SuccessMessage>>;
   unmountOnExit?: boolean;
   /**@default "2.75rem" */
   indicatorSize?: ElementDim | ((status: "success" | "error") => ElementDim);

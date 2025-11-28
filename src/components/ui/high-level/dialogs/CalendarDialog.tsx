@@ -2,7 +2,7 @@ import {
   BasicColor,
   Dialog,
   CancelButton,
-  UseDialogControllerReturn,
+  UseModalControlsReturn,
   useManagedRef,
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
@@ -14,7 +14,7 @@ import Calendar, { CalendarProps } from "../calendar/Calendar";
 interface CalendarDialogProps extends CalendarProps {
   title?: string;
   titleFontSize?: BasicSpanProps["fontSize"];
-  controller?: UseDialogControllerReturn;
+  controller?: UseModalControlsReturn;
   triggerElement?: JSX.Element;
   /**@default "onSurface[0.1]" */
   backgroundColor?: BasicColor;
@@ -44,7 +44,8 @@ function CalendarDialog(props: CalendarDialogProps) {
     props.onDateSelected?.(date);
   };
   const handleDoneClick = () => {
-    props.onDoneClick?.(dateRef.read());
+    const date = dateRef.read();
+    if (date) props.onDoneClick?.(date);
   };
   const handleOnOpenChange = (isOpen: boolean) => {
     // triggerRerender();

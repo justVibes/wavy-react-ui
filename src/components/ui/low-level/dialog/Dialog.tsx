@@ -1,4 +1,4 @@
-import { UseDialogControllerReturn } from "@/components/hooks/useDialogController";
+import { UseModalControlsReturn } from "@/components/hooks/useModalControls";
 import { BasicDiv, useRerender } from "@/main";
 import {
   Dialog as ChakraDialog,
@@ -27,54 +27,54 @@ function Root<T>(props: DialogProps.RootProps<T>) {
   };
   const handleOnExit = () => {
     props.onClose?.();
-    props.controller?.hide?.()
+    props.controller?.hide?.();
     props.rerenderOnClose && triggerRerender();
   };
 
-  if(props.controller?.isOpen === false) return
+  if (props.controller?.isOpen === false) return;
   return (
-      <ChakraDialog.Root
-        unmountOnExit={props.unmountOnExit}
-        open={props.controller?.isOpen}
-        onEscapeKeyDown={
-          props.closeOnEscape ?? true ? props.controller?.hide : undefined
-        }
-        scrollBehavior={props.scrollBehavior}
-        onInteractOutside={
-          props.closeOnInteractOutside ?? true
-            ? props.controller?.hide
-            : undefined
-        }
-        placement={props.placement || "center"}
-        closeOnEscape={props.closeOnEscape}
-        closeOnInteractOutside={props.closeOnInteractOutside}
-        onOpenChange={handleOnOpenChange}
-        onExitComplete={handleOnExit}
-        motionPreset={props.enterAnimation || "slide-in-bottom"}
-      >
-        {props.triggerElement && (
-          <ChakraDialog.Trigger asChild>
-            {props.triggerElement}
-          </ChakraDialog.Trigger>
-        )}
-        <Portal>
-          <ChakraDialog.Backdrop />
-          <ChakraDialog.Positioner>
-            <ChakraDialog.Content style={style}>
-              {props.children}
+    <ChakraDialog.Root
+      unmountOnExit={props.unmountOnExit}
+      open={props.controller?.isOpen}
+      onEscapeKeyDown={
+        props.closeOnEscape ?? true ? props.controller?.hide : undefined
+      }
+      scrollBehavior={props.scrollBehavior}
+      onInteractOutside={
+        props.closeOnInteractOutside ?? true
+          ? props.controller?.hide
+          : undefined
+      }
+      placement={props.placement || "center"}
+      closeOnEscape={props.closeOnEscape}
+      closeOnInteractOutside={props.closeOnInteractOutside}
+      onOpenChange={handleOnOpenChange}
+      onExitComplete={handleOnExit}
+      motionPreset={props.enterAnimation || "slide-in-bottom"}
+    >
+      {props.triggerElement && (
+        <ChakraDialog.Trigger asChild>
+          {props.triggerElement}
+        </ChakraDialog.Trigger>
+      )}
+      <Portal>
+        <ChakraDialog.Backdrop />
+        <ChakraDialog.Positioner>
+          <ChakraDialog.Content style={style}>
+            {props.children}
 
-              {!props.hideCloseButton && (
-                <ChakraDialog.CloseTrigger asChild>
-                  <CloseButton
-                    size={props.closeButtonSize || "sm"}
-                    onClick={props.controller?.hide}
-                  />
-                </ChakraDialog.CloseTrigger>
-              )}
-            </ChakraDialog.Content>
-          </ChakraDialog.Positioner>
-        </Portal>
-      </ChakraDialog.Root>
+            {!props.hideCloseButton && (
+              <ChakraDialog.CloseTrigger asChild>
+                <CloseButton
+                  size={props.closeButtonSize || "sm"}
+                  onClick={props.controller?.hide}
+                />
+              </ChakraDialog.CloseTrigger>
+            )}
+          </ChakraDialog.Content>
+        </ChakraDialog.Positioner>
+      </Portal>
+    </ChakraDialog.Root>
   );
 }
 
@@ -190,7 +190,7 @@ declare namespace DialogProps {
      * @default "outside"
      */
     scrollBehavior?: ChakraDialog.RootProps["scrollBehavior"];
-    controller?: UseDialogControllerReturn<T>;
+    controller?: UseModalControlsReturn<T>;
     /**
      * Whether to close the dialog when the escape key is pressed
      * @default true

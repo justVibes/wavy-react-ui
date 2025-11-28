@@ -2,7 +2,7 @@ import {
   Dialog,
   TextField,
   CancelButton,
-  UseDialogControllerReturn,
+  UseModalControlsReturn,
   useManagedRef,
   useRerender,
 } from "@/main";
@@ -16,7 +16,7 @@ import { TextFieldProps } from "../../textfield/TextField";
 import SaveButton from "../../../high-level/buttons/SaveButton";
 
 interface SimpleFormDialogProps<T extends string> {
-  controller?: UseDialogControllerReturn;
+  controller?: UseModalControlsReturn;
   title?: string;
   triggerElement?: JSX.Element;
   /**@default "md" */
@@ -95,7 +95,7 @@ function SimpleFormDialog<T extends string>(props: SimpleFormDialogProps<T>) {
           const label = (() => {
             if (typeof field.label === "function") return field.label(key);
             if (!field.label || field.label === "prop-name")
-              return props.formatFieldPropName?.(key) ?? key;
+              return props?.formatFieldPropName?.(key) ?? key;
             return field.label;
           })();
 

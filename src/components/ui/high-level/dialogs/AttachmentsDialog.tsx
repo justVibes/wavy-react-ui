@@ -11,7 +11,7 @@ import {
   OpenButton,
   SearchTextField,
   UploadButton,
-  UseDialogControllerReturn,
+  UseModalControlsReturn,
   useManagedRef,
   useRerender,
 } from "@/main";
@@ -60,7 +60,7 @@ interface AttachmentsDialogProps extends ContextType {
   triggerElement?: JSX.Element;
   unmountOnExit?: boolean;
   rerenderOnClose?: boolean;
-  controller?: UseDialogControllerReturn;
+  controller?: UseModalControlsReturn;
   onAttachmentsChange?: (attachments: Email["attachments"]) => void;
   onClose?: () => void;
 }
