@@ -49,6 +49,7 @@ interface TextFieldProps extends AdditionalElements {
   placeholder?: string;
   defaultValue?: string;
   value?: string;
+  validateInput?: (value: string) => boolean;
   allowPasteText?: boolean;
   allowCopyText?: boolean;
   label?: string;
@@ -318,10 +319,12 @@ function TextField(props: TextFieldProps) {
             }
             onChange={(e) => {
               const value = e.currentTarget.value;
+              
+              // Explicitly used 'false' because it can be 'undefined'
+              if (props.validateInput?.(value) === false) return;
 
               props.onChange?.(value, e);
               if (!controlled) setText(value);
-              //   setText(value);
             }}
             placeholder={props.placeholder}
           />

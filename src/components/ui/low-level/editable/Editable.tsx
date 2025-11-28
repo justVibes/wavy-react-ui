@@ -61,6 +61,7 @@ interface EditableProps extends Partial<Pick<TextFieldProps, "focusColor">> {
   onEditClick?: () => void;
   onContentClick?: () => void;
   onCancelClick?: () => void;
+  validateInput?: (value: string) => boolean;
   onSaveClick?: (value: string) => void;
   /** Formats the content when at rest */
   formatContent?: (value: string) => string;
@@ -192,6 +193,7 @@ function Editable(props: EditableProps) {
                 maxChars={props.maxChars}
                 value={text}
                 corners={"md"}
+                validateInput={props.validateInput}
                 width={props.inputWidth}
                 focusColor={props.focusColor}
                 size={props.inputSize || size}

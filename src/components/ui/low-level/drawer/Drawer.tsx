@@ -23,14 +23,14 @@ function Root<T>(props: DrawerProps.RootProps<T>) {
         open={props.controller?.isOpen}
         onExitComplete={handleClose}
       >
+        {props.triggerElement && (
+          <ChakraDrawer.Trigger>{props.triggerElement}</ChakraDrawer.Trigger>
+        )}
         <OptionalPortal container={props.container}>
           <ChakraDrawer.Backdrop
             pos={props.container ? "absolute" : undefined}
             boxSize={props.container ? "full" : undefined}
           />
-          {props.triggerElement && (
-            <ChakraDrawer.Trigger>{props.triggerElement}</ChakraDrawer.Trigger>
-          )}
           <ChakraDrawer.Positioner
             pos={props.container ? "absolute" : undefined}
             boxSize={props.container ? "full" : undefined}
