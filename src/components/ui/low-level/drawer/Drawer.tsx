@@ -12,16 +12,17 @@ import React, { createContext, useContext } from "react";
 const Context = createContext<{ sepColor?: BasicColor }>(null);
 
 function Root<T>(props: DrawerProps.RootProps<T>) {
-
-
   const handleClose = () => {
-    props.onClose?.()
-  }
+    props.onClose?.();
+  };
 
   if (props.controller?.isOpen === false) return;
   return (
     <Context.Provider value={{ sepColor: props.sepColor || "onSurface[0.1]" }}>
-      <ChakraDrawer.Root open={props.controller?.isOpen} onExitComplete={handleClose}>
+      <ChakraDrawer.Root
+        open={props.controller?.isOpen}
+        onExitComplete={handleClose}
+      >
         <OptionalPortal container={props.container}>
           <ChakraDrawer.Backdrop
             pos={props.container ? "absolute" : undefined}
@@ -90,6 +91,8 @@ const Drawer = {
     />
   ),
   Sep,
+  ActionTrigger: ChakraDrawer.ActionTrigger,
+  CloseTrigger: ChakraDrawer.CloseTrigger,
 };
 
 declare namespace DrawerProps {
