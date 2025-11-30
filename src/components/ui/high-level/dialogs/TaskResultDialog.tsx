@@ -35,6 +35,7 @@ interface TaskResultDialogProps {
   /**@default "sm" */
   descriptionFontSize?: BasicSpanProps["fontSize"];
   disableColorIndicator?: boolean;
+  onClose?: () => void;
   /**
    * @default "normal"
    */
@@ -77,6 +78,7 @@ function TaskResultDialog(props: TaskResultDialogProps) {
   return (
     <MainContext.Provider value={{ color }}>
       <Dialog.Root
+        onClose={props.onClose}
         controller={controller}
         width={props.width}
         minWidth={props.minWidth}
