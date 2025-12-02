@@ -6,7 +6,8 @@ import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { BasicDivProps } from "../html/div/BasicDiv";
 
 interface PageIndicatorProps {
-  currentPage: number;
+  /**@default 0 */
+  currentPage?: number;
   totalPages: number;
   /**@default 5 */
   maxIndicators?: number;
@@ -20,7 +21,7 @@ interface PageIndicatorProps {
 }
 function PageIndicator(props: PageIndicatorProps) {
   const nextClickedRef = useRef(false);
-  const [currentPage, setCurrentPage] = useState(props.currentPage);
+  const [currentPage, setCurrentPage] = useState(props.currentPage ?? 0);
 
   const maxIndicators = props.maxIndicators || 5;
   const maxIndices = maxIndicators - 1;

@@ -57,6 +57,7 @@ interface PageSliderProps<T> {
   navCorners?: BasicDivProps["corners"];
   /**@default 1 */
   childFlexGrow?: number;
+  disableShadow?:boolean;
   onEcho?: (message?: string) => T;
   /**The callback fired when the transition to the selected page has either `started` or `ended` */
   onTransition?: (event: "start" | "end") => void;
@@ -172,24 +173,24 @@ function PageSlider<T>(props: PageSliderProps<T>) {
           transformStyle: "preserve-3d",
         }}
       >
-        <Nav
+        {!props.hideControls && <Nav
           disabled={activePage <= 0}
           inset="left"
           onClick={handleOnPrevClick}
-        />
+        />}
 
         {props.children.map((Child, idx) => {
           const direction = Math.sign(activePage - idx),
             absOffset = Math.abs(activePage - idx) / 3;
           const outOfView = Math.abs(activePage - idx) > 2;
-
+          
           return (
             <div
               key={idx}
               style={{
                 position: "absolute",
                 overflow: "hidden",
-                opacity: outOfView && props.hideInactivePages ? 0 : 1,
+                opacity: idx !== activePage && props.hideInactivePages ? 0 : 1,
                 transition: "all 0.3s ease-out",
                 flexGrow: props.childFlexGrow ?? 1,
                 display: outOfView ? "none" : "flex",
@@ -200,7 +201,7 @@ function PageSlider<T>(props: PageSliderProps<T>) {
                 translateZ(calc(${absOffset} * -10rem))
                 translateX(calc(${direction} * -5rem))`,
                 filter: `blur(calc(${absOffset} * .5rem))`,
-                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                boxShadow: props.disableShadow ? undefined :"rgba(0, 0, 0, 0.35) 0px 5px 15px",
               }}
             >
               {typeof Child === "function" ? (
@@ -211,11 +212,11 @@ function PageSlider<T>(props: PageSliderProps<T>) {
             </div>
           );
         })}
-        <Nav
+        {!props.hideControls && <Nav
           inset="right"
           disabled={!hasIndex(props.children, activePage + 1)}
           onClick={handleOnNextClick}
-        />
+        />}
       </div>
     </Context.Provider>
   );
