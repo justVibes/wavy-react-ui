@@ -26,6 +26,7 @@ function PageIndicator(props: PageIndicatorProps) {
   const maxIndicators = props.maxIndicators || 5;
   const maxIndices = maxIndicators - 1;
   const lastPageIdx = props.totalPages - 1;
+
   const handleChangePage = async (index: number) => {
     if (index === currentPage) return;
     const isNextPage = index === currentPage + 1;
@@ -41,22 +42,9 @@ function PageIndicator(props: PageIndicatorProps) {
     setCurrentPage(index);
     await props.afterPageChange?.(index);
   };
-  const handlePreviousClick = async () => {
-    return handleChangePage(currentPage - 1);
-    // const newPageIdx = currentPage - 1;
-    // nextClickedRef.current = false;
-    // await props.onPreviousClick?.();
-    // await props.beforePageChange?.(newPageIdx);
-    // setCurrentPage(newPageIdx);
-  };
-  const handleNextClick = async () => {
-    return handleChangePage(currentPage + 1);
-    // const newPageIdx = currentPage + 1;
-    // nextClickedRef.current = true;
-    // await props.onNextClick?.();
-    // await props.beforePageChange?.(newPageIdx);
-    // setCurrentPage(newPageIdx);
-  };
+  const handlePreviousClick = async () => handleChangePage(currentPage - 1);
+  const handleNextClick = async () => handleChangePage(currentPage + 1);
+
   return (
     <BasicDiv row align="center" gap={props.gap || "1rem"}>
       <Nav
@@ -66,7 +54,7 @@ function PageIndicator(props: PageIndicatorProps) {
       />
       <BasicDiv
         row
-        justify="space-evenly"
+        justify={lastPageIdx > maxIndices ? "space-evenly" : undefined}
         align="center"
         gap={".5rem"}
         spill={"hidden"}

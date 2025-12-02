@@ -7,6 +7,7 @@ import { BasicColor } from "../html/BasicStyle";
 import { resolveBasicColor } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
 import React from "react";
+import { BasicDivProps } from "../html/div/BasicDiv";
 
 interface AvatarProps {
   size?: ChakraAvatarRootProps["size"];
@@ -15,6 +16,7 @@ interface AvatarProps {
   src?: string | undefined;
   backgroundColor?: BasicColor;
   color?: BasicColor;
+  style?: BasicDivProps["style"]
 }
 function Avatar(props: AvatarProps) {
   const Fallback = () => {
@@ -34,6 +36,7 @@ function Avatar(props: AvatarProps) {
       size={props.size || "md"}
       backgroundColor={resolveBasicColor(props.backgroundColor)}
       color={resolveBasicColor(props.color)}
+      style={props.style}
     >
       <Fallback />
       <ChakraAvatar.Image src={props.src} />

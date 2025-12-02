@@ -56,7 +56,14 @@ function ConfirmationDialog(props: ConfirmationDialogProps) {
     >
       <Dialog.Header fontSize="2xl">{props.title}</Dialog.Header>
       <Dialog.Body fade={0.75}>
-        <span>{props.message}</span>
+        <span>
+          {props.message.split("\n").map((text) => (
+            <>
+              {text}
+              <br />
+            </>
+          ))}
+        </span>
         {props.disclaimer && (
           <Disclaimer
             width={"full"}
