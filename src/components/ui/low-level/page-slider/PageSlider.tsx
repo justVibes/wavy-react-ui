@@ -4,7 +4,7 @@ import {
   BasicDiv,
   BasicSpan,
   usePageSliderController,
-  UsePageSliderControllerReturn
+  UsePageSliderControllerReturn,
 } from "@/main";
 import { buildArray, hasIndex } from "@wavy/fn";
 import { SafeOmit } from "@wavy/types";
@@ -34,6 +34,8 @@ const Context = createContext<
 interface PageSliderProps<T> {
   controller?: UsePageSliderControllerReturn<T>;
   spill?: BasicDivProps["spill"];
+  hideInactivePages?: boolean;
+  hideControls?: boolean;
   /**@default "md" */
   gap?: BasicDivProps["gap"];
   height?: BasicDivProps["height"];
@@ -187,6 +189,7 @@ function PageSlider<T>(props: PageSliderProps<T>) {
               style={{
                 position: "absolute",
                 overflow: "hidden",
+                opacity: outOfView && props.hideInactivePages ? 0 : 1,
                 transition: "all 0.3s ease-out",
                 flexGrow: props.childFlexGrow ?? 1,
                 display: outOfView ? "none" : "flex",
@@ -275,4 +278,3 @@ function PageIndicator(props: { totalPages: number; currentPage: number }) {
 }
 
 export { PageSlider, type PageSliderProps };
-
