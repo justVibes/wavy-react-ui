@@ -66,6 +66,9 @@ interface PageSliderProps<T> {
    *i.e: `0 -> 4 | 5 -> 2 | 4 -> 10`
    */
   onChange?: (from: number, to: number) => void;
+  slotProps?: Partial<{
+    childWrapperStyle: BasicDivProps["style"]
+  }>
 }
 function PageSlider<T>(props: PageSliderProps<T>) {
   const [transitioning, setTransitioning] = useState(false);
@@ -188,6 +191,7 @@ function PageSlider<T>(props: PageSliderProps<T>) {
             <div
               key={idx}
               style={{
+                ...props.slotProps?.childWrapperStyle,
                 position: "absolute",
                 overflow: "hidden",
                 opacity: idx !== activePage && props.hideInactivePages ? 0 : 1,
