@@ -8,6 +8,7 @@ import {
   getFileIcon,
   InlineCss,
   resolveBasicColor,
+  CssSpacing,
 } from "@/main";
 import { createContext, useContext, useEffect, useRef, type JSX } from "react";
 import type { IconType } from "react-icons";
@@ -15,7 +16,7 @@ import { BasicDivProps } from "../html/div/BasicDiv";
 import { LocalFile, SafeExtract, SafeOmit, SanitizeFile } from "@wavy/types";
 import { format } from "@wavy/fn";
 import { BasicSpanProps } from "../html/span/BasicSpan";
-import { ElementSize } from "../html/BasicStyle";
+import { BasicStyleProps, ElementSize } from "../html/BasicStyle";
 
 const ID = {
   sidebar: "fv-sidebar",
@@ -72,7 +73,7 @@ function Indicator(props: FileViewerProps.IndicatorProps) {
   const Icon = getFileIcon(props.file.typeAlias);
 
   return (
-    <BasicDiv row align="center">
+    <BasicDiv {...props} row align="center" maxWidth={props.maxWidth || "45%"}>
       {Icon && (
         <Icon.filled
           style={applyBasicStyle({
@@ -82,12 +83,14 @@ function Indicator(props: FileViewerProps.IndicatorProps) {
               padding: applyBasicStyle({
                 padding: props.styles?.icon?.padding || ".65rem",
               })?.padding,
+              paddingLeft: `calc(.65rem - ${CssSpacing.md})`,
             },
           })}
         />
       )}
       <BasicDiv asChildren={props.hideFileMetadata}>
         <BasicSpan
+          ellipsis
           color={props.styles?.filename?.color}
           fontWeight={props.styles?.filename?.fontWeight}
           fontSize={props.styles?.filename?.fontSize || "1rem"}
@@ -137,7 +140,7 @@ function Topbar(props: FileViewerProps.TopbarProps) {
       width={"full"}
       align="center"
       gap={props.gap ?? "md"}
-      padding={props.children ? ["md", "right"] : undefined}
+      padding={props.children ? ["md", ["left", "right"]] : undefined}
       justify={props.justify || "space-between"}
       style={{ ...props.style, gridArea: ID.topbar }}
     >
@@ -369,6 +372,7 @@ declare namespace FileViewerProps {
     gap?: BasicDivProps["gap"];
     onOptionClick?: (option: T) => void;
   }
+
   interface SidebarOptionProps {
     label: string;
     icon: IconType;
@@ -403,9 +407,11 @@ declare namespace FileViewerProps {
     centerContent?: boolean;
   }
 
-  interface IndicatorProps {
+  interface IndicatorProps extends BasicStyleProps {
     file: LocalFile | SanitizeFile<LocalFile>;
     hideFileMetadata?: boolean;
+    /** @default "45%" */
+    maxWidth?: BasicStyleProps["maxWidth"];
     styles?: Partial<{
       icon: Partial<{
         /**@default RootProps.navThickness */
