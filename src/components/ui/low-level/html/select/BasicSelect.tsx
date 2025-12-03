@@ -25,7 +25,7 @@ interface BasicSelectProps<T>
     PopoverProps,
     "displayAction" | "content" | "placement" | "allowInteractions"
   > {
-  isSelected?: (option: BasicSelectProps<T>["options"][number]) => boolean;
+  isSelected?: (option: OptionConfig<T>) => boolean;
   options: (OptionConfig<T> | T)[];
 
   defaultLeadingEl?: React.ReactElement;
@@ -37,9 +37,9 @@ interface BasicSelectProps<T>
   /**@default "sm" */
   gap?: BasicDivProps["gap"];
   onOptionClick?: (
-    option: BasicSelectProps<T>["options"][number],
+    option: OptionConfig<T>,
     index: number,
-    options: BasicSelectProps<T>["options"]
+    options: OptionConfig<T>[]
   ) => void;
 }
 function BasicSelect<T extends string | number>(props: BasicSelectProps<T>) {
