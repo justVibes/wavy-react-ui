@@ -1,14 +1,10 @@
-import {
-  BasicColor,
-  BasicDiv,
-  ellipsis,
-  InlineCss
-} from "@/main";
+import { BasicColor, BasicDiv, ellipsis, InlineCss } from "@/main";
 import { LuCheck } from "react-icons/lu";
 import { BasicDivProps } from "../div/BasicDiv";
 import { BasicSpanProps } from "../span/BasicSpan";
 
-interface BasicOptionProps {
+interface BasicOptionProps
+  extends Partial<Record<"leadingEl" | "trailingEl", React.ReactElement>> {
   value: string | number;
   selected?: boolean;
   /**@default "full" */
@@ -71,6 +67,7 @@ function BasicOption(props: BasicOptionProps) {
       onClick={props.disabled ? undefined : props.onClick}
     >
       {props.selected && <LuCheck style={{ flexShrink: 0 }} />}
+      {props.leadingEl}
       <span
         // ref={(r) =>
         //   r && !props.scrollIntoView && props.selected && r.scrollIntoView()
@@ -83,6 +80,7 @@ function BasicOption(props: BasicOptionProps) {
           textAlign: "start",
         })}
       />
+      {props.trailingEl}
     </BasicDiv>
   );
 }

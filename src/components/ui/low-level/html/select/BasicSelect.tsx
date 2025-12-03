@@ -1,18 +1,24 @@
-import { JSX } from "@emotion/react/jsx-runtime";
-import { SafeOmit } from "@wavy/types";
-import BasicDiv, { BasicDivProps } from "../div/BasicDiv";
-import { createContext, useContext, useEffect, useState } from "react";
-import BasicOption from "../option/BasicOption";
 import { Popover, usePopoverContext, useRerender } from "@/main";
+import { SafeOmit } from "@wavy/types";
+import { createContext, useContext, useEffect, useState } from "react";
 import { PopoverProps } from "../../popover/Popover";
+import BasicDiv, { BasicDivProps } from "../div/BasicDiv";
+import BasicOption from "../option/BasicOption";
+import { JSX } from "@emotion/react/jsx-runtime";
 
-const Context =
-  createContext<
-    Pick<
-      BasicSelectProps<unknown>,
-      "gap" | "options" | "onOptionClick" | "isSelected"
-    >
-  >(null);
+type OptionConfig<T = string | number> = {
+  leadingEl?: React.ReactElement;
+  trailingEl?: React.ReactElement;
+  value: T;
+  disabled?: boolean;
+  onClick?: () => void;
+};
+
+const Context = createContext<
+  | Pick<BasicSelectProps<unknown>, "gap" | "onOptionClick" | "isSelected"> & {
+      options: OptionConfig[];
+    }
+>(null);
 
 interface BasicSelectProps<T>
   extends SafeOmit<
@@ -20,8 +26,10 @@ interface BasicSelectProps<T>
     "displayAction" | "content" | "placement" | "allowInteractions"
   > {
   isSelected?: (option: BasicSelectProps<T>["options"][number]) => boolean;
-  // defaultSelected?: T;
-  options: { value: T; disabled?: boolean; onClick?: () => void }[];
+  options: (OptionConfig<T> | T)[];
+
+  defaultLeadingEl?: React.ReactElement;
+  defaultTrailingEl?: React.ReactElement;
   /**@default "md" */
   corners?: BasicDivProps["corners"];
   /**@default "md" */
@@ -36,7 +44,25 @@ interface BasicSelectProps<T>
 }
 function BasicSelect<T extends string | number>(props: BasicSelectProps<T>) {
   return (
-    <Context.Provider value={props}>
+    <Context.Provider
+      value={{
+        ...props,
+        options: props.options.map(
+          (opt): OptionConfig =>
+            typeof opt === "string" || typeof opt === "number"
+              ? {
+                  value: opt.toString(),
+                  leadingEl: props.defaultLeadingEl,
+                  trailingEl: props.defaultTrailingEl,
+                }
+              : {
+                  ...opt,
+                  leadingEl: opt.leadingEl || props.defaultLeadingEl,
+                  trailingEl: opt.trailingEl || props.defaultTrailingEl,
+                }
+        ),
+      }}
+    >
       <Popover
         {...props}
         backdropBlur={props.backdropBlur}
@@ -82,6 +108,8 @@ function PopoverContent() {
         return (
           <BasicOption
             key={i}
+            leadingEl={option.leadingEl}
+            trailingEl={option.trailingEl}
             value={option?.value.toString()}
             disabled={option?.disabled}
             selected={selected}

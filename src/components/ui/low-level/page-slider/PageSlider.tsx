@@ -191,7 +191,7 @@ function PageSlider<T>(props: PageSliderProps<T>) {
             <div
               key={idx}
               style={{
-                ...props.slotProps?.childWrapperStyle,
+                ...(props.slotProps?.childWrapperStyle || {}),
                 position: "absolute",
                 overflow: "hidden",
                 opacity: idx !== activePage && props.hideInactivePages ? 0 : 1,
