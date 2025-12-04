@@ -191,9 +191,10 @@ function PageSlider<T>(props: PageSliderProps<T>) {
             <div
               key={idx}
               style={{
+                overflow: "hidden",
+                boxShadow: props.disableShadow ? undefined :"rgba(0, 0, 0, 0.35) 0px 5px 15px",
                 ...(props.slotProps?.childWrapperStyle || {}),
                 position: "absolute",
-                overflow: "hidden",
                 opacity: idx !== activePage && props.hideInactivePages ? 0 : 1,
                 transition: "all 0.3s ease-out",
                 flexGrow: props.childFlexGrow ?? 1,
@@ -205,7 +206,6 @@ function PageSlider<T>(props: PageSliderProps<T>) {
                 translateZ(calc(${absOffset} * -10rem))
                 translateX(calc(${direction} * -5rem))`,
                 filter: `blur(calc(${absOffset} * .5rem))`,
-                boxShadow: props.disableShadow ? undefined :"rgba(0, 0, 0, 0.35) 0px 5px 15px",
               }}
             >
               {typeof Child === "function" ? (

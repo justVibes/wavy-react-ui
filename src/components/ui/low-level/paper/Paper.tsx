@@ -10,53 +10,52 @@ interface PaperProps {
   children: JSX.Element | JSX.Element[];
   style?: CSS.Properties;
   id?: string;
-  
 }
 function Paper(props: PaperProps) {
-  const { height, width } = getPaperDim(props.size);
-  const responsive = props.responsive ?? true;
-
-  const zoom = {
-    a4: 95,
-    a6: 80,
-  }[props.size.toLowerCase()];
-
   return (
     <BasicDiv
       id={props.id}
       spill={"hidden"}
       backgroundColor="paper"
       color="onPaper"
-      style={{
-        // ...getPaperDim(props.size, { responsive: props.responsive ?? true }),
-        ...props.style,
-        maxHeight: height,
-        height: responsive ? `${zoom}%` : height,
-        width: responsive ? undefined : width,
-        aspectRatio: "1/sqrt(2)",
-      }}
+      style={paperStyle({
+        size: props.size,
+        responsive: props.responsive ?? true,
+        style: props.style,
+      })}
     >
       {props.children}
     </BasicDiv>
   );
 }
 
-const getPaperDim = (
-  size: PaperProps["size"]
-  // options = {
-  //   /**Allows the paper's dimensions to be adaptable to different container sizes.
-  //    * @default true */
-  //   responsive: true,
-  // }
-) => {
+const getPaperDim = (size: PaperProps["size"]) => {
   return {
     a4: { height: "297mm", width: "210mm" },
     a6: { height: "148mm", width: "105mm" },
-
-    // options.responsive ?? true
-    //   ? { maxHeight: "148mm", height: "60vh", aspectRatio: "1/sqrt(2)" }
-    //   : ,
   }[size.toLowerCase()];
 };
 
-export { Paper, type PaperProps, getPaperDim };
+const paperStyle = (options: {
+  size: PaperProps["size"];
+  /**Whether the dimensions of the page should be responsive or not.
+   * @default false */
+  responsive?: boolean;
+  style?: CSS.Properties;
+}) => {
+  const { height, width } = getPaperDim(options.size);
+  const zoom = {
+    a4: 95,
+    a6: 80,
+  }[options.size.toLowerCase()];
+
+  return {
+    ...(options?.style || {}),
+    maxHeight: height,
+    height: options.responsive ? `${zoom}%` : height,
+    width: options.responsive ? undefined : width,
+    aspectRatio: "1/sqrt(2)",
+  };
+};
+
+export { Paper, type PaperProps, getPaperDim, paperStyle };

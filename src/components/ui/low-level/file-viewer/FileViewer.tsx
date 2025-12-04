@@ -140,7 +140,7 @@ function Topbar(props: FileViewerProps.TopbarProps) {
       width={"full"}
       align="center"
       gap={props.gap ?? "md"}
-      padding={props.children ? ["md", ["left", "right"]] : undefined}
+      padding={["md", ["left", "right"]]}
       justify={props.justify || "space-between"}
       style={{ ...props.style, gridArea: ID.topbar }}
     >
