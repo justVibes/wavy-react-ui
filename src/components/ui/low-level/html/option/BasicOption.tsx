@@ -18,6 +18,7 @@ interface BasicOptionProps
   color?: BasicColor;
   disabled?: boolean;
   backgroundColor?: BasicColor;
+  hideSelectedTick?: boolean;
   sx?: InlineCss;
   scrollIntoView?: boolean;
   onClick?: () => void;
@@ -66,7 +67,9 @@ function BasicOption(props: BasicOptionProps) {
       }}
       onClick={props.disabled ? undefined : props.onClick}
     >
-      {props.selected && <LuCheck style={{ flexShrink: 0 }} />}
+      {!props.hideSelectedTick && props.selected && (
+        <LuCheck style={{ flexShrink: 0 }} />
+      )}
       {props.leadingEl}
       <span
         // ref={(r) =>

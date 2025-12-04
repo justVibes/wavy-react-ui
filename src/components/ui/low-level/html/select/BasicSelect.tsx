@@ -15,7 +15,7 @@ type OptionConfig<T = string | number> = {
 };
 
 const Context = createContext<
-  | Pick<BasicSelectProps<unknown>, "gap" | "onOptionClick" | "isSelected"> & {
+  | Pick<BasicSelectProps<unknown>, "gap" | "onOptionClick" | "isSelected" | "hideSelectedTick"> & {
       options: OptionConfig[];
     }
 >(null);
@@ -36,6 +36,7 @@ interface BasicSelectProps<T>
   padding?: BasicDivProps["padding"];
   /**@default "sm" */
   gap?: BasicDivProps["gap"];
+  hideSelectedTick?:boolean
   onOptionClick?: (
     option: OptionConfig<T>,
     index: number,
@@ -108,6 +109,7 @@ function PopoverContent() {
         return (
           <BasicOption
             key={i}
+            hideSelectedTick={ctx.hideSelectedTick}
             leadingEl={option.leadingEl}
             trailingEl={option.trailingEl}
             value={option?.value.toString()}
