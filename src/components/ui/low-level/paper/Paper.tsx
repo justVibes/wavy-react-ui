@@ -1,4 +1,4 @@
-import { BasicDiv } from "@/main";
+import { BasicDiv, resolveBasicColor } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
 import * as CSS from "csstype";
 
@@ -15,12 +15,9 @@ function Paper(props: PaperProps) {
   return (
     <BasicDiv
       id={props.id}
-      spill={"hidden"}
-      backgroundColor="paper"
-      color="onPaper"
       style={paperStyle({
         size: props.size,
-        responsive: props.responsive ?? true,
+        responsive: props.responsive,
         style: props.style,
       })}
     >
@@ -39,22 +36,26 @@ const getPaperDim = (size: PaperProps["size"]) => {
 const paperStyle = (options: {
   size: PaperProps["size"];
   /**Whether the dimensions of the page should be responsive or not.
-   * @default false */
+   * @default true */
   responsive?: boolean;
   style?: CSS.Properties;
-}) => {
+}): CSS.Properties => {
   const { height, width } = getPaperDim(options.size);
   const zoom = {
     a4: 95,
     a6: 80,
   }[options.size.toLowerCase()];
+  const responsive = options.responsive ?? true;
 
   return {
     ...(options?.style || {}),
     maxHeight: height,
-    height: options.responsive ? `${zoom}%` : height,
-    width: options.responsive ? undefined : width,
+    height: responsive ? `${zoom}%` : height,
+    width: responsive ? undefined : width,
     aspectRatio: "1/sqrt(2)",
+    backgroundColor: resolveBasicColor("paper"),
+    color: resolveBasicColor("onPaper"),
+    overflow: "hidden",
   };
 };
 
