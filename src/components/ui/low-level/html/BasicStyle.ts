@@ -13,7 +13,16 @@ const CLOCKWISE_SIDES = ["top", "right", "bottom", "left"] as const;
 type BasicHtmlElementPosition = 0 | string;
 type ElementSide = (typeof CLOCKWISE_SIDES)[number];
 type BorderStyle = (typeof BORDER_STYLES)[number];
-type ElementDim = `${number}${"rem" | "px" | "%" | "vh" | "vw" | "em" | "in" | "mm" | "cm"}`;
+type ElementDim = `${number}${
+  | "rem"
+  | "px"
+  | "%"
+  | "vh"
+  | "vw"
+  | "em"
+  | "in"
+  | "mm"
+  | "cm"}`;
 type Size =
   | 0
   | "full"
@@ -109,8 +118,9 @@ interface BasicStyleProps
   backdropBlur?: string | undefined;
   gap?: 0 | keyof typeof CssSpacing | ElementDim | undefined;
   cursor?: CSS.Properties["cursor"] | undefined;
-  scrollbarBackgroundColor?: BasicColor | undefined;
-  scrollbarThumbColor?: BasicColor | undefined;
+  scrollbarColor?: Partial<{ track: BasicColor; thumb: BasicColor }>;
+  // scrollbarBackgroundColor?: BasicColor | undefined;
+  // scrollbarThumbColor?: BasicColor | undefined;
   corners?:
     | 0
     | ElementDim
@@ -186,8 +196,8 @@ const applyBasicStyle = (
     bottom: props.bottom,
     cursor: props.clickable ? "pointer" : props.cursor,
     scrollbarColor: `${resolveBasicColor(
-      props.scrollbarThumbColor || "inherit"
-    )} ${resolveBasicColor(props.scrollbarThumbColor || "inherit")}`,
+      props.scrollbarColor?.thumb || "inherit"
+    )} ${resolveBasicColor(props.scrollbarColor?.track || "inherit")}`,
     transform:
       props.centerSelf === true
         ? translate("-50%", "-50%")
