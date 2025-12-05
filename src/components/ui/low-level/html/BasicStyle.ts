@@ -195,9 +195,9 @@ const applyBasicStyle = (
     right: props.right,
     bottom: props.bottom,
     cursor: props.clickable ? "pointer" : props.cursor,
-    scrollbarColor: `${resolveBasicColor(
-      props.scrollbarColor?.thumb || "inherit"
-    )} ${resolveBasicColor(props.scrollbarColor?.track || "inherit")}`,
+    scrollbarColor: [props.scrollbarColor?.thumb, props.scrollbarColor?.track]
+      .map((col) => col || "inherit")
+      .join(" "),
     transform:
       props.centerSelf === true
         ? translate("-50%", "-50%")

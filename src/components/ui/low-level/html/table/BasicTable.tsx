@@ -14,6 +14,9 @@ import { BasicDivProps } from "../div/BasicDiv";
 import { TableColumnConfig } from "./components/types";
 import * as CSS from "csstype";
 
+const SEP_WIDTH = "1px";
+const WIDTH_BUFFER = 7
+
 const Context = createContext<
   | (Pick<
       BasicTableProps.RootProps<string>,
@@ -25,7 +28,7 @@ const Context = createContext<
         selectedRowIndices: number[];
         onSelectAllRowsClick: () => void;
         onSelectRowClick: (index: number) => void;
-        onAutoColumnWidthsComputed: (widthMap: Map<string, number>) => void;
+        onColWidthsComputed: (widthMap: Map<string, number>) => void;
         slotProps?: BasicTableProps.RootProps<string>["slotProps"];
       })
   | null
@@ -35,7 +38,7 @@ type RootStyles = {
   gap?: BasicStyleProps["gap"];
   rowGap?: BasicStyleProps["gap"];
   /**@default "onSurface[0.25]" */
-  separatorColor?: BasicColor;
+  separatorColor?: SepProps["color"];
   /**@default "lg" */
   columnGap?: BasicStyleProps["gap"];
   /**@default "sm" */
@@ -56,20 +59,20 @@ type RootStyles = {
 };
 
 function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
-  const defaultWeight = props.columnWeight || "1fr";
+  const defaultWeight = props.defaultColumnWeight || "1fr";
   const separatorColor = ["none", 0].includes(props.separatorColor!)
     ? undefined
     : props.separatorColor ?? "onSurface[0.25]";
 
   const getGridCols = (columns: (TableColumnConfig | string)[]) => {
-    const leadingColumn = props.selectable ? "auto " : "";
+    const leadingColumn = props.selectable ? `auto ${SEP_WIDTH}` : "";
     return (
       leadingColumn +
       columns
         .map((col) =>
           typeof col === "string" || !col.weight ? defaultWeight : col.weight
         )
-        .join(" ")
+        .join(` ${SEP_WIDTH} `)
     );
   };
 
@@ -111,14 +114,15 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
   };
 
   const getColumns = () => {
-    if (!props.columnWeight) return props.columns;
+    if (!props.defaultColumnWeight) return props.columns;
     return props.columns.map((col) => {
       const colConfig =
         typeof col === "object" ? col : ({} as TableColumnConfig);
       return {
         ...colConfig,
         name: getColName(col),
-        weight: "weight" in colConfig ? colConfig.weight : props.columnWeight,
+        weight:
+          "weight" in colConfig ? colConfig.weight : props.defaultColumnWeight,
         textAlign:
           "textAlign" in colConfig
             ? colConfig.textAlign
@@ -126,10 +130,42 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
       };
     });
   };
+  const colWidthMap = useRef<Map<string, number>>(null);
+  const skipCompute = useRef(false);
 
-  useEffect(() => {
-    // console.log(getColumns());
-  }, []);
+  const handleSetWidthMap = (widthMap: Map<string, number>) => {
+    if (Children.length === 1 || colWidthMap.current) {
+      widthMap.forEach((value, key) => {
+        if ((colWidthMap.current.get(key) || 0) < value) {
+          colWidthMap.current.set(key, value);
+        }
+      });
+      updateGridCols();
+    } else {
+      colWidthMap.current = widthMap;
+    }
+  };
+  const updateGridCols = () => {
+    if (skipCompute.current) {
+      skipCompute.current = false;
+      return;
+    }
+
+    const updatedColumns = props.columns.map(
+      (col): TableColumnConfig | string => {
+        const maxWidth = colWidthMap.current.get(getColName(col));
+
+        if (maxWidth) {
+          return { ...(col as any), weight: `${maxWidth}px` };
+        }
+        return col;
+      }
+    );
+    skipCompute.current = true;
+    colWidthMap.current = null;
+    setGridCols(getGridCols(updatedColumns));
+  };
+
   return (
     <Context.Provider
       value={{
@@ -146,19 +182,7 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
         padding: props.padding ?? "sm",
         columnGap: props.columnGap ?? props.gap ?? "lg",
         rowGap: props.rowGap ?? props.gap,
-        onAutoColumnWidthsComputed: (widthMap) => {
-          const updatedColumns = props.columns.map(
-            (col): TableColumnConfig | string => {
-              const maxWidth = widthMap.get(getColName(col));
-
-              if (maxWidth) {
-                return { ...(col as any), weight: `${maxWidth}px` };
-              }
-              return col;
-            }
-          );
-          setGridCols(getGridCols(updatedColumns));
-        },
+        onColWidthsComputed: handleSetWidthMap,
       }}
     >
       <BasicDiv
@@ -186,7 +210,8 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
 
 function Header(props: BasicTableProps.HeaderProps) {
   const ctx = useContext(Context)!;
-  const separatorColor = props.separatorColor || ctx.separatorColor;
+  const sepColor = props.separatorColor || ctx.separatorColor;
+  let colWidthMap = useRef(new Map<string, number>());
 
   return (
     <BasicDiv
@@ -195,8 +220,11 @@ function Header(props: BasicTableProps.HeaderProps) {
       gap={ctx.columnGap}
       borderColor={
         props.borderColor ||
-        (separatorColor ? [separatorColor, "bottom"] : undefined)
+        (sepColor !== 0 && sepColor !== "none"
+          ? [sepColor, "bottom"]
+          : undefined)
       }
+      borderWidth={SEP_WIDTH}
       spill={"hidden"}
       padding={props.padding ?? ctx.padding}
       corners={props.corners ?? (ctx.separatorColor ? 0 : undefined)}
@@ -214,27 +242,40 @@ function Header(props: BasicTableProps.HeaderProps) {
           onClick={ctx.onSelectAllRowsClick}
         />
       )}
-      {ctx.columns.map((col, i) => {
+      {ctx.columns.map((col, i, arr) => {
         const colName = getColName(col);
-        // const textAlign =
-        // const validCol =
         return (
-          <BasicSpan
-            key={colName + i}
-            size={"full"}
-            borderColor={
-              separatorColor && i !== lastIndex(ctx.columns)
-                ? [separatorColor, "right"]
-                : undefined
-            }
-            text={
-              !props.formatColumnName ||
-              props.formatColumnName === "camelToLetter"
-                ? camelCaseToLetter(colName)
-                : props.formatColumnName?.(colName) ?? colName
-            }
-            style={{ flexGrow: 1, textAlign: getColProp("textAlign", col) }}
-          />
+          <>
+            <BasicSpan
+              key={colName + i}
+              size={"full"}
+              ref={(ref) => {
+                if (ref) {
+                  colWidthMap.current.set(
+                    colName,
+                    parseFloat(getComputedStyle(ref).width) + WIDTH_BUFFER
+                  );
+
+                  if (i === lastIndex(arr)) {
+                    ctx.onColWidthsComputed(colWidthMap.current);
+                  }
+                }
+              }}
+              // borderColor={
+              //   separatorColor && i !== lastIndex(ctx.columns)
+              //     ? [separatorColor, "right"]
+              //     : undefined
+              // }
+              text={
+                !props.formatColumnName ||
+                props.formatColumnName === "camelToLetter"
+                  ? camelCaseToLetter(colName)
+                  : props.formatColumnName?.(colName) ?? colName
+              }
+              style={{ flexGrow: 1, textAlign: getColProp("textAlign", col) }}
+            />
+            {i !== arr.length - 1 && <Sep color={props.separatorColor} />}
+          </>
         );
       })}
     </BasicDiv>
@@ -285,7 +326,7 @@ function Body<T extends string>(props: BasicTableProps.BodyProps<T>) {
                 isLastColumn &&
                 columnWidthMap.current.size > 0
               ) {
-                ctx.onAutoColumnWidthsComputed(columnWidthMap.current);
+                ctx.onColWidthsComputed(columnWidthMap.current);
               }
             }}
           />
@@ -375,50 +416,34 @@ function Row(props: {
 
         if (typeof col === "object" && col.weight === "auto") {
           return (
-            <AutoCell
-              key={key}
-              data={cellData}
-              style={cellStyle}
-              onRender={handleOnRender}
-              placeholder={placeholder}
-              onWidthComputed={(w) => props.onColWidthComputed(colName, w)}
-            />
+            <>
+              <AutoCell
+                key={key}
+                data={cellData}
+                style={cellStyle}
+                onRender={handleOnRender}
+                placeholder={placeholder}
+                onWidthComputed={(w) => props.onColWidthComputed(colName, w)}
+              />
+              {colIndex !== arr.length - 1 && <Sep />}
+            </>
           );
         }
 
         return (
-          <Cell
-            key={key}
-            data={cellData}
-            style={cellStyle}
-            placeholder={placeholder}
-            onRender={handleOnRender}
-          />
+          <>
+            <Cell
+              key={key}
+              data={cellData}
+              style={cellStyle}
+              placeholder={placeholder}
+              onRender={handleOnRender}
+            />
+
+            {colIndex !== arr.length - 1 && <Sep />}
+          </>
         );
       })}
-    </BasicDiv>
-  );
-}
-
-function Select(props: { selected: boolean; onClick: () => void }) {
-  const ctx = useContext(Context)!;
-  const { disableSeparator, separatorColor } =
-    ctx.slotProps?.selectColumn || {};
-  const sepColor = separatorColor || ctx.separatorColor;
-
-  return (
-    <BasicDiv
-      padding={disableSeparator ? undefined : ["md", "right"]}
-      borderColor={
-        sepColor && !disableSeparator ? [sepColor, "right"] : undefined
-      }
-    >
-      <Checkbox
-        padding={"sm"}
-        iconSize=".85rem"
-        checked={props.selected}
-        onChange={props.onClick}
-      />
     </BasicDiv>
   );
 }
@@ -435,7 +460,7 @@ function AutoCell(props: {
   useEffect(() => {
     if (cellRef.current) {
       props.onWidthComputed(
-        parseFloat(getComputedStyle(cellRef.current).width)
+        parseFloat(getComputedStyle(cellRef.current).width) + WIDTH_BUFFER
       );
     } else {
       console.error(
@@ -474,7 +499,7 @@ function Cell(props: CellProps) {
 
   if (typeof props.data === "string" || !props.data)
     return (
-      <BasicSpan 
+      <BasicSpan
         ref={props.ref}
         children={props.data || "-"}
         fade={props.data ? 1 : 0.75}
@@ -500,6 +525,43 @@ function Cell(props: CellProps) {
     </div>
   ) : (
     props.data
+  );
+}
+
+interface SepProps {
+  color?: BasicColor | "none" | 0;
+}
+function Sep(props: SepProps) {
+  const ctx = useContext(Context);
+  const color = props.color || ctx.separatorColor;
+  return (
+    <BasicDiv
+      width={SEP_WIDTH}
+      height={"full"}
+      backgroundColor={color === "none" || color === 0 ? "transparent" : color}
+    />
+  );
+}
+function Select(props: { selected: boolean; onClick: () => void }) {
+  const ctx = useContext(Context)!;
+  const { disableSeparator, separatorColor } =
+    ctx.slotProps?.selectColumn || {};
+  const sepColor = separatorColor || ctx.separatorColor;
+
+  return (
+    <BasicDiv
+      padding={disableSeparator ? undefined : ["md", "right"]}
+      borderColor={
+        sepColor && !disableSeparator ? [sepColor, "right"] : undefined
+      }
+    >
+      <Checkbox
+        padding={"sm"}
+        iconSize=".85rem"
+        checked={props.selected}
+        onChange={props.onClick}
+      />
+    </BasicDiv>
   );
 }
 
@@ -544,13 +606,13 @@ declare namespace BasicTableProps {
     /**Applies a columnWeight to columns where: <"column">.weight === undefined
      * @default "1fr"
      */
-    columnWeight?: TableColumnConfig["weight"];
+    defaultColumnWeight?: TableColumnConfig["weight"];
     children: JSX.Element | [JSX.Element, JSX.Element];
   }
 
   interface HeaderProps {
     /**@default "onSurface[0.1]" */
-    separatorColor?: BasicColor | 0 | "none";
+    separatorColor?: SepProps["color"];
     /**@default "camelToLetter" */
     formatColumnName?: "camelToLetter" | ((name: string) => string);
     color?: BasicColor;
