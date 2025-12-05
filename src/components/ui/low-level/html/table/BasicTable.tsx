@@ -272,16 +272,12 @@ function Header(props: BasicTableProps.HeaderProps) {
                   }
                 }
               }}
-              // borderColor={
-              //   separatorColor && i !== lastIndex(ctx.columns)
-              //     ? [separatorColor, "right"]
-              //     : undefined
-              // }
               text={
                 !props.formatColumnName ||
                 props.formatColumnName === "camelToLetter"
                   ? camelCaseToLetter(colName)
-                  : props.formatColumnName?.(colName) ?? colName
+                  : props.formatColumnName?.(colName) ??
+                    camelCaseToLetter(colName)
               }
               style={{ flexGrow: 1, textAlign: getColProp("textAlign", col) }}
             />

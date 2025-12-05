@@ -196,7 +196,7 @@ const applyBasicStyle = (
     bottom: props.bottom,
     cursor: props.clickable ? "pointer" : props.cursor,
     scrollbarColor: [props.scrollbarColor?.thumb, props.scrollbarColor?.track]
-      .map((col) => col || "inherit")
+      .map((color) => color || "inherit")
       .join(" "),
     transform:
       props.centerSelf === true
