@@ -15,7 +15,7 @@ import { TableColumnConfig } from "./components/types";
 import * as CSS from "csstype";
 
 const SEP_WIDTH = "1px";
-const WIDTH_BUFFER = 7
+const WIDTH_BUFFER = 6;
 
 const Context = createContext<
   | (Pick<
@@ -64,27 +64,60 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
     ? undefined
     : props.separatorColor ?? "onSurface[0.25]";
 
-  const getGridCols = (columns: (TableColumnConfig | string)[]) => {
-    const leadingColumn = props.selectable ? `auto ${SEP_WIDTH}` : "";
-    return (
-      leadingColumn +
-      columns
-        .map((col) =>
-          typeof col === "string" || !col.weight ? defaultWeight : col.weight
-        )
-        .join(` ${SEP_WIDTH} `)
-    );
-  };
-
   const controlled = !!props.selectedRows;
   const [selectedRowIndices, setSelectedRowIndices] = useState<number[]>(
     props.defaultSelectedRows || []
   );
-  const [gridCols, setGridCols] = useState(getGridCols(props.columns));
+
+  const getColumns = () => {
+    return props.columns.map((col) => {
+      const colConfig =
+        typeof col === "object" ? col : ({} as TableColumnConfig);
+
+      return {
+        ...colConfig,
+        name: getColName(col),
+        weight: "weight" in colConfig ? colConfig.weight : defaultWeight,
+        textAlign:
+          "textAlign" in colConfig
+            ? colConfig.textAlign
+            : props.textAlign || "start",
+      };
+    });
+  };
+
+  const getGridCols = (columns: TableColumnConfig[]) => {
+    const leadingColumn = props.selectable ? `auto ${SEP_WIDTH}` : "";
+    return (
+      leadingColumn +
+      getColumns()
+        .map((col) => {
+          const weight = col.weight || defaultWeight;
+
+          if (weight === "auto") {
+            return (
+              columns.find((newCol) => newCol.name === col.name)?.weight ||
+              "auto"
+            );
+          }
+          return weight;
+        })
+        .join(` ${SEP_WIDTH} `)
+      // columns
+      //   .map((col) =>
+      //     typeof col === "string" || !col.weight ? defaultWeight : cols.find(extCol => extCol.name === col.name)?. col.weight
+      //
+      //   )
+    );
+  };
+
+  const [gridCols, setGridCols] = useState(getGridCols(getColumns()));
 
   const allRowsSelected =
     selectedRowIndices.length === props.entries.length &&
     props.entries.length > 0;
+  const colWidthMap = useRef<Map<string, number>>(null);
+  const skipCompute = useRef(false);
 
   const Children = (
     Array.isArray(props.children) ? props.children : [props.children]
@@ -112,29 +145,9 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
     props.onSelectedRowsChange?.(rows);
     if (!controlled) setSelectedRowIndices(rows);
   };
-
-  const getColumns = () => {
-    if (!props.defaultColumnWeight) return props.columns;
-    return props.columns.map((col) => {
-      const colConfig =
-        typeof col === "object" ? col : ({} as TableColumnConfig);
-      return {
-        ...colConfig,
-        name: getColName(col),
-        weight:
-          "weight" in colConfig ? colConfig.weight : props.defaultColumnWeight,
-        textAlign:
-          "textAlign" in colConfig
-            ? colConfig.textAlign
-            : props.textAlign || "start",
-      };
-    });
-  };
-  const colWidthMap = useRef<Map<string, number>>(null);
-  const skipCompute = useRef(false);
-
   const handleSetWidthMap = (widthMap: Map<string, number>) => {
     if (Children.length === 1 || colWidthMap.current) {
+      // colWidthMap.current = widthMap
       widthMap.forEach((value, key) => {
         if ((colWidthMap.current.get(key) || 0) < value) {
           colWidthMap.current.set(key, value);
@@ -151,16 +164,14 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
       return;
     }
 
-    const updatedColumns = props.columns.map(
-      (col): TableColumnConfig | string => {
-        const maxWidth = colWidthMap.current.get(getColName(col));
+    const updatedColumns = getColumns().map((col): TableColumnConfig => {
+      const width = colWidthMap.current.get(col.name);
 
-        if (maxWidth) {
-          return { ...(col as any), weight: `${maxWidth}px` };
-        }
-        return col;
+      if (width) {
+        return { ...col, weight: `${width}px` };
       }
-    );
+      return col;
+    });
     skipCompute.current = true;
     colWidthMap.current = null;
     setGridCols(getGridCols(updatedColumns));
@@ -248,7 +259,7 @@ function Header(props: BasicTableProps.HeaderProps) {
           <>
             <BasicSpan
               key={colName + i}
-              size={"full"}
+              // size={"full"}
               ref={(ref) => {
                 if (ref) {
                   colWidthMap.current.set(
@@ -357,6 +368,7 @@ function Row(props: {
   });
   return (
     <BasicDiv
+      spill={"hidden"}
       style={{
         gap,
         padding,
