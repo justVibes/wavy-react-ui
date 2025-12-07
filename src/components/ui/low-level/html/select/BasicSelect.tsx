@@ -15,7 +15,10 @@ type OptionConfig<T = string | number> = {
 };
 
 const Context = createContext<
-  | Pick<BasicSelectProps<unknown>, "gap" | "onOptionClick" | "isSelected" | "hideSelectedTick"> & {
+  | Pick<
+      BasicSelectProps<unknown>,
+      "gap" | "onOptionClick" | "isSelected" | "hideSelectedTick"
+    > & {
       options: OptionConfig[];
     }
 >(null);
@@ -25,9 +28,12 @@ interface BasicSelectProps<T>
     PopoverProps,
     "displayAction" | "content" | "placement" | "allowInteractions"
   > {
-  isSelected?: (option: OptionConfig<T>) => boolean;
+  isSelected?: (
+    option: OptionConfig<T>,
+    index: number,
+    array: OptionConfig<T>[]
+  ) => boolean;
   options: (OptionConfig<T> | T)[];
-
   defaultLeadingEl?: React.ReactElement;
   defaultTrailingEl?: React.ReactElement;
   /**@default "md" */
@@ -36,7 +42,7 @@ interface BasicSelectProps<T>
   padding?: BasicDivProps["padding"];
   /**@default "sm" */
   gap?: BasicDivProps["gap"];
-  hideSelectedTick?:boolean
+  hideSelectedTick?: boolean;
   onOptionClick?: (
     option: OptionConfig<T>,
     index: number,
@@ -81,7 +87,7 @@ function PopoverContent() {
     popoverCtx = usePopoverContext(),
     [selectedIndex, setSelectedIndex] = useState(
       ctx.isSelected
-        ? ctx.options.findIndex((o) => ctx.isSelected(o))
+        ? ctx.options.findIndex((o, idx) => ctx.isSelected(o, idx, ctx.options))
         : undefined
     ),
     { triggerRerender } = useRerender();
