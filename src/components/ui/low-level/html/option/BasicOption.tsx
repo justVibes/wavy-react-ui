@@ -22,6 +22,7 @@ interface BasicOptionProps
   sx?: InlineCss;
   scrollIntoView?: boolean;
   onClick?: () => void;
+  formatOption?: (value: string) => string;
 }
 function BasicOption(props: BasicOptionProps) {
   return (
@@ -75,7 +76,7 @@ function BasicOption(props: BasicOptionProps) {
         // ref={(r) =>
         //   r && !props.scrollIntoView && props.selected && r.scrollIntoView()
         // }
-        children={props.value.toString()}
+        children={props.formatOption?.(`${props.value}`) || `${props.value}`}
         style={ellipsis({
           maxWidth: "100%",
           flex: "1",

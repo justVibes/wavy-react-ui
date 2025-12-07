@@ -17,7 +17,7 @@ type OptionConfig<T = string | number> = {
 const Context = createContext<
   | Pick<
       BasicSelectProps<unknown>,
-      "gap" | "onOptionClick" | "isSelected" | "hideSelectedTick"
+      "gap" | "onOptionClick" | "isSelected" | "hideSelectedTick" | "formatOption"
     > & {
       options: OptionConfig[];
     }
@@ -34,6 +34,7 @@ interface BasicSelectProps<T>
     array: OptionConfig<T>[]
   ) => boolean;
   options: (OptionConfig<T> | T)[];
+  formatOption?: (option: string) => string;
   defaultLeadingEl?: React.ReactElement;
   defaultTrailingEl?: React.ReactElement;
   /**@default "md" */
@@ -115,6 +116,7 @@ function PopoverContent() {
         return (
           <BasicOption
             key={i}
+            formatOption={ctx.formatOption}
             hideSelectedTick={ctx.hideSelectedTick}
             leadingEl={option.leadingEl}
             trailingEl={option.trailingEl}
