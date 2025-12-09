@@ -146,8 +146,7 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
     if (!controlled) setSelectedRowIndices(rows);
   };
   const handleSetWidthMap = (widthMap: Map<string, number>) => {
-    if (Children.length === 1 || colWidthMap.current) {
-      // colWidthMap.current = widthMap
+    if (colWidthMap.current) {
       widthMap.forEach((value, key) => {
         if ((colWidthMap.current.get(key) || 0) < value) {
           colWidthMap.current.set(key, value);
@@ -156,6 +155,7 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
       updateGridCols();
     } else {
       colWidthMap.current = widthMap;
+      if (Children.length === 1) updateGridCols();
     }
   };
   const updateGridCols = () => {
@@ -167,9 +167,8 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
     const updatedColumns = getColumns().map((col): TableColumnConfig => {
       const width = colWidthMap.current.get(col.name);
 
-      if (width) {
-        return { ...col, weight: `${width}px` };
-      }
+      if (width) return { ...col, weight: `${width}px` };
+
       return col;
     });
     skipCompute.current = true;
