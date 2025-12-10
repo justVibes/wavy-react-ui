@@ -57,7 +57,11 @@ interface PageSliderProps<T> {
   navCorners?: BasicDivProps["corners"];
   /**@default 1 */
   childFlexGrow?: number;
-  disableShadow?:boolean;
+  disableShadow?: boolean;
+  /**The max amount of elements, relative to the active element, that have display:block
+   * @default 2
+   */
+  maxDisplayed?: number;
   onEcho?: (message?: string) => T;
   /**The callback fired when the transition to the selected page has either `started` or `ended` */
   onTransition?: (event: "start" | "end") => void;
@@ -67,8 +71,8 @@ interface PageSliderProps<T> {
    */
   onChange?: (from: number, to: number) => void;
   slotProps?: Partial<{
-    childWrapperStyle: BasicDivProps["style"]
-  }>
+    childWrapperStyle: BasicDivProps["style"];
+  }>;
 }
 function PageSlider<T>(props: PageSliderProps<T>) {
   const [transitioning, setTransitioning] = useState(false);
@@ -176,29 +180,34 @@ function PageSlider<T>(props: PageSliderProps<T>) {
           transformStyle: "preserve-3d",
         }}
       >
-        {!props.hideControls && <Nav
-          disabled={activePage <= 0}
-          inset="left"
-          onClick={handleOnPrevClick}
-        />}
+        {!props.hideControls && (
+          <Nav
+            disabled={activePage <= 0}
+            inset="left"
+            onClick={handleOnPrevClick}
+          />
+        )}
 
         {props.children.map((Child, idx) => {
           const direction = Math.sign(activePage - idx),
             absOffset = Math.abs(activePage - idx) / 3;
-          const outOfView = Math.abs(activePage - idx) > 2;
-          
+          const outOfView =
+            Math.abs(activePage - idx) > (props.maxDisplayed ?? 2);
+
           return (
             <div
               key={idx}
               style={{
                 overflow: "hidden",
-                boxShadow: props.disableShadow ? undefined :"rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                boxShadow: props.disableShadow
+                  ? undefined
+                  : "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                 ...(props.slotProps?.childWrapperStyle || {}),
+                display: outOfView ? "none" : "flex",
                 position: "absolute",
                 opacity: idx !== activePage && props.hideInactivePages ? 0 : 1,
                 transition: "all 0.3s ease-out",
                 flexGrow: props.childFlexGrow ?? 1,
-                display: outOfView ? "none" : "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 transform: `
@@ -216,11 +225,13 @@ function PageSlider<T>(props: PageSliderProps<T>) {
             </div>
           );
         })}
-        {!props.hideControls && <Nav
-          inset="right"
-          disabled={!hasIndex(props.children, activePage + 1)}
-          onClick={handleOnNextClick}
-        />}
+        {!props.hideControls && (
+          <Nav
+            inset="right"
+            disabled={!hasIndex(props.children, activePage + 1)}
+            onClick={handleOnNextClick}
+          />
+        )}
       </div>
     </Context.Provider>
   );

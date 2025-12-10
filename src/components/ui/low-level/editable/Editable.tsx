@@ -112,9 +112,9 @@ function Editable(props: EditableProps) {
   };
   const handleTextFieldBlur = (e: { preventDefault: VoidFunction }) => {
     e.preventDefault();
-    const clickedControl = clickedControlRef.read();
+    // const clickedControl = clickedControlRef.read();
 
-    if (clickedControl !== "save") rollbackChanges();
+    // if (clickedControl !== "save") rollbackChanges();
     setEditing(false);
   };
   const handleOnSave = (isClick = true) => {
