@@ -9,5 +9,4 @@ export * from "./icons/icons";
 export * from "./types/cluster";
 export * from "./types/low-level";
 
-export { EventManager } from "@/components/event-manager/EventManager";
 export { UiProvider as WavyUi };
