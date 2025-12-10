@@ -58,7 +58,7 @@ interface PageSliderProps<T> {
   /**@default 1 */
   childFlexGrow?: number;
   disableShadow?: boolean;
-  /**The max amount of elements, relative to the active element, that have display:block
+  /**The max amount of elements, relative to the active element, that have display: `flex`
    * @default 2
    */
   maxDisplayed?: number;
