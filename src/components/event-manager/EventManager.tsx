@@ -1,3 +1,4 @@
+import { UnsubscribeFunction } from "@wavy/types";
 import { PropsWithChildren, useEffect, useRef } from "react";
 import { EventContext } from "../contexts/EventContext";
 
@@ -11,6 +12,7 @@ function EventManager(props: Required<PropsWithChildren>) {
 
     return cleanup;
   }, []);
+
   return (
     <EventContext.Provider
       value={{
@@ -19,8 +21,14 @@ function EventManager(props: Required<PropsWithChildren>) {
           const cb = map.current.get?.(event);
           cb?.(payload);
         },
-        on: (event, cb) => {
+        on: (event, cb): UnsubscribeFunction => {
           map.current.set(event, cb);
+          return () => {
+            map.current.delete(event);
+          };
+        },
+        listeners: (event) => {
+          return map.current.has(event) ? 1 : 0;
         },
       }}
     >
