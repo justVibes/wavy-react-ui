@@ -49,6 +49,7 @@ interface TextFieldProps extends AdditionalElements {
   placeholder?: string;
   defaultValue?: string;
   value?: string;
+  allowHtmlInput?: boolean;
   validateInput?: (value: string) => boolean;
   allowPasteText?: boolean;
   allowCopyText?: boolean;
@@ -318,8 +319,13 @@ function TextField(props: TextFieldProps) {
                 : undefined
             }
             onChange={(e) => {
-              const value = e.currentTarget.value;
-              
+              let value = e.currentTarget.value;
+
+              if (!props.allowHtmlInput) {
+                value =
+                  new DOMParser().parseFromString(value, "text/html").body
+                    .textContent || "";
+              }
               // Explicitly used 'false' because it can be 'undefined'
               if (props.validateInput?.(value) === false) return;
 
