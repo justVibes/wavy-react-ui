@@ -51,6 +51,8 @@ interface TextFieldProps extends AdditionalElements {
   defaultValue?: string;
   value?: string;
   allowHtmlInput?: boolean;
+  /**@default false */
+  trimOnChange?: boolean | "end" | "start";
   validateInput?: (value: string) => boolean;
   allowPasteText?: boolean;
   allowCopyText?: boolean;
@@ -324,6 +326,18 @@ function TextField(props: TextFieldProps) {
 
               if (!props.allowHtmlInput) {
                 value = stripHtml(value);
+              }
+              
+              switch (props.trimOnChange) {
+                case "start":
+                  value = value.trimStart();
+                  break;
+                case "end":
+                  value = value.trimEnd();
+                  break;
+                case true:
+                  value = value.trim();
+                  break;
               }
               // Explicitly used 'false' because it can be 'undefined'
               if (props.validateInput?.(value) === false) return;
