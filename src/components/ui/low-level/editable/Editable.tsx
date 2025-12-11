@@ -57,6 +57,7 @@ interface EditableProps extends Partial<Pick<TextFieldProps, "focusColor">> {
   fontSize?: BasicSpanProps["fontSize"];
   charCounterFontSize?: BasicSpanProps["fontSize"];
   allowedChars?: RegExp;
+  readOnly?: boolean;
   renderPopoverContent?: (value: string) => React.ReactNode;
   onEditClick?: () => void;
   onContentClick?: () => void;
@@ -92,6 +93,7 @@ function Editable(props: EditableProps) {
   const size = props.size || "md";
 
   const handleOnChange = (value: string) => {
+    if (props.readOnly) return;
     if (props.value === undefined) setText(value);
     props.onChange?.(value);
   };
@@ -99,6 +101,7 @@ function Editable(props: EditableProps) {
     handleOnChange(previousTextRef.read());
   };
   const handleOnEdit = () => {
+    if (props.readOnly) return;
     props.onEdit?.();
     if (props.preventDefault) return;
     setEditing(true);
@@ -185,10 +188,11 @@ function Editable(props: EditableProps) {
           }
           justify={props.spaceBetween ? "space-between" : undefined}
         >
-          {editing ? (
+          {editing && !props.readOnly ? (
             <BasicDiv width={"full"} align="center" gap={"md"}>
               <TextField
                 autoFocus
+                readOnly={props.readOnly}
                 allowedChars={props.allowedChars}
                 maxChars={props.maxChars}
                 value={text}
@@ -218,7 +222,9 @@ function Editable(props: EditableProps) {
               cursor="text"
               css={{
                 transition: "all 200ms linear",
-                ":hover": { backgroundColor: "onSurface[0.1]" },
+                ":hover": props.readOnly
+                  ? undefined
+                  : { backgroundColor: "onSurface[0.1]" },
               }}
               onDoubleClick={
                 activationMode === "dblclick"
