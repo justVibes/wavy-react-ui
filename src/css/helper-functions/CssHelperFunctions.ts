@@ -288,6 +288,12 @@ export function resolveBasicColor(
   return color;
 }
 
+export const stripHtml = (text: string) => {
+  return (
+    new DOMParser().parseFromString(text, "text/html").body.textContent || ""
+  );
+};
+
 export const isValidHex = (hex: string) =>
   /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(hex);
 

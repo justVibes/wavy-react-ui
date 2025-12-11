@@ -5,6 +5,7 @@ import {
   CssSpacing,
   PasteButton,
   resolveBasicColor,
+  stripHtml,
   useManagedRef,
 } from "@/main";
 import {
@@ -322,9 +323,7 @@ function TextField(props: TextFieldProps) {
               let value = e.currentTarget.value;
 
               if (!props.allowHtmlInput) {
-                value =
-                  new DOMParser().parseFromString(value, "text/html").body
-                    .textContent || "";
+                value = stripHtml(value);
               }
               // Explicitly used 'false' because it can be 'undefined'
               if (props.validateInput?.(value) === false) return;
