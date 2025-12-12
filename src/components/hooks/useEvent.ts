@@ -33,7 +33,22 @@ function useEvent<EventMapper extends Record<string, any>>() {
     return ctx.listeners(key);
   };
 
-  return { emit, on, listeners };
+  const dettach = (key: keyof EventMapper) => {
+    if (typeof key !== "string") return invalidKey(key);
+    return ctx.dettach(key);
+  };
+
+  return {
+    /**Emits an event to the closest EventContainer (defaults to the one in `WavyUi`) */
+    emit,
+    /**Subscribes to an event in the closest EventContainer (defaults to the one in `WavyUi`) */
+    on,
+    /**Gets the total amount of listeners on an event */
+    listeners,
+    /**Removes an event from the registry in the closest EventContainer (unsubscribing all listeners in the process) */
+    dettach,
+  };
 }
+
 
 export { useEvent };

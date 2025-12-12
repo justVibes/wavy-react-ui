@@ -2,7 +2,6 @@ export * from "@/components/hooks/useAsyncEffect";
 export * from "@/components/hooks/usePostRenderEffect";
 export * from "@/components/hooks/useComputedStyle";
 export * from "@/components/hooks/useModalControls";
-export * from "@/components/hooks/useEventEmitter";
 export * from "@/components/hooks/useManagedRef";
 export * from "@/components/hooks/usePageSliderController";
 export * from "@/components/hooks/usePopoverContext";
