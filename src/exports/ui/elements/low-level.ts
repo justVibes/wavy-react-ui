@@ -9,7 +9,7 @@ import BasicTable, {
 import BasicSelect from "@/components/ui/low-level/html/select/BasicSelect";
 import BasicOption from "@/components/ui/low-level/html/option/BasicOption";
 
-
+export * from "@/components/ui/low-level/spinner/Spinner";
 export * from "@/components/ui/low-level/page-indicator/PageIndicator";
 export * from "@/components/ui/low-level/drawer/Drawer";
 export * from "@/components/ui/low-level/file-dropzone/FileDropzone";
