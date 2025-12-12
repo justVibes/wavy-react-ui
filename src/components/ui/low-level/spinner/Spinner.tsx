@@ -1,14 +1,13 @@
+import { resolveBasicColor } from "@/main";
 import {
   Spinner as ChakraSpinner,
   type SpinnerProps as ChakraSpinnerProps,
 } from "@chakra-ui/react";
-import applyBasicStyle, {
+import {
   BasicColor,
-  BasicStyleProps,
   ElementDim,
-  ElementSize,
+  ElementSize
 } from "../html/BasicStyle";
-import { resolveBasicColor } from "@/main";
 
 const sizes = ["sm", "md", "lg", "xl", "xs"] as const;
 interface SpinnerProps
@@ -19,7 +18,7 @@ interface SpinnerProps
   thickness?: ElementDim;
   /**@default "slowest" */
   animationDuration?: ChakraSpinnerProps["animationDuration"];
-  /**@default "blue.500" */
+  /**@default "seed" */
   color?: BasicColor | ChakraSpinnerProps["color"];
 }
 function Spinner(props: SpinnerProps) {
@@ -46,11 +45,11 @@ function Spinner(props: SpinnerProps) {
       animationDelay={animationDelay}
       animationDirection={animationDirection}
       animationDuration={animationDuration}
-      //@ts-ignore
-      color={props.color ? resolveBasicColor(props.color) : "blue.500"}
+      //@ts-expect-error
+      color={resolveBasicColor(props.color || "seed")}
       borderWidth={props.thickness || ".1rem"}
       style={{
-        padding: isSizePredefined(size) ? undefined : size
+        padding: isSizePredefined(size) ? undefined : size,
         // height: isSizePredefined(size) ? undefined : size,
         // height: isSizePredefined(size) ? undefined : size,
         // aspectRatio: 1,
@@ -60,3 +59,4 @@ function Spinner(props: SpinnerProps) {
 }
 
 export { Spinner, type SpinnerProps };
+
