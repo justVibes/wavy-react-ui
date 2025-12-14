@@ -2,17 +2,20 @@ import { buildArray } from "@wavy/fn";
 import { NonFunction } from "@wavy/types";
 import { useRef } from "react";
 
-function useManagedRef<T extends NonFunction<unknown>>(initialValue: T) {
+function useManagedRef<T extends NonFunction<unknown>>(
+  initialValue: T,
+  options?: Partial<{ onChange: (curr: T, prev: T) => void }>
+) {
   type UpdaterFunction<T> = (value: T) => T;
-  const ref = useRef<{ current: T; previous: T }>({
-    current: initialValue,
-    previous: undefined,
+  const ref = useRef<{ recent: T; stale: T }>({
+    recent: initialValue,
+    stale: undefined,
   });
 
   return {
     debug: () => {
-      const previousRef = ref.current.previous;
-      const currentRef = ref.current.current;
+      const previousRef = ref.current.stale;
+      const currentRef = ref.current.recent;
 
       const changes = (): Record<"from" | "to" | "difference", T | T[]> => {
         if (Array.isArray(previousRef)) {
@@ -66,19 +69,20 @@ function useManagedRef<T extends NonFunction<unknown>>(initialValue: T) {
       return changes();
     },
     upsert: (value: T | UpdaterFunction<T>) => {
-      const updRefVal =
+      const newValue =
         typeof value === "function"
-          ? (value as UpdaterFunction<T>)(ref.current.current)
+          ? (value as UpdaterFunction<T>)(ref.current.recent)
           : value;
-      const prevRef = ref.current.current;
+      const prevRef = ref.current.recent;
 
       ref.current = {
-        current: updRefVal,
-        previous: prevRef,
+        recent: newValue,
+        stale: prevRef,
       };
+      options?.onChange?.(newValue, prevRef);
     },
     read: () => {
-      return ref.current.current;
+      return ref.current.recent;
     },
     delete: () => {
       ref.current = undefined;

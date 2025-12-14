@@ -44,7 +44,7 @@
   "dependencies": {
     "@chakra-ui/react": "^3.27.0",
     "@emotion/react": "^11.14.0",
-    "@wavy/fn": "^0.0.19",
+    "@wavy/fn": "^0.0.23",
     "next-themes": "^0.4.6",
     "react-datepicker": "^8.8.0",
     "react-icons": "^5.5.0",
