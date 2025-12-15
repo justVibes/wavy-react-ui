@@ -33,6 +33,7 @@ function Root(props: CardProps.RootProps) {
         style={props.style}
         spill={props.spill ?? "hidden"}
         css={props.sx}
+        onClick={props.onClick}
       >
         {props.children}
       </BasicDiv>
@@ -159,6 +160,7 @@ declare namespace CardProps {
     style?: BasicDivProps["style"];
     sx?: BasicDivProps["css"];
     spill?: BasicDivProps["spill"];
+    onClick?: () => void;
     children:
       | JSX.Element
       | [JSX.Element, JSX.Element]
