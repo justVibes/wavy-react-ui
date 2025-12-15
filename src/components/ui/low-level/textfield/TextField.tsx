@@ -127,6 +127,7 @@ function TextField(props: TextFieldProps) {
   const styles = {
     label: applyBasicStyle({
       ...props?.slotProps?.label,
+      row: true,
       fade: props?.slotProps?.label?.fade || 0.75,
     }),
     helperText: applyBasicStyle({
@@ -240,9 +241,14 @@ function TextField(props: TextFieldProps) {
       // width={props.width}
       style={styles.root}
     >
-      {props.label && (
-        <Field.Label style={styles.label}>
-          {props.label} <Field.RequiredIndicator />
+      {(props.label || props.required) && (
+        <Field.Label
+          style={{
+            ...styles.label,
+          }}
+        >
+          {props.required ? props.label || "required" : props.label}{" "}
+          {props.required && <Field.RequiredIndicator />}
         </Field.Label>
       )}
 
@@ -327,7 +333,7 @@ function TextField(props: TextFieldProps) {
               if (!props.allowHtmlInput) {
                 value = stripHtml(value);
               }
-              
+
               switch (props.trimOnChange) {
                 case "start":
                   value = value.trimStart();
