@@ -8,5 +8,6 @@ export * from "@/components/hooks/usePopoverContext";
 export * from "@/components/hooks/useRerender";
 export * from "@/components/hooks/useSessionStorage";
 export * from "@/components/hooks/useEvent";
+export * from "@/components/hooks/useSmartState";
 
 export { useSteps, type UseStepsProps } from "@chakra-ui/react";
