@@ -67,7 +67,7 @@ function SegmentedControls<ControlType extends string>(
         const label = typeof control === "string" ? control : control.value;
         return (
           <SegmentGroup.Item
-            cursor={ "pointer"}
+            cursor={"pointer"}
             padding={
               props.padding in CssSpacing
                 ? CssSpacing[props.padding as keyof typeof CssSpacing]
@@ -103,10 +103,9 @@ function Text(props: {
             ? FontSize[props.fontSize as keyof typeof FontSize]
             : props.fontSize,
         border: 0,
-        color:
-          ctx.checked && props.selectedColor
-            ? resolveBasicColor(props.selectedColor)
-            : props.color,
+        color: resolveBasicColor(
+          ctx.checked && props.selectedColor ? props.selectedColor : props.color
+        ),
       }}>
       {ctx.value}
     </SegmentGroup.ItemText>

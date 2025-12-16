@@ -261,7 +261,7 @@ export function resolveBasicColor(
     preference: "res" | "css";
   }>
 ) {
-  if (!basicColor || typeof basicColor !== "string") return;
+  if (!basicColor || typeof basicColor !== "string") return basicColor;
 
   const preference = options?.preference || "css";
   const color = basicColor.replaceAll(" ", "");
