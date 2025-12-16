@@ -49,6 +49,7 @@ type RootStyles = {
   fontWeight?: BasicDivProps["fontWeight"];
   defaultSelectedRows?: number[];
   selectedRows?: number[];
+  style?: BasicDivProps["style"];
   onSelectedRowsChange?: (selectedRows: number[]) => void;
   slotProps?: Partial<{
     selectColumn?: Partial<{
@@ -193,11 +194,10 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
         columnGap: props.columnGap ?? props.gap ?? "lg",
         rowGap: props.rowGap ?? props.gap,
         onColWidthsComputed: handleSetWidthMap,
-      }}
-    >
+      }}>
       <BasicDiv
         grid
-        gridRows="auto auto"
+        gridRows='auto auto'
         corners={props.corners}
         height={props.height}
         width={props.width}
@@ -210,8 +210,10 @@ function Root<T extends string>(props: BasicTableProps.RootProps<T>) {
         fontWeight={props.fontWeight}
         backgroundColor={props.backgroundColor}
         spill={props.spill}
-        style={{ gridTemplateAreas: `"header" "body"` }}
-      >
+        style={{
+          gridTemplateAreas: `"header" "body"`,
+          ...(props.style || {}),
+        }}>
         {Children}
       </BasicDiv>
     </Context.Provider>
@@ -242,10 +244,9 @@ function Header(props: BasicTableProps.HeaderProps) {
       backgroundColor={props.backgroundColor}
       fontWeight={props.fontWeight}
       fontSize={props.fontSize}
-      align="center"
+      align='center'
       width={"full"}
-      style={{ gridArea: "header" }}
-    >
+      style={{ gridArea: "header" }}>
       {ctx.selectable && (
         <Select
           selected={ctx.allRowsSelected}
@@ -305,8 +306,7 @@ function Body<T extends string>(props: BasicTableProps.BodyProps<T>) {
       padding={props.padding ?? (ctx.rowGap ? [ctx.rowGap, "top"] : undefined)}
       color={props.color}
       fontSize={props.fontSize}
-      style={{ paddingTop: ctx.rowGap, gridArea: "body" }}
-    >
+      style={{ paddingTop: ctx.rowGap, gridArea: "body" }}>
       {ctx.entries.map((entry, index) => {
         return (
           <Row
@@ -371,8 +371,7 @@ function Row(props: {
         alignItems: "center",
         gridTemplateColumns: ctx.gridCols,
         ...props.style,
-      }}
-    >
+      }}>
       {ctx.selectable && (
         <Select selected={selected} onClick={handleSelectClick} />
       )}
@@ -524,8 +523,7 @@ function Cell(props: CellProps) {
         ...props.style,
         width: "100%",
         overflow: "hidden",
-      }}
-    >
+      }}>
       {props.data}
     </div>
   ) : (
@@ -558,11 +556,10 @@ function Select(props: { selected: boolean; onClick: () => void }) {
       padding={disableSeparator ? undefined : ["md", "right"]}
       borderColor={
         sepColor && !disableSeparator ? [sepColor, "right"] : undefined
-      }
-    >
+      }>
       <Checkbox
         padding={"sm"}
-        iconSize=".85rem"
+        iconSize='.85rem'
         checked={props.selected}
         onChange={props.onClick}
       />
