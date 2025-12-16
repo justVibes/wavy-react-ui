@@ -1,8 +1,14 @@
 import { useContext } from "react";
 import { EventContext } from "../contexts/EventContext";
+import { useRerender } from "./useRerender";
 
-function useEvent<EventMapper extends Record<string, any>>() {
+function useEvent<EventMapper extends Record<string, any>>(
+  options?: Partial<{
+    rerenderOnEmit: boolean;
+  }>
+) {
   const ctx = useContext(EventContext);
+  const { triggerRerender } = useRerender();
 
   const invalidKey = (key: unknown) => {
     throw new Error(`Invalid key used in useEvent`, {
@@ -16,16 +22,20 @@ function useEvent<EventMapper extends Record<string, any>>() {
   ) => {
     if (typeof key !== "string") return invalidKey(key);
     ctx.emit(key, args?.[0]);
+    if (options?.rerenderOnEmit) triggerRerender();
   };
+  
   const on = <Key extends keyof EventMapper>(
     key: Key,
     cb: (
       ...args: EventMapper[Key] extends null ? [] : [payload: EventMapper[Key]]
-    ) => void
+    ) => void,
+    options?: Partial<{ rerender: boolean }>
   ) => {
     if (typeof key !== "string") return invalidKey(key);
-
-    return ctx.on(key, cb);
+    const unsub = ctx.on(key, cb);
+    if (options?.rerender) triggerRerender();
+    return unsub;
   };
 
   const listeners = (key: keyof EventMapper) => {
@@ -49,6 +59,5 @@ function useEvent<EventMapper extends Record<string, any>>() {
     dettach,
   };
 }
-
 
 export { useEvent };
