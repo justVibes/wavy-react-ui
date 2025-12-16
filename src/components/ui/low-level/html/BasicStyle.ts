@@ -73,6 +73,7 @@ interface BasicStyleProps
     | 0
     | keyof typeof CssSpacing
     | ElementDim
+    | (string & {})
     | [
         padding: keyof typeof CssSpacing | ElementDim,
         sides: ElementSide | "all" | ElementSide[]

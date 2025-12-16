@@ -255,10 +255,8 @@ function Header(props: BasicTableProps.HeaderProps) {
       {ctx.columns.map((col, i, arr) => {
         const colName = getColName(col);
         return (
-          <>
+          <React.Fragment key={colName + i}>
             <BasicSpan
-              key={colName + i}
-              // size={"full"}
               ref={(ref) => {
                 if (ref) {
                   colWidthMap.current.set(
@@ -281,7 +279,7 @@ function Header(props: BasicTableProps.HeaderProps) {
               style={{ flexGrow: 1, textAlign: getColProp("textAlign", col) }}
             />
             {i !== arr.length - 1 && <Sep color={props.separatorColor} />}
-          </>
+          </React.Fragment>
         );
       })}
     </BasicDiv>
