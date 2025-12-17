@@ -12,6 +12,7 @@ interface UserProfileProps {
   picture?: string;
   name: Name;
   email: string;
+  useDefaultFallback?: boolean;
   gap?: BasicDivProps["gap"];
   rowGap?: BasicDivProps["gap"];
   /**@default "md" */
@@ -27,6 +28,7 @@ interface UserProfileProps {
         color?: BasicColor;
         size: AvatarProps["size"];
         style?: BasicDivProps["style"];
+        fallbackStyle?: BasicDivProps["style"];
       }>;
     } & Record<
       "name" | "email",
@@ -83,11 +85,12 @@ function UserProfile(props: UserProfileProps) {
       style={props.style}>
       <Avatar
         size={props.slotProps?.avatar?.size}
-        fallback={name}
+        fallback={props.useDefaultFallback ? undefined : name}
         src={props.picture}
         backgroundColor={props.slotProps?.avatar?.backgroundColor}
         color={props.slotProps?.avatar?.color}
         style={props.slotProps?.avatar?.style}
+        fallbackStyle={props.slotProps?.avatar?.fallbackStyle}
       />
       <BasicDiv gap={props.rowGap ?? props.gap} width='full' spill={"hidden"}>
         <Text value={"name"} />
