@@ -18,12 +18,15 @@ interface UserProfileProps {
   columnGap?: BasicDivProps["gap"];
   trailingEl?: React.ReactElement;
   style?: BasicDivProps["style"];
+  /**@default ".85rem" */
+  fontSize?: BasicDivProps["fontSize"];
   slotProps?: Partial<
     {
       avatar: Partial<{
         backgroundColor?: BasicColor;
         color?: BasicColor;
-        size: AvatarProps["size"] | (string & {});
+        size: AvatarProps["size"];
+        style?: BasicDivProps["style"];
       }>;
     } & Record<
       "name" | "email",
@@ -48,7 +51,7 @@ function UserProfile(props: UserProfileProps) {
   }) => {
     const {
       fade = def.fade,
-      fontSize = def.fontSize || ".85rem",
+      fontSize = def.fontSize || props.fontSize || ".85rem",
       fontWeight = def.fontWeight,
       lineHeight = (def.lineHeight = fontSize),
     } = props.slotProps?.[value] || {};
@@ -79,12 +82,12 @@ function UserProfile(props: UserProfileProps) {
       width={props.fullWidth ? "full" : undefined}
       style={props.style}>
       <Avatar
-        //@ts-expect-error
         size={props.slotProps?.avatar?.size}
         fallback={name}
         src={props.picture}
         backgroundColor={props.slotProps?.avatar?.backgroundColor}
         color={props.slotProps?.avatar?.color}
+        style={props.slotProps?.avatar?.style}
       />
       <BasicDiv gap={props.rowGap ?? props.gap} width='full' spill={"hidden"}>
         <Text value={"name"} />
