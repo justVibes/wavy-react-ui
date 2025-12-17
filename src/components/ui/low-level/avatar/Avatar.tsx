@@ -21,19 +21,23 @@ interface AvatarProps {
 }
 function Avatar(props: AvatarProps) {
   const Fallback = () => {
+    const style = {
+      ...props.fallbackStyle,
+      display: props.fallbackStyle?.display || "flex",
+      alignItems: props.fallbackStyle?.alignItems || "center",
+      justifyContent: props.fallbackStyle?.justifyContent || "center",
+    };
     if (props.disableFallback) return;
     if (typeof props.fallback === "string") {
-      return (
-        <ChakraAvatar.Fallback name={props.fallback} style={props.style} />
-      );
+      return <ChakraAvatar.Fallback name={props.fallback} style={style} />;
     }
     if (props.fallback && React.isValidElement(props.fallback))
       return props.fallback as JSX.Element;
     if (props.fallback) {
       const Icon = props.fallback as IconType;
-      return <Icon size={"50%"} style={props.style} />;
+      return <Icon size={"50%"} style={style} />;
     }
-    return <ChakraAvatar.Fallback style={props.style} />;
+    return <ChakraAvatar.Fallback style={style} />;
   };
   return (
     <ChakraAvatar.Root
