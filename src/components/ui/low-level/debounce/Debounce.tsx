@@ -43,4 +43,4 @@ function Debounce(props: DebounceProps) {
   );
 }
 
-export default Debounce;
+export { Debounce, type DebounceProps};

@@ -9,9 +9,10 @@ import BasicTable, {
 import BasicSelect from "@/components/ui/low-level/html/select/BasicSelect";
 import BasicOption from "@/components/ui/low-level/html/option/BasicOption";
 
-export * from "@/components/ui/low-level/avatar-group/AvatarGroup";
 
-// export * from "@/components/ui/low-level/lazy-load/LazyLoad";
+export * from "@/components/ui/low-level/debounce/Debounce";
+
+export * from "@/components/ui/low-level/avatar-group/AvatarGroup";
 export * from "@/components/ui/low-level/event-container/EventContainer";
 export * from "@/components/ui/low-level/spinner/Spinner";
 export * from "@/components/ui/low-level/page-indicator/PageIndicator";
