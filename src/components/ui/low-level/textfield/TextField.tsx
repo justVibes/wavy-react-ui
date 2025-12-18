@@ -239,14 +239,12 @@ function TextField(props: TextFieldProps) {
       disabled={props.disabled}
       // opacity={}
       // width={props.width}
-      style={styles.root}
-    >
+      style={styles.root}>
       {(props.label || props.required) && (
         <Field.Label
           style={{
             ...styles.label,
-          }}
-        >
+          }}>
           {props.required ? props.label || "required" : props.label}{" "}
           {props.required && <Field.RequiredIndicator />}
         </Field.Label>
@@ -257,8 +255,7 @@ function TextField(props: TextFieldProps) {
         useCopy={props.allowCopyText}
         usePaste={props.allowPasteText}
         onPaste={handleOnPaste}
-        slotProps={props.slotProps}
-      >
+        slotProps={props.slotProps}>
         <InputGroup
           startElement={props.leadingContent}
           startElementProps={
@@ -294,8 +291,7 @@ function TextField(props: TextFieldProps) {
             padding: props.slotProps?.trailingAdornment?.padding || "1",
             borderRadius: "xl",
           }}
-          gapX={".5rem"}
-        >
+          gapX={".5rem"}>
           <Input
             maxLength={props.maxChars}
             readOnly={props.readOnly}
@@ -319,6 +315,7 @@ function TextField(props: TextFieldProps) {
             onBlur={props.onBlur}
             css={{
               "--focus-color": resolveBasicColor(props.focusColor || "primary"),
+              transition: "all 300ms linear",
             }}
             _placeholder={
               props.slotProps?.placeholder?.color
@@ -387,8 +384,7 @@ function ClipboardHelperWrapper(props: ClipboardHelperWrapperProps) {
         alignItems: "center",
         gap: CssSpacing.sm,
         width: "100%",
-      }}
-    >
+      }}>
       {props.children}
       {props.useCopy && (
         <CopyButton

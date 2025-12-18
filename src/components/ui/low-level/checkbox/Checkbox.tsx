@@ -1,4 +1,4 @@
-import { BasicColor, BasicDiv, resolveBasicColor } from "@/main";
+import { BasicColor, BasicDiv } from "@/main";
 import { useState } from "react";
 import { IoMdCheckmark } from "react-icons/io";
 import { BasicDivProps } from "../html/div/BasicDiv";
@@ -20,7 +20,7 @@ interface CheckboxProps {
   /**@default "onPrimaryContainer" */
   iconColor?: BasicColor;
   disableShadow?: boolean;
-  iconSize?: `${number}${"rem" | "em" | "px"}`;
+  iconSize?: `${number}${"rem" | "em" | "px" | "%"}`;
   onChange?: (checked: boolean) => void;
   onClick?: () => void;
 }
@@ -39,6 +39,7 @@ function Checkbox(props: CheckboxProps) {
   };
   return (
     <BasicDiv
+      centerContent
       cursor={props.disabled ? "not-allowed" : "pointer"}
       fade={props.disabled ? 0.5 : 1}
       size={props.size}
@@ -54,8 +55,7 @@ function Checkbox(props: CheckboxProps) {
           ? undefined
           : "rgba(0, 0, 0, 0.25) 0px 2px 4px 0px inset",
       }}
-      onClick={props.disabled ? undefined : toggleChecked}
-    >
+      onClick={props.disabled ? undefined : toggleChecked}>
       <IoMdCheckmark
         size={props.iconSize}
         style={{ opacity: checked ? 1 : 0 }}

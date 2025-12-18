@@ -1,32 +1,28 @@
-import { TextField } from "@/main";
+import { TextField, TextFieldProps } from "@/main";
+import { SafeOmit } from "@wavy/types";
 import { CiSearch } from "react-icons/ci";
 import { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 
-interface SearchTextFieldProps {
-  disabled?: boolean;
-  placeholder?: string;
+interface SearchTextFieldProps
+  extends SafeOmit<TextFieldProps, "leadingContent" | "leadingAdornment"> {
+  /**@default "20rem" */
   width?: BasicDivProps["width"];
-  defaultValue?: string;
-  value?: string;
-  allowCopy?: boolean;
-  allowPaste?: boolean;
-  onEnterKeyPressed?: () => void;
-  onChange?: (text: string) => void;
+  /**@default "onSurface[0.1]" */
+  backgroundColor?: TextFieldProps["backgroundColor"];
+  /**@default "Search..." */
+  placeholder?: string;
+  /**@default "1.15rem" */
+  searchIconSize?: string;
 }
 function SearchTextField(props: SearchTextFieldProps) {
   return (
     <TextField
-      disabled={props.disabled}
-      allowCopyText={props.allowCopy}
-      allowPasteText={props.allowPaste}
-      defaultValue={props.defaultValue}
-      value={props.value}
+      {...props}
+      leadingAdornment={null}
       width={props.width || "20rem"}
-      backgroundColor="onSurface[0.1]"
-      leadingContent={<CiSearch size={"1.15rem"} />}
+      backgroundColor={props.backgroundColor || "onSurface[0.1]"}
+      leadingContent={<CiSearch size={props.searchIconSize || "1.15rem"} />}
       placeholder={props.placeholder || "Search..."}
-      onEnterKeyPressed={props.onEnterKeyPressed}
-      onChange={props.onChange}
     />
   );
 }
