@@ -1,5 +1,5 @@
 import { applyBasicStyle, BasicStyleProps } from "@/main";
-import type { SafeOmit } from "@wavy/types";
+import type { SafeOmit } from "@wavy/util";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/server";
 import * as CSS from "csstype";

@@ -13,7 +13,7 @@ import {
 import { createContext, useContext, useEffect, useRef, type JSX } from "react";
 import type { IconType } from "react-icons";
 import { BasicDivProps } from "../html/div/BasicDiv";
-import { LocalFile, SafeExtract, SafeOmit, SanitizeFile } from "@wavy/types";
+import { FileDetails, SafeOmit } from "@wavy/util";
 import { format } from "@wavy/fn";
 import { BasicSpanProps } from "../html/span/BasicSpan";
 import { BasicStyleProps, ElementSize } from "../html/BasicStyle";
@@ -40,8 +40,7 @@ function Root(props: FileViewerProps.RootProps) {
         borderColor,
         corners,
         navThickness: props.navThickness || "3rem",
-      }}
-    >
+      }}>
       <BasicDiv
         minHeight={props.minHeight}
         maxHeight={props.maxHeight}
@@ -60,8 +59,7 @@ function Root(props: FileViewerProps.RootProps) {
         style={{
           gridTemplateAreas: `"${ID.topbar} ${ID.topbar}" "${ID.sidebar} ${ID.viewer}"`,
           boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-        }}
-      >
+        }}>
         {props.children}
       </BasicDiv>
     </Context.Provider>
@@ -70,10 +68,10 @@ function Root(props: FileViewerProps.RootProps) {
 
 function Indicator(props: FileViewerProps.IndicatorProps) {
   const { navThickness } = useContext(Context);
-  const Icon = getFileIcon(props.file.typeAlias);
+  const Icon = getFileIcon(props.file.alias);
 
   return (
-    <BasicDiv {...props} row align="center" maxWidth={props.maxWidth || "45%"}>
+    <BasicDiv {...props} row align='center' maxWidth={props.maxWidth || "45%"}>
       {Icon && (
         <Icon.filled
           style={applyBasicStyle({
@@ -103,11 +101,10 @@ function Indicator(props: FileViewerProps.IndicatorProps) {
             gap={props.styles?.fileMetadata?.gap ?? "sm"}
             fade={props.styles?.fileMetadata?.fade ?? 0.5}
             color={props.styles?.fileMetadata?.color}
-            align="center"
-          >
+            align='center'>
             <BasicSpan
-              fontWeight="bold"
-              text={(props.file.ext || props.file.typeAlias)?.toUpperCase()}
+              fontWeight='bold'
+              text={(props.file.extension || props.file.alias)?.toUpperCase()}
             />
             <BasicDiv
               size={props.styles?.fileMetadataSeparator?.size || ".3rem"}
@@ -138,12 +135,14 @@ function Topbar(props: FileViewerProps.TopbarProps) {
       id={ID.topbar}
       height={navThickness}
       width={"full"}
-      align="center"
+      align='center'
       gap={props.gap ?? "md"}
-      padding={["md", ["left", "right"]]}
       justify={props.justify || "space-between"}
-      style={{ ...props.style, gridArea: ID.topbar }}
-    >
+      style={{
+        ...(props.style || {}),
+        padding: props.style?.padding || "0px .5rem",
+        gridArea: ID.topbar,
+      }}>
       {props.children}
     </BasicDiv>
   );
@@ -160,18 +159,16 @@ function SidebarRoot<T extends string>(
   const { navThickness } = useContext(Context);
   return (
     <SidebarContext.Provider
-      value={{ onOptionClick: (o) => props.onOptionClick?.(o as T) }}
-    >
+      value={{ onOptionClick: (o) => props.onOptionClick?.(o as T) }}>
       <BasicDiv
         {...rest}
         id={ID.sidebar}
         height={"full"}
         width={navThickness}
-        align="center"
+        align='center'
         gap={rest.gap || "md"}
         padding={["md", ["top", "bottom"]]}
-        style={{ ...rest.style, gridArea: ID.sidebar }}
-      >
+        style={{ ...rest.style, gridArea: ID.sidebar }}>
         {props.children}
       </BasicDiv>
     </SidebarContext.Provider>
@@ -187,12 +184,11 @@ function SidebarOption(props: FileViewerProps.SidebarOptionProps) {
   };
   return (
     <Popover
-      displayAction="hover"
-      placement="right"
-      fontSize="sm"
+      displayAction='hover'
+      placement='right'
+      fontSize='sm'
       content={props.label}
-      asChild={props.disabled}
-    >
+      asChild={props.disabled}>
       <BasicDiv
         fade={props.disabled ? 0.5 : 1}
         cursor={
@@ -221,8 +217,7 @@ function SidebarOption(props: FileViewerProps.SidebarOptionProps) {
                   props.css?.[":hover"].backgroundColor || "outline[0.25]",
               },
         }}
-        onClick={props.disabled ? undefined : handleOnClick}
-      >
+        onClick={props.disabled ? undefined : handleOnClick}>
         {<props.icon size={props.iconSize ?? "1.1rem"} />}
       </BasicDiv>
     </Popover>
@@ -293,8 +288,7 @@ function Viewer(props: FileViewerProps.ViewerProps) {
         gridArea: ID.viewer,
         boxShadow:
           "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-      }}
-    >
+      }}>
       {props.children}
     </BasicDiv>
   );
@@ -408,7 +402,7 @@ declare namespace FileViewerProps {
   }
 
   interface IndicatorProps extends BasicStyleProps {
-    file: LocalFile | SanitizeFile<LocalFile>;
+    file: FileDetails;
     hideFileMetadata?: boolean;
     /** @default "45%" */
     maxWidth?: BasicStyleProps["maxWidth"];

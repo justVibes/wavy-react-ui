@@ -3,7 +3,7 @@ import { IoRemove } from "react-icons/io5";
 import { Avatar, AvatarProps } from "../../low-level/avatar/Avatar";
 import BasicDiv, { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 import BasicSpan, { BasicSpanProps } from "../../low-level/html/span/BasicSpan";
-import { Name } from "@wavy/types";
+import { Name } from "@wavy/util";
 import { format } from "@wavy/fn";
 import { BasicColor, FontSize } from "@/main";
 

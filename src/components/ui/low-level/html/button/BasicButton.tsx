@@ -1,6 +1,6 @@
 import { BasicColor, resolveBasicColor } from "@/main";
 import { AbsoluteCenter, Button, Icon, Spinner } from "@chakra-ui/react";
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 import React, { JSX, useState } from "react";
 import { IconType } from "react-icons";
 import { FaFolder } from "react-icons/fa";
@@ -157,8 +157,7 @@ function BasicButton(props: BasicButtonProps) {
         width: props.width || "fit-content",
       })}
       onClick={handleOnClick}
-      onMouseDown={props.onMouseDown}
-    >
+      onMouseDown={props.onMouseDown}>
       {LeadingEl}
       {props.text}
       {props.children}

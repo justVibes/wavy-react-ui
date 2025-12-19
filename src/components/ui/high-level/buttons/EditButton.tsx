@@ -1,6 +1,6 @@
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 import BasicButton, {
-    BasicButtonProps
+  BasicButtonProps,
 } from "../../low-level/html/button/BasicButton";
 
 import { BasicColor } from "@/main";
@@ -32,7 +32,6 @@ function EditButton(props: EditButtonProps) {
       borderColor={props.borderColor || "onSurface[0.25]"}
       color={props.color || "onSurface"}
       corners={props.corners || "sm"}
-      
     />
   );
 }

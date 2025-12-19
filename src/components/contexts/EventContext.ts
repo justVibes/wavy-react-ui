@@ -1,4 +1,4 @@
-import { UnsubscribeFunction } from "@wavy/types";
+import { UnsubscribeFunction } from "@wavy/util";
 import { createContext } from "react";
 
 const EventContext = createContext<{

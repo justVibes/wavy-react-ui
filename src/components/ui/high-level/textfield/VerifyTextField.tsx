@@ -4,12 +4,7 @@ import { TextField, TextFieldProps } from "../../low-level/textfield/TextField";
 import VerifyButton from "../buttons/VerifyButton";
 import ErrorTooltip from "../tooltip/ErrorTooltip";
 import { useManagedRef } from "@/main";
-import {
-  ErrorMessage,
-  SafeOmit,
-  TaskResult,
-  TaskResultStatus,
-} from "@wavy/types";
+import { ErrorMessage, SafeOmit, TaskResult, TaskStatus } from "@wavy/util";
 
 function VerifyTextField(
   props: SafeOmit<
@@ -19,7 +14,7 @@ function VerifyTextField(
     | "trailingAdornment"
     | "trailingContent"
   > & {
-    defaultStatus?: TaskResultStatus;
+    defaultStatus?: TaskStatus;
     verifyError?: ErrorMessage;
     onVerifyClick: () => Promise<TaskResult>;
   }
@@ -46,9 +41,8 @@ function VerifyTextField(
         <ErrorTooltip
           wrapChildren
           asChild={status !== "error"}
-          error={errorRef.read()}
-        >
-          <Status indicatorSize=".4rem" status={status} />
+          error={errorRef.read()}>
+          <Status indicatorSize='.4rem' status={status} />
         </ErrorTooltip>
       }
       trailingContent={<VerifyButton onClick={handleOnVerifyClick} />}

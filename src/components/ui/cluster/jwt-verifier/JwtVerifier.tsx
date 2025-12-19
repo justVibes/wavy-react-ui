@@ -2,7 +2,7 @@ import { CopyButton, useManagedRef, VerifyTextField } from "@/main";
 import { useRef, useState } from "react";
 import JsonViewer from "../../high-level/json-viewer/JsonViewer";
 import BasicDiv from "../../low-level/html/div/BasicDiv";
-import { ErrorMessage, TaskResult } from "@wavy/types";
+import { ErrorMessage, TaskResult } from "@wavy/util";
 
 type JwtVerificationStatus = {
   verified: boolean;
@@ -42,7 +42,7 @@ function JwtVerifier(props: JwtVerifierProps) {
     props.onTokenChange?.(value);
   };
   return (
-    <BasicDiv size="full" spill={"hidden"} maxHeight={"full"} gap={"lg"}>
+    <BasicDiv size='full' spill={"hidden"} maxHeight={"full"} gap={"lg"}>
       <VerifyTextField
         allowCopyText
         allowPasteText
@@ -57,7 +57,7 @@ function JwtVerifier(props: JwtVerifierProps) {
         onChange={handleOnTokenChange}
         onVerifyClick={handleOnVerifyClick}
       />
-      <BasicDiv size="full" spill={"hidden"} gap={"sm"}>
+      <BasicDiv size='full' spill={"hidden"} gap={"sm"}>
         {status && <CopyButton textToCopy={status.payload} />}
 
         <JsonViewer fullSize json={status ? status.payload : undefined} />

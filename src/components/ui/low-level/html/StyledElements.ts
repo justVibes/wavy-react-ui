@@ -2,7 +2,7 @@ import { resolveBasicColor } from "@/main";
 import newStyled from "@emotion/styled";
 import type * as CSS from "csstype";
 import { BasicColor } from "./BasicStyle";
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 
 type CssProperties = SafeOmit<CSS.Properties, "backgroundColor" | "color"> &
   Partial<Record<"backgroundColor" | "color", BasicColor>>;

@@ -10,7 +10,7 @@ import applyBasicStyle from "../html/BasicStyle";
 import { BasicDivProps } from "../html/div/BasicDiv";
 import { BasicSpanProps } from "../html/span/BasicSpan";
 import { createContext, useContext } from "react";
-import { Prettify, SafeOmit } from "@wavy/types";
+import { Prettify, SafeOmit } from "@wavy/util";
 
 const GapContext = createContext<{ gap: BasicDivProps["gap"] }>(null);
 
@@ -29,12 +29,11 @@ function Root(props: CardProps.RootProps) {
         minWidth={props.minWidth}
         backgroundColor={props.backgroundColor}
         color={props.color}
-        align="center"
+        align='center'
         style={props.style}
         spill={props.spill ?? "hidden"}
         css={props.sx}
-        onClick={props.onClick}
-      >
+        onClick={props.onClick}>
         {props.children}
       </BasicDiv>
     </GapContext.Provider>
@@ -68,8 +67,7 @@ function createAddOnEl<SingleChild extends boolean>(singleChild: SingleChild) {
           spill,
           centerContent,
           align: align,
-        }}
-      >
+        }}>
         {children}
       </BasicDiv>
     );
@@ -120,8 +118,7 @@ const Content = (
         ...props,
         spill: props.spill || "hidden",
         maxWidth: props.maxWidth || "full",
-      }}
-    >
+      }}>
       {props.children}
     </BasicDiv>
   );

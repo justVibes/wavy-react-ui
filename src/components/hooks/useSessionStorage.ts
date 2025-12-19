@@ -1,4 +1,4 @@
-import { NonFunction } from "@wavy/types";
+import { NonFunction } from "@wavy/util";
 import { useState } from "react";
 
 function useSessionStorage<Value extends NonFunction<any>>(

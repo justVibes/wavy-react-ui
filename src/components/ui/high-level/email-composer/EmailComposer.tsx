@@ -10,7 +10,7 @@ import {
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { strictArray } from "@wavy/fn";
-import { Email, SafeOmit, SuccessMessage, TaskResult } from "@wavy/types";
+import { Email, SafeOmit, SuccessMessage, TaskResult } from "@wavy/util";
 import { useState } from "react";
 import { Avatar } from "../../low-level/avatar/Avatar";
 import BasicDiv, { BasicDivProps } from "../../low-level/html/div/BasicDiv";
@@ -65,27 +65,30 @@ function EmailComposer<Return extends SendReturnType>(
       : !!props.onSendClick
   );
   const dialogController = useModalControls<TaskResult<SuccessMessage>>();
-  const emailRef = useManagedRef({
+  const emailRef = useManagedRef<Email>({
     subject: props.subject ?? "",
-    body: props.body || "",
-    recipients: props.recipients?.join?.(RECIPIENTS_SEP) ?? "",
+    body: { text: props.body || "" },
+    recipients: props.recipients || [],
     attachments: props.attachments || [],
   });
 
   const handleEmailChange = <Key extends keyof Email>(
     key: Key,
-    value: ReturnType<(typeof emailRef)["read"]>[Key]
+    value: Email[Key]
   ) => {
     emailRef.upsert((email) => ({ ...email, [key]: value }));
   };
-  const getRecipients = () =>
-    strictArray(emailRef.read().recipients.split(RECIPIENTS_SEP));
+  const getRecipients = () => strictArray(emailRef.read().recipients);
 
   const handleOnSendClick = async () => {
-    const { subject, body, attachments } = emailRef.read();
+    const {
+      subject,
+      body: { text },
+      attachments,
+    } = emailRef.read();
     const result = await props.onSendClick({
       subject,
-      body: { text: body, html: props.bodyToHtml?.(body) },
+      body: { text, html: props.bodyToHtml?.(text) },
       recipients: getRecipients(),
       attachments,
     });
@@ -112,15 +115,14 @@ function EmailComposer<Return extends SendReturnType>(
     <BasicDiv
       height={props.height || "15rem"}
       width={props.width || "22rem"}
-      backgroundColor="paper"
-      color="onPaper"
+      backgroundColor='paper'
+      color='onPaper'
       corners={"md"}
       padding={"md"}
       spill={"hidden"}
       style={{
         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-      }}
-    >
+      }}>
       <TaskResultDialog
         unmountOnExit
         disableColorIndicator={
@@ -143,7 +145,9 @@ function EmailComposer<Return extends SendReturnType>(
         <Recipients
           readOnly={props.readOnly}
           recipients={getRecipients()}
-          onChange={(value) => handleEmailChange("recipients", value)}
+          onChange={(value) =>
+            handleEmailChange("recipients", value.split(RECIPIENTS_SEP))
+          }
         />
       )}
 
@@ -153,19 +157,18 @@ function EmailComposer<Return extends SendReturnType>(
         onChange={(value) => handleEmailChange("subject", value)}
       />
 
-      <BasicDiv size="full" gap={"sm"} spill={"hidden"}>
+      <BasicDiv size='full' gap={"sm"} spill={"hidden"}>
         <Body
-          defaultValue={emailRef.read().body}
+          defaultValue={emailRef.read().body.text}
           readOnly={props.readOnly}
-          onChange={(value) => handleEmailChange("body", value)}
+          onChange={(value) => handleEmailChange("body", { text: value })}
         />
         <BasicDiv
-          width="full"
+          width='full'
           row
-          align="center"
-          justify="space-between"
-          gap={"md"}
-        >
+          align='center'
+          justify='space-between'
+          gap={"md"}>
           <AttachmentsButton
             attachments={emailRef.read().attachments}
             corners={"lg"}
@@ -183,7 +186,7 @@ function EmailComposer<Return extends SendReturnType>(
             }}
           />
           <SendButton
-            size="2xs"
+            size='2xs'
             disabled={sendDisabled.read()}
             onClick={handleOnSendClick}
           />
@@ -203,7 +206,7 @@ function Recipients(props: {
     return (
       <BasicSpan
         text={props.value}
-        cursor="not-allowed"
+        cursor='not-allowed'
         sx={{ ":hover": { textDecoration: "underline" } }}
       />
     );
@@ -211,18 +214,18 @@ function Recipients(props: {
   return (
     <CustomTextField
       readOnly={props.readOnly}
-      placeholder="Recipients"
+      placeholder='Recipients'
       defaultValue={props.recipients.join(RECIPIENTS_SEP)}
       onFocus={props.readOnly ? undefined : () => setFocused(true)}
       onBlur={props.readOnly ? undefined : () => setFocused(false)}
       autoFocus={focused}
       leadingContent={
-        focused ? <BasicSpan fontSize="xs" text="To:" /> : undefined
+        focused ? <BasicSpan fontSize='xs' text='To:' /> : undefined
       }
       trailingContent={
-        <BasicDiv row gap={"sm"} fontSize="xs">
-          <CopyIndicator value="Cc" />
-          <CopyIndicator value="Bcc" />
+        <BasicDiv row gap={"sm"} fontSize='xs'>
+          <CopyIndicator value='Cc' />
+          <CopyIndicator value='Bcc' />
         </BasicDiv>
       }
       indent={{ right: "3rem" }}
@@ -236,34 +239,31 @@ function ReadOnlyRecipients(props: { recipients: string[] }) {
     <BasicDiv
       width={"full"}
       grid
-      gridCols="1fr auto"
+      gridCols='1fr auto'
       gap={"md"}
-      justify="space-between"
-      borderColor={[FIELD_SEP_COLOR, "bottom"]}
-    >
+      justify='space-between'
+      borderColor={[FIELD_SEP_COLOR, "bottom"]}>
       <BasicDiv
         row
         width={"full"}
         gap={"md"}
         spill={"hidden"}
-        padding={["sm", "bottom"]}
-      >
+        padding={["sm", "bottom"]}>
         {props.recipients.map((recipient) => (
           <BasicDiv
             row
-            align="center"
+            align='center'
             gap={"sm"}
-            fontSize="xs"
-            color="onPaper"
+            fontSize='xs'
+            color='onPaper'
             borderColor={"onPaper[0.1]"}
             padding={"xs"}
             corners={"xl"}
-            spill={"hidden"}
-          >
+            spill={"hidden"}>
             <Avatar
               size={"2xs"}
-              backgroundColor="sendBlue[0.25]"
-              color="sendBlue"
+              backgroundColor='sendBlue[0.25]'
+              color='sendBlue'
             />
             <BasicSpan ellipsis text={recipient} />
           </BasicDiv>
@@ -285,15 +285,14 @@ function Subject(props: {
       row
       width={"full"}
       gap={"md"}
-      justify="space-between"
-      align="center"
+      justify='space-between'
+      align='center'
       padding={["xs", ["top", "bottom"]]}
       asChildren={!copyVisible}
-      borderColor={[FIELD_SEP_COLOR, "bottom"]}
-    >
+      borderColor={[FIELD_SEP_COLOR, "bottom"]}>
       <CustomTextField
         disableSepColor={copyVisible}
-        placeholder="Subject"
+        placeholder='Subject'
         defaultValue={props.subject}
         readOnly={props.readOnly}
         onChange={props.onChange}
@@ -310,7 +309,7 @@ function Body(props: {
 }) {
   const copyVisible = !!(props.defaultValue && props.readOnly);
   return (
-    <BasicDiv pos="relative" size={"full"} asChildren={!copyVisible}>
+    <BasicDiv pos='relative' size={"full"} asChildren={!copyVisible}>
       <textarea
         defaultValue={props.defaultValue}
         readOnly={props.readOnly}
@@ -331,11 +330,10 @@ function Body(props: {
       />
       {copyVisible && (
         <BasicDiv
-          pos="absolute"
+          pos='absolute'
           top={"72.5%"}
           left={"85%"}
-          style={{ zIndex: 2 }}
-        >
+          style={{ zIndex: 2 }}>
           <Copy textToCopy={props.defaultValue} />
         </BasicDiv>
       )}
@@ -363,7 +361,7 @@ function CustomTextField(props: {
       corners={0}
       defaultValue={props.defaultValue}
       autoFocus={props.autoFocus}
-      focusColor="transparent"
+      focusColor='transparent'
       onFocus={props.onFocus}
       onBlur={props.onBlur}
       indent={props.indent}
@@ -382,11 +380,11 @@ function Copy(props: { textToCopy: string }) {
   return (
     <CopyButton
       iconOnly
-      iconSize="xs"
+      iconSize='xs'
       textToCopy={props.textToCopy}
-      backgroundColor="onPaper[0.1]"
-      color="onPaper"
-      borderColor="onPaper[0.25]"
+      backgroundColor='onPaper[0.1]'
+      color='onPaper'
+      borderColor='onPaper[0.25]'
     />
   );
 }

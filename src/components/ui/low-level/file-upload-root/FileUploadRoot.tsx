@@ -1,6 +1,6 @@
 import { FileUpload } from "@chakra-ui/react";
 import { JSX } from "@emotion/react/jsx-runtime";
-import { LOCAL_FILE_MIME_TYPES, LocalFile } from "@wavy/types";
+import { FILE_MIME_TYPES, FileDetails } from "@wavy/util";
 import React from "react";
 
 interface FileUploadRootProps {
@@ -10,7 +10,7 @@ interface FileUploadRootProps {
   maxWidth?: FileUpload.RootProps["maxW"];
   height?: FileUpload.RootProps["height"];
   width?: FileUpload.RootProps["width"];
-  accepts: LocalFile["typeAlias"][];
+  accepts: FileDetails["alias"][];
   children: JSX.Element;
   slotProps?: Partial<{
     fileList: FileUpload.ListProps;
@@ -23,14 +23,13 @@ function FileUploadRoot(props: FileUploadRootProps) {
   };
   return (
     <FileUpload.Root
-      alignItems="stretch"
+      alignItems='stretch'
       width={props.width}
       maxWidth={props.maxWidth || "xl"}
       maxFiles={props.maxFiles || (props.multiple ? Infinity : 1)}
       overflow={"hidden"}
       height={props.height}
-      accept={getAcceptedMimeTypes(props.accepts)}
-    >
+      accept={getAcceptedMimeTypes(props.accepts)}>
       <FileUpload.HiddenInput onChange={handleOnChange} />
       {props.children}
 
@@ -40,7 +39,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
 }
 
 const getAcceptedMimeTypes = (categories: FileUploadRootProps["accepts"]) => {
-  return categories.flatMap((category) => LOCAL_FILE_MIME_TYPES[category]);
+  return categories.flatMap((category) => FILE_MIME_TYPES[category]);
 };
 
 export { FileUploadRoot, type FileUploadRootProps };

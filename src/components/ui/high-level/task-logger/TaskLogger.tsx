@@ -3,8 +3,8 @@ import { sort } from "@wavy/fn";
 import { useEffect, useState } from "react";
 import Terminal from "../../high-level/terminal/Terminal";
 import BasicDiv from "../../low-level/html/div/BasicDiv";
-import {ItemInfo} from "../../low-level/item-info/ItemInfo";
-import { TaskLog, UnsubscribeFunction } from "@wavy/types";
+import { ItemInfo } from "../../low-level/item-info/ItemInfo";
+import { TaskLog, UnsubscribeFunction } from "@wavy/util";
 
 interface TaskLoggerProps {
   defaultTasks?: TaskLog[];
@@ -35,19 +35,17 @@ function TaskLogger(props: TaskLoggerProps) {
 
   return (
     <BasicDiv
-      size="full"
+      size='full'
       grid
-      gridRows="1fr .85fr"
+      gridRows='1fr .85fr'
       spill={"hidden"}
-      maxHeight={"full"}
-    >
+      maxHeight={"full"}>
       <BasicDiv
-        size="full"
+        size='full'
         spill={{ x: "hidden", y: "auto" }}
         gap={"lg"}
         style={{ flexShrink: 0 }}
-        maxHeight={"full"}
-      >
+        maxHeight={"full"}>
         <For each={props.relatedTaskData}>
           {({ content, ...item }) => {
             return <ItemInfo item={item} info={content} />;
@@ -55,7 +53,7 @@ function TaskLogger(props: TaskLoggerProps) {
         </For>
       </BasicDiv>
       <Terminal
-        initialMessage="Awaiting registration process..."
+        initialMessage='Awaiting registration process...'
         logs={tasks}
       />
     </BasicDiv>

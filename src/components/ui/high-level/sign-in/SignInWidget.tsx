@@ -1,6 +1,6 @@
 import { BasicButton, BasicColor } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
-import { AUTH_PROVIDERS, AuthProvider } from "@wavy/types";
+import { authProviders, AuthProvider } from "@wavy/util";
 import { FcGoogle } from "react-icons/fc";
 import BasicDiv, { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 import BasicSpan from "../../low-level/html/span/BasicSpan";
@@ -18,7 +18,7 @@ interface SignInWidgetProps<Auth extends AuthProvider> {
 function SignInWidget<Provider extends AuthProvider = AuthProvider>(
   props: SignInWidgetProps<Provider>
 ) {
-  const providers = props.authProviders || [...AUTH_PROVIDERS.values()];
+  const providers = props.authProviders || authProviders.options;
   return (
     <BasicDiv
       padding={"1.75rem"}
@@ -35,22 +35,21 @@ function SignInWidget<Provider extends AuthProvider = AuthProvider>(
       style={{
         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
         zIndex: props.zIndex,
-      }}
-    >
+      }}>
       {props.header || (
-        <BasicDiv width="full" color="inherit">
-          <BasicSpan fontWeight="bold" fontSize="1.55rem" text="Sign In" />
+        <BasicDiv width='full' color='inherit'>
+          <BasicSpan fontWeight='bold' fontSize='1.55rem' text='Sign In' />
           <span
             style={{
               opacity: 0.75,
               fontSize: ".95rem",
             }}
-            children="Select a sign-in method to continue."
+            children='Select a sign-in method to continue.'
           />
         </BasicDiv>
       )}
 
-      <BasicDiv width="full" color="inherit">
+      <BasicDiv width='full' color='inherit'>
         {providers.map((provider) => (
           <Provider provider={provider} onClick={props.onAuthProviderClick} />
         ))}
@@ -78,11 +77,11 @@ function Provider(props: AuthProviderProps) {
   return (
     <BasicButton
       async
-      width="full"
+      width='full'
       pendingDelay={1000}
       borderColor={"outlineVariant"}
       backgroundColor={"transparent"}
-      color="inherit"
+      color='inherit'
       padding={".75rem"}
       iconSize={"md"}
       leadingEl={Icon}

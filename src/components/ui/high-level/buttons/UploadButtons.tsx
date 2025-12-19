@@ -5,7 +5,7 @@ import BasicFileInput, {
 } from "../../low-level/html/input/BasicFileInput";
 import { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 import { BasicButtonProps } from "../../low-level/html/button/BasicButton";
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 import { BasicStyleProps } from "../../low-level/html/BasicStyle";
 
 interface UploadFileButtonProps
@@ -51,8 +51,7 @@ function createButton<Props extends UploadFileButtonProps>(
         corners={props.corners || "md"}
         accepts={accepts}
         {...(rest || {})}
-        allowDrop={false}
-      >
+        allowDrop={false}>
         <BasicButton
           debug={props.debug}
           disabled={props.disabled}
@@ -61,7 +60,7 @@ function createButton<Props extends UploadFileButtonProps>(
           corners={props.corners || "md"}
           borderColor={props.borderColor}
           color={props.color}
-          variant="outline"
+          variant='outline'
           fontSize={fontSize}
           leadingEl={HiUpload}
           iconSize={iconSize}

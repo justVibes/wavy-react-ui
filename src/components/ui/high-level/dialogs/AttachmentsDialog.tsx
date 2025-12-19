@@ -15,13 +15,8 @@ import {
   useManagedRef,
   useRerender,
 } from "@/main";
-import { format, isEmpty, sanitizeLocalFile } from "@wavy/fn";
-import type {
-  Email,
-  KnownFileTypeAlias,
-  LocalFile,
-  Prettify,
-} from "@wavy/types";
+import { isEmpty, parseFileSize, toObject } from "@wavy/fn";
+import { Email, FileDetails, KnownFileAlias, Prettify } from "@wavy/util";
 import { createContext, JSX, useContext, useEffect, useState } from "react";
 
 type Attachment = Email["attachments"][number];
@@ -38,7 +33,7 @@ type ContextType = Prettify<
         boolean | ((attachment: Attachment) => boolean)
       >
     > & {
-      attachments: Email["attachments"];
+      attachments: FileDetails[];
       onOpenAttachment?: (attachment: Attachment) => void;
       attachmentsEventListener?: (
         event: "open" | "delete" | "add",
@@ -49,7 +44,7 @@ type ContextType = Prettify<
       hideOpenAttachmentButton?: boolean;
       hideUploadButton?: boolean;
       getFilePath?: (file: File) => string;
-      accepts?: KnownFileTypeAlias | KnownFileTypeAlias[];
+      accepts?: KnownFileAlias | KnownFileAlias[];
     }
 >;
 
@@ -94,8 +89,7 @@ function AttachmentsDialog(props: AttachmentsDialogProps) {
         },
         attachments: attachmentsRef.read(),
         rerender: triggerRerender,
-      }}
-    >
+      }}>
       <Dialog.Root
         onClose={handleOnClose}
         unmountOnExit={props.unmountOnExit}
@@ -104,9 +98,8 @@ function AttachmentsDialog(props: AttachmentsDialogProps) {
         scrollBehavior={"inside"}
         triggerElement={props.triggerElement}
         controller={props.controller}
-        spill={"hidden"}
-      >
-        <Dialog.Header style={{ flexShrink: 0 }} fontSize="xxl">
+        spill={"hidden"}>
+        <Dialog.Header style={{ flexShrink: 0 }} fontSize='xxl'>
           Attachments
         </Dialog.Header>
         <Dialog.Body size={"full"} padding={"sm"} spill={"hidden"}>
@@ -149,12 +142,12 @@ function AttachmentsList() {
     mainCtx?.onAttachmentDeleted?.(attachment);
     mainCtx?.attachmentsEventListener?.("delete", attachment);
   };
-  const handleOnUpload = (_: File[], files: LocalFile[]) => {
-    const sanitizedFile = sanitizeLocalFile(files[0]);
-    setAttachments([...attachments, sanitizedFile]);
+  const handleOnUpload = (_: File[], files: FileDetails[]) => {
+    const selectedFile = files[0];
+    setAttachments([...attachments, selectedFile]);
 
-    mainCtx?.onAttachmentAdded?.(sanitizedFile);
-    mainCtx?.attachmentsEventListener("add", sanitizedFile);
+    mainCtx?.onAttachmentAdded?.(selectedFile);
+    mainCtx?.attachmentsEventListener("add", selectedFile);
   };
   const handleOnOpen = (attachment: Attachment) => {
     mainCtx?.onOpenAttachment?.(attachment);
@@ -169,8 +162,7 @@ function AttachmentsList() {
         maxHeight={"10rem"}
         spill={"auto"}
         padding={queryNotFound ? "lg" : undefined}
-        centerContent={queryNotFound}
-      >
+        centerContent={queryNotFound}>
         {queryNotFound ? (
           <span style={{ opacity: 0.75 }}>{`"${query}" not found`}</span>
         ) : (
@@ -203,8 +195,8 @@ function AttachmentsList() {
         <UploadButton
           getFilePath={mainCtx?.getFilePath}
           disabled={mainCtx?.uploadDisabled}
-          fileClass="attachment"
-          size="xs"
+          fileClass='attachment'
+          size='xs'
           width={"full"}
           onAccept={handleOnUpload}
         />
@@ -223,8 +215,8 @@ function Attachment(props: {
   onDelete?: (attachment: Attachment) => void;
   onOpen?: (attachement: Attachment) => void;
 }) {
-  const { typeAlias, path, name: filename, sizeInBytes } = props.value;
-  const Icon = getFileIcon(typeAlias);
+  const { alias, path, name: filename, sizeInBytes } = props.value;
+  const Icon = getFileIcon(alias);
 
   return (
     <Card.Root
@@ -237,18 +229,16 @@ function Attachment(props: {
         ":hover": {
           backgroundColor: "outline[0.1]",
         },
-      }}
-    >
+      }}>
       <Card.LeadingAddOn
         size={"2rem"}
         aspectRatio={1}
-        color={typeAlias}
+        color={alias}
         padding={"sm"}
         corners={"md"}
         backgroundColor={"onSurface[0.1]"}
-        style={{ flexShrink: 0 }}
-      >
-        {typeAlias === "img" && path.trim() ? (
+        style={{ flexShrink: 0 }}>
+        {alias === "img" && path.trim() ? (
           <BasicImg
             src={path.trim()}
             size={"full"}
@@ -271,28 +261,27 @@ function Attachment(props: {
           }
           fade={0.7}
           row
-          align="center"
+          align='center'
           gap={"sm"}
-          fontSize="xxs"
-        >
-          <BasicSpan fontWeight="bold" text={typeAlias.toUpperCase()} />
+          fontSize='xxs'>
+          <BasicSpan fontWeight='bold' text={alias.toUpperCase()} />
           <BasicDiv
             size={".25rem"}
             corners={"circle"}
-            backgroundColor="onSurface"
+            backgroundColor='onSurface'
           />
-          <BasicSpan fade={0.5} text={format("file-size", sizeInBytes)} />
+          <BasicSpan fade={0.5} text={parseFileSize(sizeInBytes)} />
         </BasicDiv>
       </Card.Content>
 
       {(!props.hideDeleteButton || !props.hideOpenAttachmentButton) && (
-        <Card.TrailingAddOn row gap={"sm"} align="center">
+        <Card.TrailingAddOn row gap={"sm"} align='center'>
           {!props.hideOpenAttachmentButton && (
             <OpenButton
               iconOnly
               disabled={props.disableOpen}
-              borderColor="transparent"
-              size="sm"
+              borderColor='transparent'
+              size='sm'
               onClick={() => props.onOpen?.(props.value)}
             />
           )}
@@ -301,9 +290,9 @@ function Attachment(props: {
             <DeleteButton
               iconOnly
               disabled={props.disableDelete}
-              backgroundColor="transparent"
-              color="delete"
-              size="sm"
+              backgroundColor='transparent'
+              color='delete'
+              size='sm'
               onClick={() => props.onDelete?.(props.value)}
             />
           )}
@@ -318,7 +307,7 @@ function AttachmentsNotFound() {
   return (
     <EmptyState.Root>
       <EmptyState.Indicator
-        size="7rem"
+        size='7rem'
         disableFade
         element={
           <BasicImg
@@ -329,20 +318,20 @@ function AttachmentsNotFound() {
         }
       />
       <EmptyState.Content
-        title="Attachments not found"
-        description="Upload an attachment and it will appear here."
+        title='Attachments not found'
+        description='Upload an attachment and it will appear here.'
       />
       {!ctx.hideUploadButton && (
         <UploadButton
           disabled={ctx.uploadDisabled}
           getFilePath={ctx.getFilePath}
-          fileClass="attachment"
-          backgroundColor="secondaryContainer"
-          color="onSecondaryContainer"
+          fileClass='attachment'
+          backgroundColor='secondaryContainer'
+          color='onSecondaryContainer'
           accepts={ctx.accepts}
           onAccept={(_, files) => {
             files.forEach((file) => {
-              ctx?.attachmentsEventListener?.("add", sanitizeLocalFile(file));
+              ctx?.attachmentsEventListener?.("add", file);
             });
             ctx.rerender();
           }}

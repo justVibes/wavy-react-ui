@@ -6,11 +6,7 @@ import {
   strictArray,
   toObject,
 } from "@wavy/fn";
-import {
-  KnownFileTypeAlias,
-  LOCAL_FILE_TYPE_ALIAS,
-  LocalFile,
-} from "@wavy/types";
+import { KnownFileAlias, fileAliases, FileDetails } from "@wavy/util";
 import React, { useRef } from "react";
 import applyBasicStyle, { BasicStyleProps } from "../BasicStyle";
 
@@ -25,19 +21,19 @@ interface BasicFileInputProps extends BasicStyleProps {
    * Sets the 'maxFiles' property to Infinity
    */
   multiple?: boolean;
-  accepts?: KnownFileTypeAlias[] | KnownFileTypeAlias;
+  accepts?: KnownFileAlias[] | KnownFileAlias;
   children?: JSX.Element;
   disabled?: boolean;
   getFilePath?: (file: File) => string;
-  onAccept?: (files: File[], localFiles: LocalFile[]) => void;
-  onReject?: (files: File[], localFiles: LocalFile[]) => void;
+  onAccept?: (files: File[], localFiles: FileDetails[]) => void;
+  onReject?: (files: File[], localFiles: FileDetails[]) => void;
 }
 function BasicFileInput(props: BasicFileInputProps) {
   const acceptedMimeTypes = getMimeTypes(
     distinct(
       strictArray(
         !props.accepts
-          ? [...LOCAL_FILE_TYPE_ALIAS].filter((alias) => alias !== "unknown")
+          ? [...fileAliases.options].filter((alias) => alias !== "unknown")
           : Array.isArray(props.accepts)
           ? props.accepts
           : [props.accepts]
@@ -114,12 +110,11 @@ function BasicFileInput(props: BasicFileInputProps) {
       }}
       onDrop={handleOnDrop}
       onDragOver={(e) => e.preventDefault()}
-      onClick={triggerInputClick}
-    >
+      onClick={triggerInputClick}>
       {props.children}
       <input
-        id="file"
-        type="file"
+        id='file'
+        type='file'
         ref={inputRef}
         style={{ display: "none" }}
         onChange={handleOnChange}

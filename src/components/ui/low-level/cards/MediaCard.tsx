@@ -4,7 +4,7 @@ import type { IconType } from "react-icons";
 import { PiImageBrokenLight } from "react-icons/pi";
 import applyBasicStyle from "../html/BasicStyle";
 import { BasicDivProps } from "../html/div/BasicDiv";
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 import { BasicSpanProps } from "../html/span/BasicSpan";
 
 function Root(props: MediaCardProps.RootProps) {
@@ -20,25 +20,23 @@ function Root(props: MediaCardProps.RootProps) {
       className={props.className}
       padding={"1px"}
       corners={corners}
-      backgroundColor="onSurface"
-      color="surface"
+      backgroundColor='onSurface'
+      color='surface'
       gap={"sm"}
       spill={"hidden"}
       fade={props.fade}
       height={props.height ?? "fit-content"}
       width={props.width ?? "14rem"}
-      style={{ ...props.style, boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
-    >
+      style={{ ...props.style, boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
       <BasicDiv
         centerContent
         height={props.mediaHeight ?? "7rem"}
         width={"full"}
-        backgroundColor="surface"
-        color="onSurface"
+        backgroundColor='surface'
+        color='onSurface'
         borderColor={"surface"}
         corners={{ top: corners }}
-        spill={"hidden"}
-      >
+        spill={"hidden"}>
         {props.src ? (
           <BasicImg
             cover={props.coverImg ?? true}
@@ -56,9 +54,8 @@ function Root(props: MediaCardProps.RootProps) {
         width={"full"}
         gap={"md"}
         padding={"md"}
-        align="start"
-        spill={"hidden"}
-      >
+        align='start'
+        spill={"hidden"}>
         <BasicDiv width={"full"} gap={0} spill={"hidden"}>
           <span
             children={props.title}
@@ -89,8 +86,7 @@ function Content(props: MediaCardProps.ContentProps) {
         ...props,
         width: props.width ?? "full",
         spill: props.spill || "hidden",
-      }}
-    >
+      }}>
       {props.children}
     </BasicDiv>
   );

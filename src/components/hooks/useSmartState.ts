@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useRerender } from "./useRerender";
-import { CastFn } from "@wavy/types";
+import { CastFn } from "@wavy/util";
 import { castReturn } from "@wavy/fn";
 
 /**A hook that allows you to optionally skip re-rendering on state change  */

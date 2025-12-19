@@ -1,6 +1,6 @@
 import { BasicDiv, BasicSpan, Checkbox } from "@/main";
 import { camelCaseToLetter, distinct, lastIndex, run } from "@wavy/fn";
-import type { SafeOmit } from "@wavy/types";
+import type { SafeOmit } from "@wavy/util";
 import React, {
   createContext,
   useContext,

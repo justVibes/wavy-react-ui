@@ -1,5 +1,5 @@
 import { Avatar, BasicColor, ellipsis } from "@/main";
-import { AddPrefix } from "@wavy/types";
+import { AddPrefix } from "@wavy/util";
 import { type JSX } from "react";
 import { AvatarProps } from "../avatar/Avatar";
 import applyBasicStyle from "../html/BasicStyle";
@@ -38,13 +38,12 @@ function Root(props: ProfileCardProps.RootProps) {
       style={{
         ...props.style,
         boxShadow,
-      }}
-    >
+      }}>
       <BasicDiv
         row
         className={props.children ? undefined : props.className}
         gap={"md"}
-        align="center"
+        align='center'
         height={getProp("height")}
         width={getProp("width")}
         backgroundColor={getProp("backgroundColor")}
@@ -52,8 +51,7 @@ function Root(props: ProfileCardProps.RootProps) {
         padding={getProp("padding")}
         corners={getProp("corners")}
         spill={"hidden"}
-        style={props.children ? undefined : { ...props.style, boxShadow }}
-      >
+        style={props.children ? undefined : { ...props.style, boxShadow }}>
         <Avatar
           src={props.avatarSrc}
           size={props.avatarSize ?? "sm"}

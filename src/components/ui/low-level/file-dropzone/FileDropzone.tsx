@@ -7,7 +7,7 @@ import {
 } from "../file-upload-root/FileUploadRoot";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { resolveBasicColor } from "@/main";
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 
 interface FileDropzoneProps extends SafeOmit<FileUploadRootProps, "children"> {
   backgroundColor?: BasicColor;
@@ -28,16 +28,15 @@ function FileDropzone(props: FileDropzoneProps) {
         )}
         borderColor={resolveBasicColor(props.borderColor || "outlineVariant")}
         color={resolveBasicColor(props.color || "onSurface")}
-        cursor={"pointer"}
-      >
-        <Icon size="md" color="fg.muted">
+        cursor={"pointer"}>
+        <Icon size='md' color='fg.muted'>
           <LuUpload />
         </Icon>
         <FileUpload.DropzoneContent maxHeight={"100%"} overflow={"hidden"}>
           {props.content || (
             <>
               <Box>Drag and drop files here</Box>
-              <Box color="fg.muted">.png, .jpg up to 5MB</Box>
+              <Box color='fg.muted'>.png, .jpg up to 5MB</Box>
             </>
           )}
         </FileUpload.DropzoneContent>

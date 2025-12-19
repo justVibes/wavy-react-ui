@@ -1,4 +1,4 @@
-import { LocalFile } from "@wavy/types";
+import { FileDetails } from "@wavy/util";
 import { IconType } from "react-icons";
 import { AiFillFileUnknown, AiOutlineFileUnknown } from "react-icons/ai";
 import {
@@ -16,7 +16,7 @@ import {
   RiFileWord2Line,
 } from "react-icons/ri";
 
-function getFileIcon(alias: LocalFile["typeAlias"]): {
+function getFileIcon(alias: FileDetails["alias"]): {
   filled: IconType;
   outlined: IconType;
 } {

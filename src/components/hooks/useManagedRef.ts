@@ -1,5 +1,5 @@
 import { buildArray } from "@wavy/fn";
-import { NonFunction } from "@wavy/types";
+import { NonFunction } from "@wavy/util";
 import { useRef } from "react";
 
 function useManagedRef<T extends NonFunction<unknown>>(

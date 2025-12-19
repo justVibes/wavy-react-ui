@@ -2,7 +2,7 @@ import { BasicColor, BasicDiv, BasicSpan, tiledBackground } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { format } from "@wavy/fn";
 import { BasicDivProps } from "../../low-level/html/div/BasicDiv";
-import { NoUndefinedField } from "@wavy/types";
+import { NoUndefinedField } from "@wavy/util";
 
 interface MoneyDisplayCardProps {
   label?: string;
@@ -61,20 +61,19 @@ function MoneyDisplayCard(props: MoneyDisplayCardProps) {
           borderColor: props.wireColor || "surface[0.25]",
           tileSize: "1.5rem",
         }),
-      }}
-    >
-      <BasicDiv gap={"sm"} color="inherit">
+      }}>
+      <BasicDiv gap={"sm"} color='inherit'>
         {props.label && (
           <BasicSpan
             fade={0.75}
             fontSize={props.slotProps?.label?.fontSize || "sm"}
             text={props.label}
-            color="inherit"
+            color='inherit'
           />
         )}
-        <BasicDiv row align="end" gap={"sm"}>
+        <BasicDiv row align='end' gap={"sm"}>
           <BasicSpan
-            fontWeight="bold"
+            fontWeight='bold'
             fontSize={props.slotProps?.fee?.fontSize || "xl"}
             text={format("money", props.amount, {
               truncate:
@@ -84,7 +83,7 @@ function MoneyDisplayCard(props: MoneyDisplayCardProps) {
             })}
           />
           <BasicSpan
-            fontWeight="bold"
+            fontWeight='bold'
             fade={0.5}
             fontSize={props.slotProps?.currency?.fontSize || "sm"}
             text={currency}

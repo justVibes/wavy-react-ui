@@ -7,7 +7,7 @@ import {
   Portal,
 } from "@chakra-ui/react";
 import { JSX } from "@emotion/react/jsx-runtime";
-import { SafeExtract, SafeOmit } from "@wavy/types";
+import { SafeExtract, SafeOmit } from "@wavy/util";
 import React from "react";
 import applyBasicStyle from "../html/BasicStyle";
 import { BasicDivProps } from "../html/div/BasicDiv";
@@ -50,8 +50,7 @@ function Root<T>(props: DialogProps.RootProps<T>) {
       closeOnInteractOutside={props.closeOnInteractOutside}
       onOpenChange={handleOnOpenChange}
       onExitComplete={handleOnExit}
-      motionPreset={props.enterAnimation || "slide-in-bottom"}
-    >
+      motionPreset={props.enterAnimation || "slide-in-bottom"}>
       {props.triggerElement && (
         <ChakraDialog.Trigger asChild>
           {props.triggerElement}

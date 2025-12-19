@@ -7,7 +7,7 @@ import {
   useRerender,
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
-import { Email, SafeOmit } from "@wavy/types";
+import { Email, SafeOmit } from "@wavy/util";
 import { BsPaperclip } from "react-icons/bs";
 import { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 import AttachmentsDialog, {
@@ -36,7 +36,7 @@ function AttachmentsButton(props: AttachmentsButtonProps) {
   };
 
   return (
-    <Tooltip tooltip="Attachments" placement="right">
+    <Tooltip tooltip='Attachments' placement='right'>
       <Badge
         circleChild
         asChild={!props.attachments}
@@ -48,27 +48,24 @@ function AttachmentsButton(props: AttachmentsButtonProps) {
                 : attachmentsRef.read().length
             }
           />
-        }
-      >
+        }>
         <Dialog
           asChild={!Array.isArray(props.attachments)}
           attachments={attachmentsRef.read()}
           onAttachmentsChange={handleOnAttachmentsChange}
           onClose={triggerRerender}
-          {...props.slotProps?.attachmentsDialog}
-        >
+          {...props.slotProps?.attachmentsDialog}>
           <BasicDiv
             row
             gap={"xs"}
-            fontSize="xs"
-            color="onPaper"
-            align="center"
+            fontSize='xs'
+            color='onPaper'
+            align='center'
             corners={props.corners || "md"}
             padding={"md"}
             clickable
-            backgroundColor="onPaper[0.1]"
-            onClick={props.onClick}
-          >
+            backgroundColor='onPaper[0.1]'
+            onClick={props.onClick}>
             <BsPaperclip size={"1rem"} />
             {!props.iconOnly && "Attachments"}
           </BasicDiv>

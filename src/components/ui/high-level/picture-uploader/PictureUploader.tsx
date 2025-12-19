@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import { IoMdImages } from "react-icons/io";
-import {Avatar} from "../../low-level/avatar/Avatar";
+import { Avatar } from "../../low-level/avatar/Avatar";
 import BasicDiv, { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { BasicSpan } from "@/main";
 import { UploadButton } from "../buttons/UploadButtons";
-import { LocalFile, SanitizeFile } from "@wavy/types";
+import { FileDetails } from "@wavy/util";
 
 interface PictureUploaderProps {
   fallback?: IconType;
-  defaultPicture?: LocalFile | SanitizeFile<LocalFile>;
+  defaultPicture?: FileDetails 
   label?: string;
   columnGap?: BasicDivProps["gap"];
   rowGap?: BasicDivProps["gap"];
@@ -22,14 +22,10 @@ interface PictureUploaderProps {
     }>;
   }>;
   getFilePath?: (file: File) => string;
-  onChange?: (picture: LocalFile) => void;
+  onChange?: (picture: FileDetails) => void;
 }
 function PictureUploader(props: PictureUploaderProps) {
-  const [avatar, setAvatar] = useState<string>(props.defaultPicture?.path);
-
-  useEffect(() => {
-    console.log(avatar);
-  }, [avatar]);
+  const [avatar, setAvatar] = useState<string>(props.defaultPicture.path);
 
   const Wrapper = ({ children }: { children: JSX.Element }) => {
     if (!props.label) return children;
@@ -46,7 +42,7 @@ function PictureUploader(props: PictureUploaderProps) {
     );
   };
 
-  const handleOnChange = (_: File[], localFiles: LocalFile[]) => {
+  const handleOnChange = (_: File[], localFiles: FileDetails[]) => {
     const photo = localFiles[0];
     setAvatar(photo.path);
     props.onChange?.(photo);
@@ -54,7 +50,7 @@ function PictureUploader(props: PictureUploaderProps) {
 
   return (
     <Wrapper>
-      <BasicDiv row gap={props.columnGap || "lg"} align="center">
+      <BasicDiv row gap={props.columnGap || "lg"} align='center'>
         <Avatar
           size={"xl"}
           fallback={props.fallback || IoMdImages}
@@ -62,7 +58,7 @@ function PictureUploader(props: PictureUploaderProps) {
         />
 
         <UploadButton
-          fileClass="photo"
+          fileClass='photo'
           accepts={["img"]}
           getFilePath={props.getFilePath}
           onAccept={handleOnChange}

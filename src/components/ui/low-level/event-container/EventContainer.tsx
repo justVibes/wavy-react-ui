@@ -1,5 +1,5 @@
 import { EventContext } from "@/components/contexts/EventContext";
-import { UnsubscribeFunction } from "@wavy/types";
+import { UnsubscribeFunction } from "@wavy/util";
 import React, { useEffect, useRef } from "react";
 import { v4 } from "uuid";
 
@@ -93,8 +93,7 @@ function EventContainer(props: EventContainerProps) {
         listeners: (event) => {
           return map.current.get(event)?.length;
         },
-      }}
-    >
+      }}>
       {props.children}
     </EventContext.Provider>
   );

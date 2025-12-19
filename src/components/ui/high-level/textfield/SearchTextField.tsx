@@ -1,5 +1,5 @@
 import { TextField, TextFieldProps } from "@/main";
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 import { CiSearch } from "react-icons/ci";
 import { BasicDivProps } from "../../low-level/html/div/BasicDiv";
 

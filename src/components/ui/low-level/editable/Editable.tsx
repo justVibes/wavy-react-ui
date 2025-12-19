@@ -8,7 +8,7 @@ import {
   useManagedRef,
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
-import { Prettify, SafeOmit } from "@wavy/types";
+import { Prettify, SafeOmit } from "@wavy/util";
 import React, { createContext, useContext, useState } from "react";
 import { IconType } from "react-icons";
 import { LuCheck, LuPencilLine, LuX } from "react-icons/lu";
@@ -153,14 +153,12 @@ function Editable(props: EditableProps) {
       value={{
         padding: ".25rem",
         iconSize: props.iconSize || size,
-      }}
-    >
+      }}>
       <BasicDiv
         {...wrapperProps}
         asChildren={!props.label}
         row={false}
-        align="start"
-      >
+        align='start'>
         {props.label && (
           <BasicSpan
             text={props.label}
@@ -186,10 +184,9 @@ function Editable(props: EditableProps) {
               ? "1fr auto auto"
               : "1fr auto"
           }
-          justify={props.spaceBetween ? "space-between" : undefined}
-        >
+          justify={props.spaceBetween ? "space-between" : undefined}>
           {editing && !props.readOnly ? (
-            <BasicDiv width={"full"} align="center" gap={"md"}>
+            <BasicDiv width={"full"} align='center' gap={"md"}>
               <TextField
                 autoFocus
                 readOnly={props.readOnly}
@@ -219,7 +216,7 @@ function Editable(props: EditableProps) {
               padding={props.contentPadding ?? ["md", ["top", "bottom"]]}
               corners={"sm"}
               fontSize={props.fontSize || size}
-              cursor="text"
+              cursor='text'
               css={{
                 transition: "all 200ms linear",
                 ":hover": props.readOnly
@@ -233,8 +230,7 @@ function Editable(props: EditableProps) {
               }
               onClick={
                 activationMode === "click" ? handleOnContentClick : undefined
-              }
-            >
+              }>
               <Popover
                 {...props.slotProps?.popover}
                 allowInteractions
@@ -249,16 +245,14 @@ function Editable(props: EditableProps) {
                     props.renderPopoverContent?.(text)) ??
                   text
                 }
-                displayAction="hover"
+                displayAction='hover'
                 maxWidth={props.slotProps?.popover?.maxWidth || "10rem"}
-                maxHeight={props.slotProps?.popover?.maxHeight || "5rem"}
-              >
+                maxHeight={props.slotProps?.popover?.maxHeight || "5rem"}>
                 <span
                   style={ellipsis({
                     opacity: props.placeholder && !text ? 0.85 : 1,
                     width: "100%",
-                  })}
-                >
+                  })}>
                   {(props.formatContent?.(text) ?? text) || props.placeholder}
                 </span>
               </Popover>
@@ -334,8 +328,7 @@ function Control(props: {
         ":hover": {
           backgroundColor: "onSurface[0.1]",
         },
-      }}
-    >
+      }}>
       <BasicButton
         size={iconSize}
         padding={padding}
@@ -344,7 +337,7 @@ function Control(props: {
         borderColor={props.outlined ? "onSurface[0.25]" : undefined}
         onClick={props.onClick}
         aspectRatio={1}
-        color="onSurface"
+        color='onSurface'
         corners={"sm"}
         onMouseDown={(e) => {
           e.preventDefault();

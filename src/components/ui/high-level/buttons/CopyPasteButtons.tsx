@@ -1,6 +1,6 @@
 import { BasicColor } from "@/main";
 import { copyToClipboard, readClipboardText } from "@wavy/fn";
-import { Prettify, TaskResult } from "@wavy/types";
+import { Prettify, TaskResult } from "@wavy/util";
 import { useState } from "react";
 import { IconType } from "react-icons";
 import { ImPaste } from "react-icons/im";
@@ -48,7 +48,7 @@ function createButton<P>(options: {
         size={props.size || "xs"}
         fontSize={props.fontSize}
         iconSize={props.iconSize}
-        backdropBlur=".1rem"
+        backdropBlur='.1rem'
         leadingEl={completed ? IoCheckmark : options.actionIcon}
         text={props.iconOnly ? undefined : options.label(completed)}
         onClick={async () => {
@@ -112,7 +112,7 @@ const CopyButton = createButton<CopyButtonProps>({
     if (!text) {
       return {
         error: {
-          errorCode: "BAD_REQUEST",
+          code: "BAD_REQUEST",
           title: "Failed to copy text.",
           message: "Failed to find the text to copy.",
         },

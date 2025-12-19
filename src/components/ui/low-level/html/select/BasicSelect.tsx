@@ -1,5 +1,5 @@
 import { Popover, usePopoverContext, useRerender } from "@/main";
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 import { createContext, useContext, useEffect, useState } from "react";
 import { PopoverProps } from "../../popover/Popover";
 import BasicDiv, { BasicDivProps } from "../div/BasicDiv";
@@ -17,7 +17,11 @@ type OptionConfig<T = string | number> = {
 const Context = createContext<
   | Pick<
       BasicSelectProps<unknown>,
-      "gap" | "onOptionClick" | "isSelected" | "hideSelectedTick" | "formatOption"
+      | "gap"
+      | "onOptionClick"
+      | "isSelected"
+      | "hideSelectedTick"
+      | "formatOption"
     > & {
       options: OptionConfig[];
     }
@@ -69,14 +73,13 @@ function BasicSelect<T extends string | number>(props: BasicSelectProps<T>) {
                   trailingEl: opt.trailingEl || props.defaultTrailingEl,
                 }
         ),
-      }}
-    >
+      }}>
       <Popover
         {...props}
         backdropBlur={props.backdropBlur}
         padding={props.padding || "md"}
         corners={props.corners || "md"}
-        displayAction="click"
+        displayAction='click'
         content={<PopoverContent />}
       />
     </Context.Provider>

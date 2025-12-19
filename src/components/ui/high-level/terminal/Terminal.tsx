@@ -3,8 +3,8 @@ import { For } from "@chakra-ui/react";
 import { format, lastIndex } from "@wavy/fn";
 import { useEffect } from "react";
 import BasicDiv from "../../low-level/html/div/BasicDiv";
-import {Tag} from "../../low-level/tag/Tag";
-import { TaskLog } from "@wavy/types";
+import { Tag } from "../../low-level/tag/Tag";
+import { TaskLog } from "@wavy/util";
 
 interface TerminalProps {
   initialMessage?: string;
@@ -15,10 +15,6 @@ const initialLog: TaskLog = {
   timestamp: Date.now(),
   status: "info",
   response: "Hello World!",
-  // response: {
-  //   tag: "Started",
-  //   message: "Process started...",
-  // },
 };
 function Terminal(props: TerminalProps) {
   useEffect(() => {
@@ -30,15 +26,14 @@ function Terminal(props: TerminalProps) {
   const logs = [initialLog, ...props.logs];
   return (
     <BasicDiv
-      size="full"
+      size='full'
       spill={{ x: "hidden", y: "auto" }}
       padding={"lg"}
       corners={"md"}
       borderColor={"outlineVariant"}
       backgroundColor={"outlineVariant[0.1]"}
       gap={"sm"}
-      maxHeight={"full"}
-    >
+      maxHeight={"full"}>
       <For each={logs}>
         {(log, i) => (
           <Log key={i} {...log} scrollIntoView={i === lastIndex(logs)} />
@@ -64,8 +59,7 @@ function Log(props: TaskLog & { scrollIntoView: boolean }) {
       ref={(r) => {
         if (r && props.scrollIntoView) r.scrollIntoView();
       }}
-      style={{ fontSize: ".85rem", wordSpacing: ".25rem" }}
-    >
+      style={{ fontSize: ".85rem", wordSpacing: ".25rem" }}>
       <span
         style={{ opacity: 0.5, wordSpacing: "normal" }}
         children={format("date", props.timestamp, "hh:mm:ss A")}
@@ -93,8 +87,7 @@ function Log(props: TaskLog & { scrollIntoView: boolean }) {
               ? undefined
               : resolveBasicColor(`${statusColorMapper[props.status]}[0.25]`),
           padding: `0px .2rem`,
-        }}
-      >
+        }}>
         {typeof props.response === "object"
           ? props.response.message
           : props.response}

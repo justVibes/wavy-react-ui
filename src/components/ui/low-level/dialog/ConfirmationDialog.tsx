@@ -5,7 +5,7 @@ import {
   UseModalControlsReturn,
 } from "@/main";
 import { JSX } from "@emotion/react/jsx-runtime";
-import { TaskResult } from "@wavy/types";
+import { TaskResult } from "@wavy/util";
 import { BasicDivProps } from "../html/div/BasicDiv";
 import { Dialog } from "./Dialog";
 
@@ -52,9 +52,8 @@ function ConfirmationDialog(props: ConfirmationDialogProps) {
       maxHeight={props.maxHeight}
       minWidth={props.minWidth}
       maxWidth={props.maxWidth}
-      triggerElement={props.triggerElement}
-    >
-      <Dialog.Header fontSize="2xl">{props.title}</Dialog.Header>
+      triggerElement={props.triggerElement}>
+      <Dialog.Header fontSize='2xl'>{props.title}</Dialog.Header>
       <Dialog.Body fade={0.75}>
         <span>
           {props.message.split("\n").map((text) => (
@@ -77,20 +76,20 @@ function ConfirmationDialog(props: ConfirmationDialogProps) {
       <Dialog.Footer gap={"md"}>
         <Dialog.ActionTrigger>
           <BasicButton
-            size="sm"
+            size='sm'
             fade={0.75}
-            color="onSurface"
-            backgroundColor="transparent"
+            color='onSurface'
+            backgroundColor='transparent'
             text={props.cancelLabel || "Cancel"}
             onClick={props.onCancelClick}
           />
         </Dialog.ActionTrigger>
         <BasicButton
           async
-          size="sm"
+          size='sm'
           text={props.action.label}
           backgroundColor={color}
-          color="white"
+          color='white'
           onClick={props.action.onClick}
         />
       </Dialog.Footer>

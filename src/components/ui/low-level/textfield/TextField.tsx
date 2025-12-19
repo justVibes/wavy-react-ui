@@ -5,8 +5,7 @@ import {
   CssSpacing,
   PasteButton,
   resolveBasicColor,
-  stripHtml,
-  useManagedRef,
+  stripHtml
 } from "@/main";
 import {
   Field,
@@ -18,13 +17,13 @@ import {
 } from "@chakra-ui/react";
 import { JSX } from "@emotion/react/jsx-runtime";
 import { takeLast } from "@wavy/fn";
+import { Prettify } from "@wavy/util";
 import { useEffect, useRef, useState } from "react";
 import applyBasicStyle, { ElementDim } from "../html/BasicStyle";
-import BasicDiv, { BasicDivProps } from "../html/div/BasicDiv";
+import { BasicDivProps } from "../html/div/BasicDiv";
+import { BasicSpanProps } from "../html/span/BasicSpan";
 import { isCharAllowed } from "./helper-functions/BasicTextFieldHelperFunctions";
 import { AllowedCharacters } from "./types";
-import { Prettify } from "@wavy/types";
-import { BasicSpanProps } from "../html/span/BasicSpan";
 
 type ElementPos = "leading" | "trailing";
 type ElementType = "Adornment" | "Content";
@@ -404,3 +403,4 @@ function ClipboardHelperWrapper(props: ClipboardHelperWrapperProps) {
 }
 
 export { TextField, type TextFieldProps };
+

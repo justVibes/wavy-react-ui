@@ -4,7 +4,7 @@ import CssColors from "@/css/resources/CssColors";
 import CssShapes from "@/css/resources/CssShapes";
 import CssSpacing from "@/css/resources/CssSpacing";
 import FontSize from "@/css/resources/FontSize";
-import { NoUndefinedField, SafeExtract } from "@wavy/types";
+import { NoUndefinedField, SafeExtract } from "@wavy/util";
 import type * as CSS from "csstype";
 
 const BORDER_STYLES = ["dashed", "solid", "dotted", "double"] as const;

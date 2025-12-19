@@ -7,7 +7,7 @@ import {
   UsePageSliderControllerReturn,
 } from "@/main";
 import { buildArray, hasIndex } from "@wavy/fn";
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 import React, {
   createContext,
   useCallback,
@@ -178,12 +178,11 @@ function PageSlider<T>(props: PageSliderProps<T>) {
           transition: "all 300ms ease-in-out",
           perspective: "500px",
           transformStyle: "preserve-3d",
-        }}
-      >
+        }}>
         {!props.hideControls && (
           <Nav
             disabled={activePage <= 0}
-            inset="left"
+            inset='left'
             onClick={handleOnPrevClick}
           />
         )}
@@ -215,8 +214,7 @@ function PageSlider<T>(props: PageSliderProps<T>) {
                 translateZ(calc(${absOffset} * -10rem))
                 translateX(calc(${direction} * -5rem))`,
                 filter: `blur(calc(${absOffset} * .5rem))`,
-              }}
-            >
+              }}>
               {typeof Child === "function" ? (
                 <Child isActive={idx === activePage} />
               ) : (
@@ -227,7 +225,7 @@ function PageSlider<T>(props: PageSliderProps<T>) {
         })}
         {!props.hideControls && (
           <Nav
-            inset="right"
+            inset='right'
             disabled={!hasIndex(props.children, activePage + 1)}
             onClick={handleOnNextClick}
           />
@@ -250,7 +248,7 @@ function Nav(props: {
     <BasicDiv
       fade={disabled ? 0.5 : 1}
       cursor={disabled ? "not-allowed" : "pointer"}
-      pos="absolute"
+      pos='absolute'
       centerSelf={"y"}
       centerContent
       borderColor={ctx.navBorderColor}
@@ -276,8 +274,7 @@ function Nav(props: {
               opacity: 0.75,
             },
       }}
-      onClick={disabled ? undefined : props.onClick}
-    >
+      onClick={disabled ? undefined : props.onClick}>
       <Icon size={ctx.navIconSize} />
     </BasicDiv>
   );

@@ -3,10 +3,10 @@ import BasicDiv from "../html/div/BasicDiv";
 import BasicSpan from "../html/span/BasicSpan";
 import { upperFirst } from "@wavy/fn";
 import { ElementDim } from "../html/BasicStyle";
-import { TaskResultStatus } from "@wavy/types";
+import { TaskStatus } from "@wavy/util";
 
 interface StatusProps {
-  status: TaskResultStatus;
+  status: TaskStatus;
   indicatorSize?: ElementDim;
   indicatorOnly?: boolean;
 }
@@ -22,13 +22,12 @@ function Status(props: StatusProps) {
     <BasicDiv
       row
       disableSelection
-      align="center"
+      align='center'
       gap={"md"}
       corners={"md"}
       padding={"sm"}
       backgroundColor={`${colorMap[props.status]}[0.5]`} // Last updated 10/10/2025 1:53 pm
-      style={{ zIndex: 3 }}
-    >
+      style={{ zIndex: 3 }}>
       <BasicDiv
         corners={size}
         size={size}
@@ -37,7 +36,7 @@ function Status(props: StatusProps) {
       {!props.indicatorOnly && (
         <BasicSpan
           style={{ fontWeight: 500 }}
-          fontSize=".85rem"
+          fontSize='.85rem'
           color={`${colorMap[props.status]}[0.75]`}
           text={upperFirst(props.status)}
         />

@@ -22,7 +22,7 @@
   },
   "scripts": {
     "css": "npm run bundle-css",
-    "deps": "npm i @wavy/types@latest @wavy/fn@latest",
+    "deps": "npm i @wavy/util@latest @wavy/fn@latest",
     "tp-css-bundler": "tsup scripts/templates/bundleCss.ts --outDir scripts/public --format esm --no-dts --external utils.js",
     "tp-theme-builder": "tsup scripts/templates/buildTheme.ts --outDir scripts/public --format esm --no-dts --external utils.js",
     "tp-builders": "npm run tp-css-bundler && npm run tp-theme-builder",
@@ -35,16 +35,17 @@
     "@types/node": "^24.7.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.3",
-    "@wavy/types": "^0.0.56",
+    "@wavy/util": "^0.0.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tsup": "^8.5.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "zod": "^4.2.1"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.27.0",
     "@emotion/react": "^11.14.0",
-    "@wavy/fn": "^0.0.26",
+    "@wavy/fn": "^0.0.28",
     "next-themes": "^0.4.6",
     "react-datepicker": "^8.8.0",
     "react-icons": "^5.5.0",

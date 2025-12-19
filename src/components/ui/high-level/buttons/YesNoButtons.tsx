@@ -1,6 +1,6 @@
 import { BasicButton } from "@/main";
 import { BasicButtonProps } from "../../low-level/html/button/BasicButton";
-import { SafeOmit } from "@wavy/types";
+import { SafeOmit } from "@wavy/util";
 
 interface ButtonProps {
   onClick?: () => void;

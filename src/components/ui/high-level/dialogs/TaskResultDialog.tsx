@@ -6,7 +6,7 @@ import {
   resolveBasicColor,
   UseModalControlsReturn,
 } from "@/main";
-import { SuccessMessage, TaskResult } from "@wavy/types";
+import { SuccessMessage, TaskResult } from "@wavy/util";
 import { createContext, useContext } from "react";
 import { IconType } from "react-icons";
 import { BsCheck2Circle } from "react-icons/bs";
@@ -85,9 +85,8 @@ function TaskResultDialog(props: TaskResultDialogProps) {
         maxWidth={props.maxWidth ?? "25rem"}
         gap={"sm"}
         unmountOnExit={props.unmountOnExit}
-        borderColor={props.disableColorIndicator ? undefined : [color, "left"]}
-      >
-        <Dialog.Body grid gridCols="auto 1fr" gap={"lg"}>
+        borderColor={props.disableColorIndicator ? undefined : [color, "left"]}>
+        <Dialog.Body grid gridCols='auto 1fr' gap={"lg"}>
           <Indicator
             color={resolveBasicColor(color)}
             size={
@@ -100,20 +99,19 @@ function TaskResultDialog(props: TaskResultDialogProps) {
             width={"full"}
             gap={"sm"}
             spill={"hidden"}
-            padding={["md", "top"]}
-          >
+            padding={["md", "top"]}>
             <span style={applyTextStyle(styles.title)}>{title}</span>
             <span style={applyTextStyle(styles.description)}>{message}</span>
           </BasicDiv>
         </Dialog.Body>
 
-        <Dialog.Footer row gap={"md"} align="center">
+        <Dialog.Footer row gap={"md"} align='center'>
           <Dialog.ActionTrigger>
             <BasicButton
-              size="xs"
+              size='xs'
               backgroundColor={actionButton ? "transparent" : "onSurface[0.1]"}
-              color="onSurface[0.75]"
-              text="Dismiss"
+              color='onSurface[0.75]'
+              text='Dismiss'
               onClick={controller.hide}
             />
           </Dialog.ActionTrigger>
@@ -141,8 +139,8 @@ function ActionButton(props: ActionButtonProps) {
       disabled={props.disabled}
       backgroundColor={color}
       leadingEl={props.leadingIcon}
-      color="white"
-      size="xs"
+      color='white'
+      size='xs'
       trailingEl={props.trailingIcon}
       text={props.label}
       onClick={props.onClick}
